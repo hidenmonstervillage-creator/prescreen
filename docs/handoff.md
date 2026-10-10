@@ -82,18 +82,18 @@ Site pages and site API routes are gated twice: `middleware.ts`, then a session 
 Deployed: commit `512a73a` (finder, submit rate limit), then `e82535a` (plainer criteria lines, prompt version in the cache). Both on https://prescreen-tau.vercel.app, functions in dub1.
 
 **`/find`, public, no passcode.** Heading "Find a recruiting trial for a patient"; the subline says the site contacts the patient after the pre-screen. It is a door into the per-trial pre-screens, never a product of its own: the page does not name itself. Form (plain GET, so a result list is a shareable URL): condition, stage or markers (optional), city.
-- Search (`lib/finder.ts`, `lib/ctgov.ts`): `query.cond` = condition plus the markers text, `filter.overallStatus=RECRUITING`, `query.locn` = city + ", Bulgaria", `pageSize` 10. Under 3 results: a second search with `query.locn=Bulgaria`, merged after the city results. At most 5 shown.
+- Search (`lib/finder.ts`, `lib/ctgov.ts`): `query.cond` = condition plus the markers text, `filter.overallStatus=RECRUITING`, `query.locn` = city + ", Bulgaria", `pageSize` 10. Under 3 results: a second search with `query.locn=Bulgaria`, merged after the city results. Studies with a published pre-screen on the platform come first (sorted before the cut to 5), API order otherwise. At most 5 shown.
 - Each result: NCT link, title, phase, overall status, recruiting sites in Bulgaria (facility and city only; no staff contacts are ever read), "Top criteria in plain words", and either "Pre-screen this patient" to `/s/<slug>` (published on the platform) or "Not on the platform yet" with the site cities.
 - Plain-word lines: one gpt-4o call per study (temperature 0, JSON). Criterion ids are numbered in code from the criteria text with the generation convention (an introducing line ending in a colon is not an item; its sub-items are), so for NCT06380751 they match the inbox ids exactly (`tests/finder.test.ts`). The model returns only `criterion_id` and `text`; code attaches the verbatim criterion, shown on hover (title) and on expand (details). A line is dropped, never the study, when its id is unknown or repeated, it is empty or over 240 characters, it fails `wordingProblems` (verdict words, em dash), or it contains a number the criterion text does not.
 - Cache: `finder_rewrites`, one row per NCT ID. A row is reused while its `report.prompt_version` equals `PLAIN_PROMPT_VERSION` and every line's quote still matches the current criteria text; otherwise the next search rewrites it. Bump `PLAIN_PROMPT_VERSION` whenever `PLAIN_SYSTEM` changes.
 - A model failure shows the study with "Plain-word lines are not available right now." and caches nothing. `LIVE=1 npx vitest run tests/finder.live.test.ts` runs one real call on the NCT06380751 fixture.
 
-**Demo query:** https://prescreen-tau.vercel.app/find?condition=breast+cancer&markers=&city=Plovdiv. The city search returns 3 studies, so there is no fallback:
+**Demo query:** https://prescreen-tau.vercel.app/find?condition=breast+cancer&markers=&city=Plovdiv. The city search returns 3 studies, so there is no fallback. API order is NCT06727227, NCT06380751, NCT05774951; the page shows NCT06380751 first because it is on the platform:
 
 | # | Study | Phase, status | Recruiting sites in Bulgaria | Next step |
 |---|-------|---------------|------------------------------|-----------|
-| 1 | NCT06727227, real-world trastuzumab deruxtecan, HER2-low | Phase not given, Recruiting | Burgas | Not on the platform yet |
-| 2 | NCT06380751, saruparib (the demo trial) | Phase 3, Recruiting | Plovdiv, Sofia, Stara Zagora | Pre-screen this patient: `/s/nct06380751-md2jhsjd` |
+| 1 | NCT06380751, saruparib (the demo trial) | Phase 3, Recruiting | Plovdiv, Sofia, Stara Zagora | Pre-screen this patient: `/s/nct06380751-md2jhsjd` |
+| 2 | NCT06727227, real-world trastuzumab deruxtecan, HER2-low | Phase not given, Recruiting | Burgas | Not on the platform yet |
 | 3 | NCT05774951, camizestrant, early breast cancer | Phase 3, Recruiting | none listed as recruiting | Not on the platform yet |
 
 NCT06380751 lines: i2, i3, i6, e6, e8. Warming the query cost 3 calls (4125 tokens in, 413 out); the repeat search made no model call (cache rows unchanged, 0.9 s).

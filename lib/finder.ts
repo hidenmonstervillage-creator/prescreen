@@ -412,11 +412,14 @@ export async function findTrials(input: FinderInput, deps: FinderDeps): Promise<
     const seen = new Set(studies.map((s) => s.nctId));
     studies = [...studies, ...second.studies.filter((s) => !seen.has(s.nctId))];
   }
-  const top = studies.slice(0, MAX_RESULTS);
   const links = await lookupOnPlatform(
-    top.map((s) => s.nctId),
+    studies.map((s) => s.nctId),
     deps.platformRows,
   );
+  // Studies with a published pre-screen first, API order otherwise (sort is stable).
+  // Sorted before the cut, so a published study past the fifth API result still shows.
+  const onPlatform = (s: CtgovStudy) => (links.has(s.nctId) ? 0 : 1);
+  const top = [...studies].sort((a, b) => onPlatform(a) - onPlatform(b)).slice(0, MAX_RESULTS);
 
   const usage = emptyUsage();
   let cacheHits = 0;

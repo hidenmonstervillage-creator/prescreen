@@ -246,7 +246,7 @@ describe("on-platform lookup", () => {
     expect(odd.size).toBe(0);
   });
 
-  it("findTrials sets the pre-screen link only for the study on the platform", async () => {
+  it("findTrials sets the pre-screen link only for the study on the platform, and lists it first", async () => {
     const { deps } = fakeDeps({
       searches: [result([study("NCT06727227"), study("NCT06380751"), study("NCT05774951")].map((s) => ({ ...s, criteriaText: "" })))],
       platform: [
@@ -255,11 +255,46 @@ describe("on-platform lookup", () => {
       ],
     });
     const out = await findTrials(DEMO, deps);
+    // The demo query: API order is NCT06727227, NCT06380751, NCT05774951. An unpublished trial row does not count.
     expect(out.results.map((r) => [r.nctId, r.prescreenHref])).toEqual([
-      ["NCT06727227", null],
       ["NCT06380751", "/s/nct06380751-md2jhsjd"],
+      ["NCT06727227", null],
       ["NCT05774951", null],
     ]);
+  });
+});
+
+describe("findTrials: studies on the platform first", () => {
+  const published = (nct: string): PlatformRow => ({ nct_id: nct, slug: `${nct.toLowerCase()}-abcdefgh`, published_at: "2026-10-10T11:00:00Z" });
+  const ids = (n: number) => Array.from({ length: n }, (_, k) => `NCT0000000${k}`);
+
+  it("keeps API order inside each group", async () => {
+    const { deps } = fakeDeps({
+      searches: [result(ids(5).map((id) => study(id, { criteriaText: "" })))],
+      platform: [published("NCT00000003"), published("NCT00000001")],
+    });
+    const out = await findTrials(DEMO, deps);
+    expect(out.results.map((r) => r.nctId)).toEqual(["NCT00000001", "NCT00000003", "NCT00000000", "NCT00000002", "NCT00000004"]);
+  });
+
+  it("a published study past the fifth API result still shows, first; the last unpublished one drops out", async () => {
+    const { deps, platformCalls } = fakeDeps({
+      searches: [result(ids(8).map((id) => study(id, { criteriaText: "" })))],
+      platform: [published("NCT00000007")],
+    });
+    const out = await findTrials(DEMO, deps);
+    expect(platformCalls).toEqual([ids(8)]);
+    expect(out.results.map((r) => r.nctId)).toEqual(["NCT00000007", "NCT00000000", "NCT00000001", "NCT00000002", "NCT00000003"]);
+    expect(out.results[0].prescreenHref).toBe("/s/nct00000007-abcdefgh");
+  });
+
+  it("nothing on the platform: API order unchanged, city results before the country fallback", async () => {
+    const a = study("NCT00000001", { criteriaText: "" });
+    const b = study("NCT00000002", { criteriaText: "" });
+    const c = study("NCT00000003", { criteriaText: "" });
+    const { deps } = fakeDeps({ searches: [result([a, b]), result([c, a])] });
+    const out = await findTrials(DEMO, deps);
+    expect(out.results.map((r) => r.nctId)).toEqual(["NCT00000001", "NCT00000002", "NCT00000003"]);
   });
 });
 
