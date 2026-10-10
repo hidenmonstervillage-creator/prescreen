@@ -1,4 +1,5 @@
 import type { GenerationReport } from "@/lib/generate";
+import { guardSummaryText, rejectedRulesText } from "@/lib/rule-guard";
 import type { Criterion } from "@/lib/types";
 import { UnavailableIcon } from "./Icons";
 
@@ -16,6 +17,8 @@ export default function GenerationSummary({ report, criteria }: { report: Partia
   const askable = criteria.filter((c) => c.askable).length;
   const c = report.criteria;
   const q = report.questions;
+  const guard = guardSummaryText(report);
+  const refused = rejectedRulesText(q);
   return (
     <section data-generation-summary className="rounded-2xl border border-line bg-surface-sunken/60 px-5 py-4 text-body text-ink tabular-nums">
       <p className="text-[17px]">
@@ -32,6 +35,19 @@ export default function GenerationSummary({ report, criteria }: { report: Partia
       {q && q.reasked && <p className="mt-1.5 text-ink-secondary">Questions re-asked once: {q.first_problems.join("; ")}</p>}
       {q && q.dropped.length > 0 && (
         <Problem>Questions dropped: {q.dropped.map((d) => `${d.id} (${d.problems.join("; ")})`).join(", ")}</Problem>
+      )}
+      {guard && (
+        <p className="mt-1.5" data-guard-summary>
+          {guard}
+          {report.research_team && report.research_team.length > 0 && (
+            <span className="text-ink-secondary"> ({report.research_team.map((r) => `${r.criterion_id}: ${r.reason}`).join("; ")})</span>
+          )}
+        </p>
+      )}
+      {refused && (
+        <p className="mt-1.5 text-ink-secondary" data-rejected-rules>
+          {refused}
+        </p>
       )}
       {report.usage && (
         <p className="mt-1.5 text-small text-ink-secondary">

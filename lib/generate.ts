@@ -6,7 +6,8 @@
 // Every check here is deterministic code; the model's output is never trusted as is.
 import { MODEL, openaiJson, addUsage, emptyUsage, type ChatMessage, type LlmJson } from "./openai";
 import { wordingProblems } from "./wording";
-import { applyMustAsk, type MustAskTag } from "./must-ask";
+import { applyMustAsk, permissionGuard, type MustAskTag } from "./must-ask";
+import { RESEARCH_TEAM_REASON, isTimeWindow, ruleRejections, type ResearchTeamItem, type RuleRejection } from "./rule-guard";
 import type { Criterion, Question, QuestionRule, QuestionType, Section, TokenUsage } from "./types";
 import { normalizeWs, visibleText } from "./text";
 
@@ -294,7 +295,9 @@ Rules:
    Judge only whether the criterion's text, as written, is true or false for the person. Do not consider whether that is good or bad for them.
    An answer that leaves any part of the criterion open goes in neither list; that is expected and fine. Example: for "Uncontrolled high blood pressure" asked as "Have you ever been told you have high blood pressure?", "no" goes in "deny_answers" and "yes" goes in neither list, because "yes" does not show that it is uncontrolled. When a criterion has several parts, ask in a way that one answer can settle all of them, such as a choice question whose options combine the parts. Example: for "Adult men and women", the answer "Woman" does not show that the person is an adult, so it confirms nothing; options such as "Woman aged 18 or over", "Man aged 18 or over" and "Under 18" settle every part.
    For "yes_no" use only "yes" and "no". For "choice" use only the exact option strings. For "number" both lists are empty; use "confirm_range" and "deny_range" instead, each {"min": number or null, "max": number or null}, inclusive, null meaning no limit on that side, and the two ranges must not overlap. For every type other than "number" both ranges are null. For "free_text" both lists are empty.
-8. To cover more criteria, one "yes_no" question may list conditions from several criteria ("Have you had any of these: A, B or C?"). Then "no" goes in "deny_answers" for each of those criteria, and "yes" goes in neither list for all of them, because "yes" does not show which one is true. The same answer never confirms two criteria of one "yes_no" question.`;
+8. To cover more criteria, one "yes_no" question may list conditions from several criteria ("Have you had any of these: A, B or C?"). Then "no" goes in "deny_answers" for each of those criteria, and "yes" goes in neither list for all of them, because "yes" does not show which one is true. The same answer never confirms two criteria of one "yes_no" question.
+9. Ask every yes or no question affirmatively, so that "yes" means the criterion's text is true for the person and "no" means it is false. Do not use "not", "never", "without", "no longer" or a word ending in n't in the question. So "yes" may only go in "confirm_answers" and "no" may only go in "deny_answers" (or in neither list). A "choice" question whose options start with "Yes" or "No" follows the same rule.
+10. When a criterion names a time window (within a number of days, weeks or months; at least a number of weeks since something; a washout period), use a "number" question that asks how many days, weeks or months ago, and set the ranges from the window. Never use a yes or no question, or a choice, for it.`;
 
 const RANGE_SCHEMA = {
   anyOf: [
@@ -367,6 +370,12 @@ export type QuestionsReport = {
   askable_without_question: string[];
   /** Criteria the must-ask table recognised: the question that serves each, or why it was left to the model. */
   must_ask?: MustAskTag[];
+  /** Model rules the polarity and time-window guards refused (lib/rule-guard.ts), before their one re-ask. */
+  rejected_rules?: RuleRejection[];
+  /** Criteria re-asked once on their own after a refused rule, and whether the second answer passed. */
+  reasked_criteria?: { criterion_id: string; passed: boolean }[];
+  /** Criteria the guards sent to the research team: no patient answer may give them met or not met. */
+  research_team?: ResearchTeamItem[];
 };
 
 function overlaps(a: { min: number | null; max: number | null }, b: { min: number | null; max: number | null }): boolean {
@@ -473,14 +482,16 @@ export function questionSetProblems(qs: Question[], min = MIN_QUESTIONS, max = M
 /**
  * The questions for one trial. `fixed` are the must-ask table's questions (already checked, ids q1..qk):
  * they come first, and the model writes questions only for the askable criteria they do not serve,
- * within the slots left under MAX_QUESTIONS.
+ * within the slots left under MAX_QUESTIONS. Every model rule then goes through the polarity and
+ * time-window guards (lib/rule-guard.ts): a refused criterion is re-asked once on its own, and if the
+ * second answer still fails it goes to the research team. The returned criteria carry that change.
  */
 export async function writeQuestions(
   criteria: Criterion[],
   llm: LlmJson = openaiJson,
   usage: TokenUsage = emptyUsage(),
   fixed: Question[] = [],
-): Promise<{ questions: Question[]; report: QuestionsReport }> {
+): Promise<{ questions: Question[]; report: QuestionsReport; criteria: Criterion[] }> {
   const askable = criteria.filter((c) => c.askable);
   const fixedServed = new Set(fixed.flatMap((q) => q.criterion_ids));
   // The model sees, and may serve, only what the table left.
@@ -495,13 +506,53 @@ export async function writeQuestions(
   ];
 
   const m = openAskable.length && slots > 0 ? await modelQuestions(open, openAskable, min, slots, describe, llm, usage) : null;
-  const fromModel = m?.questions ?? [];
-  // Table questions keep q1..qk; the model's follow on. Without table questions the ids stay the model's.
-  const qs = fixed.length ? [...fixed, ...fromModel.map((q, k) => ({ ...q, id: `q${fixed.length + k + 1}` }))] : fromModel;
+  const firstModel = m?.questions ?? [];
+
+  // The guards, on every model rule before anything is stored. A refused rule leaves its question;
+  // a question left with no criterion is dropped.
+  const rejected = firstModel.flatMap((q) => ruleRejections(q, open));
+  const refused = new Set(rejected.map((r) => `${r.question_id} ${r.criterion_id}`));
+  const fromModel = firstModel
+    .map((q) => {
+      const keep = q.criterion_ids.filter((id) => !refused.has(`${q.id} ${id}`));
+      return { ...q, criterion_ids: keep, rules: q.rules.filter((r) => keep.includes(r.criterion_id)) };
+    })
+    .filter((q) => q.criterion_ids.length > 0);
+
+  // One re-ask per refused criterion, for that criterion only.
+  const byId = new Map(open.map((c) => [c.id, c]));
+  const reasked: { criterion_id: string; passed: boolean }[] = [];
+  const researchTeam: ResearchTeamItem[] = [];
+  for (const id of [...new Set(rejected.map((r) => r.criterion_id))]) {
+    const c = byId.get(id)!;
+    const mine = rejected.filter((r) => r.criterion_id === id);
+    const again = await reaskOne(c, mine.map((r) => r.problem), llm, usage);
+    reasked.push({ criterion_id: id, passed: again !== null });
+    if (!again) {
+      const guard = mine.some((r) => r.guard === "time_window") ? "time_window" : "polarity";
+      researchTeam.push({ criterion_id: id, guard, reason: RESEARCH_TEAM_REASON[guard] });
+    } else if (fixed.length + fromModel.length < MAX_QUESTIONS) {
+      fromModel.push(again);
+    }
+    // A passing answer with no slot left: the criterion stays askable without a question (not found).
+  }
+  // A time window the table does not ask and no number question serves goes to the research team.
+  const servedByModel = new Set(fromModel.flatMap((q) => q.criterion_ids));
+  for (const c of openAskable) {
+    if (servedByModel.has(c.id) || researchTeam.some((r) => r.criterion_id === c.id) || !isTimeWindow(c)) continue;
+    researchTeam.push({ criterion_id: c.id, guard: "time_window", reason: RESEARCH_TEAM_REASON.time_window });
+  }
+
+  // Table questions keep q1..qk; the model's follow on. Without table questions or guard changes the ids stay the model's.
+  const renumber = fixed.length > 0 || rejected.length > 0;
+  const qs = renumber ? [...fixed, ...fromModel].map((q, k) => ({ ...q, id: `q${k + 1}` })) : fromModel;
+  const sent = new Map(researchTeam.map((r) => [r.criterion_id, r.reason]));
+  const out = criteria.map((c) => (sent.has(c.id) ? { ...c, askable: false, not_askable_reason: sent.get(c.id)! } : c));
   const served = new Set(qs.flatMap((q) => q.criterion_ids));
 
   return {
     questions: qs,
+    criteria: out,
     report: {
       returned: m?.returned ?? 0,
       kept: qs.length,
@@ -509,9 +560,42 @@ export async function writeQuestions(
       first_problems: m?.first_problems ?? [],
       dropped: m?.dropped ?? [],
       links_removed: m?.links_removed ?? [],
-      askable_without_question: askable.filter((c) => !served.has(c.id)).map((c) => c.id),
+      askable_without_question: askable.filter((c) => !served.has(c.id) && !sent.has(c.id)).map((c) => c.id),
+      rejected_rules: rejected,
+      reasked_criteria: reasked,
+      research_team: researchTeam,
     },
   };
+}
+
+/**
+ * The one re-ask for a criterion whose rule the guards refused: a fresh call about that criterion only.
+ * Returns the question when it passes every check and both guards, else null.
+ */
+async function reaskOne(c: Criterion, problems: string[], llm: LlmJson, usage: TokenUsage): Promise<Question | null> {
+  const list = [{ id: c.id, text: c.parent_quote ? `${c.parent_quote} ${c.quote}` : c.quote }];
+  const window = isTimeWindow(c)
+    ? ' This criterion names a time window: use a "number" question that asks how many days, weeks or months ago, and set the ranges from the window.'
+    : "";
+  const res = await llm<{ questions: Question[] }>({
+    label: `questions re-ask ${c.id}`,
+    messages: [
+      { role: "system", content: questionsSystem(1, 1) },
+      {
+        role: "user",
+        content:
+          `Criteria:\n${JSON.stringify(list, null, 2)}\n\n` +
+          `An earlier question for ${c.id} failed automatic checks: ${problems.join("; ")}.\n` +
+          `Write exactly one question that covers only ${c.id}. Ask it affirmatively: "yes" means the criterion's text is true for the person and "no" means it is false.${window}`,
+      },
+    ],
+    schemaName: "prescreen_questions",
+    schema: QUESTIONS_SCHEMA,
+  });
+  addUsage(usage, res.usage);
+  const q = res.data.questions.map(cleanQuestion).find((x) => x.criterion_ids.length === 1 && x.criterion_ids[0] === c.id);
+  if (!q || questionProblems(q, [c]).length || ruleRejections(q, [c]).length) return null;
+  return q;
 }
 
 /** One questions call, at most one re-ask, then the deterministic clean-up. */
@@ -612,6 +696,8 @@ export type GenerationReport = {
   questions: QuestionsReport;
   /** Wording or count problems left after the re-asks; empty when everything passed. */
   open_problems: string[];
+  /** Every criterion the guards sent to the research team: permissions, then the polarity and time-window guards. */
+  research_team?: ResearchTeamItem[];
 };
 
 /** Both steps for one trial's criteria text. */
@@ -621,19 +707,30 @@ export async function generateForTrial(
 ): Promise<{ criteria: Criterion[]; questions: Question[]; report: GenerationReport }> {
   const usage = emptyUsage();
   const a = await splitCriteria(text, llm, usage);
+  // Permissions go to the research team before anything is asked (lib/must-ask.ts guard list).
+  const permitted = permissionGuard(a.criteria);
   // The must-ask table, in code, before the questions call: these criteria are always asked.
-  const must = applyMustAsk(a.criteria, MAX_QUESTIONS);
+  const must = applyMustAsk(permitted.criteria, MAX_QUESTIONS);
   const tableProblems = must.questions.flatMap((q) => questionProblems(q, must.criteria).map((p) => `${q.id}: ${p}`));
   const b = await writeQuestions(must.criteria, llm, usage, must.questions);
   const open = [...tableProblems, ...questionSetProblems(b.questions)];
+  const researchTeam = [...permitted.sent, ...(b.report.research_team ?? [])];
   console.log(
     `[generate] ${a.criteria.length} criteria (${a.report.dropped.length} dropped), ${b.questions.length} questions ` +
-      `(${must.questions.length} from the must-ask table); ` +
+      `(${must.questions.length} from the must-ask table), ${(b.report.rejected_rules ?? []).length} model rules refused, ` +
+      `${researchTeam.length} criteria sent to the research team; ` +
       `${usage.calls} calls, ${usage.prompt_tokens} in, ${usage.completion_tokens} out`,
   );
   return {
-    criteria: must.criteria,
+    criteria: b.criteria,
     questions: b.questions,
-    report: { model: MODEL, usage, criteria: a.report, questions: { ...b.report, must_ask: must.tags }, open_problems: open },
+    report: {
+      model: MODEL,
+      usage,
+      criteria: a.report,
+      questions: { ...b.report, must_ask: must.tags },
+      open_problems: open,
+      research_team: researchTeam,
+    },
   };
 }

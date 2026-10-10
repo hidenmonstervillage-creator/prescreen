@@ -33,6 +33,13 @@ export const VERDICT_WORDS: readonly string[] = [
 
 const VERDICT_RE = new RegExp(`\\b(${VERDICT_WORDS.join("|")})\\b`, "i");
 
+/**
+ * A criterion that only gives permission, in the registry's own words: "are eligible for the study",
+ * "remain eligible to continue". Kept here because only this file may spell the word; the permission
+ * guard in lib/must-ask.ts uses it to send such a criterion to the research team, never to a question.
+ */
+export const PERMISSION_VERDICT_RE = /\b(?:is|are|be|remain|remains)\s+(?:also\s+)?eligible\b/i;
+
 // Built from code points so this file contains no literal dash or escape sequence.
 const EM_DASH = String.fromCharCode(0x2014);
 const EM_DASH_PATTERNS = [EM_DASH, "&" + "mdash;", "\\" + "u2014"];

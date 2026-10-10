@@ -8,8 +8,9 @@
 // into one plain question (yes, no, not sure, or a number) with that criterion's rule. The rule is
 // conservative: an answer confirms or denies the criterion only when the question covers everything
 // the criterion says in that direction; any other answer settles nothing and maps to not found.
-import { wordingProblems } from "./wording";
+import { PERMISSION_VERDICT_RE, wordingProblems } from "./wording";
 import { normalizeWs } from "./text";
+import { RESEARCH_TEAM_REASON, type ResearchTeamItem } from "./rule-guard";
 import type { Criterion, NumberRange, Question, QuestionRule, Section } from "./types";
 
 export type MustAskKind =
@@ -637,6 +638,43 @@ function criterionText(c: Criterion): string {
   return normalizeWs(c.parent_quote ? `${c.parent_quote} ${c.quote}` : c.quote);
 }
 
+// ---------------------------------------------------------------------------
+// The guard list: criteria no table question and no model question may ask.
+
+/**
+ * Permission, not a requirement: "may have received", "is allowed", "is permitted", "can be included".
+ * The registry's "are ... for the study" and "are ... to continue" form uses a word only lib/wording.ts
+ * may spell, so it lives there as PERMISSION_VERDICT_RE. A patient's answer can never give such a
+ * criterion met or not met.
+ */
+export const PERMISSION_PATTERNS: readonly RegExp[] = [
+  /\b(?:may|can|could|might)\s+(?:also\s+)?(?:have\s+)?(?:received|had|continue|been\s+treated|be\s+(?:included|enrolled|enroled|allowed|permitted|treated|considered))\b/i,
+  /\b(?:is|are|be|remain|remains)\s+(?:also\s+)?(?:allowed|permitted|acceptable)\b/i,
+  /\bcan\s+be\s+(?:included|enrolled|enroled)\b/i,
+  PERMISSION_VERDICT_RE,
+];
+
+/** The criterion's stem: its first clause, before a full stop, a semicolon or a "Note:". */
+export function criterionStem(text: string): string {
+  return text.split(/\.\s+(?=[A-Z])|;\s|\bNote\s*:/)[0];
+}
+
+export function isPermissive(text: string): boolean {
+  const stem = criterionStem(normalizeWs(text));
+  return PERMISSION_PATTERNS.some((re) => re.test(stem));
+}
+
+/** Sends every permission to the research team before the table or the model sees it. */
+export function permissionGuard(criteria: Criterion[]): { criteria: Criterion[]; sent: ResearchTeamItem[] } {
+  const sent: ResearchTeamItem[] = [];
+  const out = criteria.map((c) => {
+    if (!isPermissive(criterionText(c))) return c;
+    sent.push({ criterion_id: c.id, guard: "permission", reason: RESEARCH_TEAM_REASON.permission });
+    return { ...c, askable: false, not_askable_reason: RESEARCH_TEAM_REASON.permission };
+  });
+  return { criteria: out, sent };
+}
+
 /** Applies the table: the questions it guarantees, and the criteria with those it serves made askable. */
 export function applyMustAsk(criteria: Criterion[], maxQuestions = 12): MustAskResult {
   const cancerTrial = criteria.some((c) => c.section === "inclusion" && CANCER_TRIAL_RE.test(criterionText(c)));
@@ -647,6 +685,8 @@ export function applyMustAsk(criteria: Criterion[], maxQuestions = 12): MustAskR
 
   for (const c of criteria) {
     const text = criterionText(c);
+    // A permission is never asked (the guard list above).
+    if (isPermissive(text)) continue;
     const ctx: Context = { section: c.section, cancerTrial };
     let firstKind: MustAskKind | null = null;
     let done = false;
