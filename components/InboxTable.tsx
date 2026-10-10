@@ -192,7 +192,8 @@ export default function InboxTable({ rows: initial, filters: initialFilters = NO
         </div>
       </section>
       {error && <ErrorLine className="text-body">{error}</ErrorLine>}
-      <div className={`overflow-x-auto ${cardClass}`}>
+      {/* relative: the sr-only text in the rows is absolutely placed; without it, it escapes the scroll box and widens the page. */}
+      <div className={`relative overflow-x-auto ${cardClass}`}>
         <table data-inbox className="w-full border-collapse text-left">
           <thead className="bg-surface-sunken">
             <tr className="text-label uppercase text-ink-secondary">
