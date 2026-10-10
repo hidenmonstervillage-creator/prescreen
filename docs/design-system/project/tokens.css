@@ -1,0 +1,170 @@
+/* Karma: generated from tokens.json */
+:root, [data-theme="light"] {
+  --page: #f8fafc; /* Main palette · the paper: the page ground behind every card. It is also the token you use for that ground, `bg-page`. If you change it, keep the text colours below readable on it. Tailwind default: slate-50. */
+  --white: #ffffff; /* Main palette · cards and everything raised above the page ground. Used by `surface` (cards, header, footer, the evidence panel, inputs) and `action-ink` (the lettering of the main button). A background, not a text colour. Tailwind default: white. */
+  --mist: #e7e4e7; /* Main palette · the sunken grey. Used by `surface-sunken`: table heads, hovered rows, loading skeletons, source chips at rest. Tailwind default: slate-100. */
+  --fog: #e2e8f0; /* Main palette · hairlines. Used by `line` (card borders, table dividers) and `disabled-fill`. Tailwind default: slate-200. */
+  --cloud: #cbd5e1; /* Main palette · the stronger rule that must survive a projector. Used by `line-strong`. Tailwind default: slate-300. */
+  --pewter: #64748b; /* Main palette · the mid grey. Used by `control` (edges of inputs, secondary buttons, chips, the drop zone), `ink-muted` and `disabled-ink`. As text, on `white` and `page` only: 4.8:1 and 4.55:1. As an edge it needs 3:1. Tailwind default: slate-500. */
+  --graphite: #475569; /* Main palette · secondary text. Used by `ink-secondary` and `control-hover`. Text on `white`, `page`, `mist` and `ice`: 7.6, 7.2, 6.9 and 7.0:1. Tailwind default: slate-600. */
+  --charcoal: #1e293b; /* Main palette · the main button on hover. Used by `action-hover`; white text reads 14.6:1 against it. Tailwind default: slate-800. */
+  --midnight: #0f172a; /* Main palette · the brand ink. Used by `ink` (all primary text) and, through it, `action` (the main button) and the wordmark. Text on `page`, `white`, `mist`, `ice` and `highlight`: at least 14:1. Tailwind default: slate-900. */
+  --accent: #2563eb; /* Main palette · the one bright blue. Used by `link`, `focus-ring`, `selected-line` and `evidence-line`, and by the pulled line in the logo and on the cover. Text on `white`, `page`, `mist` and `ice`: 5.2, 4.9, 4.7 and 4.75:1; keep all four at 4.5:1 or more if you change it. Never a fill behind text, never a state. Tailwind default: blue-600. */
+  --cobalt: #1d4ed8; /* Main palette · the deeper blue. Used by `link-hover`. Text on `white`: 6.7:1. Tailwind default: blue-700. */
+  --ice: #eff6ff; /* Main palette · the palest blue. Used by `selected-tint`: the selected chip, tab or row. Tailwind default: blue-50. */
+  --highlight: #dbeafe; /* Main palette · the highlighter. Used by `evidence-tint` (behind quoted words) and `evidence-mark` (laid over the page image). Tailwind default: blue-100. */
+  --surface: var(--white); /* Cards, header, footer, the evidence panel, inputs, table rows. Alias of `white`. Text on it: `ink`, `ink-secondary`, `ink-muted`, `link`. `bg-surface`. Tailwind default: white. */
+  --surface-sunken: var(--mist); /* Table header band, hovered rows, loading skeletons, the source chip at rest. Alias of `mist`. Text on it: `ink`, `ink-secondary` and `link`. Keep `ink-muted` off it (4.3:1). `bg-surface-sunken`. Tailwind default: slate-100. */
+  --line: var(--fog); /* Hairlines: card borders, header and footer rules, table row dividers. Decorative, never the only edge of a control. Alias of `fog`. `border-line`, `divide-line`. Tailwind default: slate-200. */
+  --line-strong: var(--cloud); /* Hairlines that must survive a projector: the sticky matrix header rule, the source chip border, section rules on the case card. Alias of `cloud`. `border-line-strong`. Tailwind default: slate-300. */
+  --control: var(--pewter); /* Edges of things you operate: inputs, secondary buttons, filter chips, the drop zone, inactive source tabs. 4.8:1 on `surface`, 4.55:1 on `page` (needs 3:1). Alias of `pewter`. `border-control`. Tailwind default: slate-500. */
+  --control-hover: var(--graphite); /* Control edge on hover. Alias of `graphite`. `hover:border-control-hover`. Tailwind default: slate-600. */
+  --ink: var(--midnight); /* Primary text: values, criterion text, quotes, headings. 17.9:1 on `surface`; at least 14:1 on every tint in this system. Alias of `midnight`. `text-ink`. Tailwind default: slate-900. */
+  --ink-secondary: var(--graphite); /* Labels, metadata, column headers, the tagline, the footer. 7.6:1 on `surface`, 7.2:1 on `page`, 6.9:1 on `surface-sunken`. Alias of `graphite`. `text-ink-secondary`. Tailwind default: slate-600. */
+  --ink-muted: var(--pewter); /* Optional metadata only (timestamps, file sizes), on `surface` (4.8:1) or `page` (4.55:1). Never on `surface-sunken` (4.3:1) and never on a projector screen. Alias of `pewter`. `text-ink-muted`. Tailwind default: slate-500. */
+  --action: var(--ink); /* Primary button fill, the one dark element per view. Alias of `ink`. `bg-action`. Tailwind default: slate-900. */
+  --action-hover: var(--charcoal); /* Primary button fill on hover. Alias of `charcoal`. `hover:bg-action-hover`. Tailwind default: slate-800. */
+  --action-ink: var(--white); /* Text and icons on `action` (17.9:1) and `action-hover` (14.6:1). Alias of `white`. `text-action-ink`. Tailwind default: white. */
+  --disabled-fill: var(--fog); /* Fill of a disabled primary button. Alias of `fog`. `bg-disabled-fill`. Tailwind default: slate-200. */
+  --disabled-ink: var(--pewter); /* Text of any disabled control. Disabled controls are exempt from the 4.5:1 rule, and this one still reads 3.9:1 against `disabled-fill`. Alias of `pewter`. `text-disabled-ink`. Tailwind default: slate-500. */
+  --link: var(--accent); /* Links, NCT IDs, "Open the criterion matrix →". 3.5:1 against `ink`, so links stand apart from body text; inside a sentence they are also underlined. Alias of `accent`. `text-link`. Tailwind default: blue-600. */
+  --link-hover: var(--cobalt); /* Link on hover, always with an underline. 6.7:1 on `surface`. Alias of `cobalt`. `hover:text-link-hover`. Tailwind default: blue-700. */
+  --focus-ring: var(--accent); /* Keyboard focus: a solid 2px outline, 2px off the element. 5.2:1 on `surface`, 4.9:1 on `page`, 4.7:1 on `surface-sunken`. Alias of `accent`. `outline-focus-ring`. Tailwind default: blue-600. */
+  --selected-tint: var(--ice); /* Background of the selected thing: the open source chip, the active source tab, the row whose evidence panel is open. Alias of `ice`. Text on it: `ink`, `ink-secondary`, `link`. `bg-selected-tint`. Tailwind default: blue-50. */
+  --selected-line: var(--accent); /* Edge of the selected thing (2px). Alias of `accent`. `border-selected-line`. Tailwind default: blue-600. */
+  --evidence-tint: var(--highlight); /* Highlighter behind the quoted words in the evidence panel. `ink` on it is 14.6:1. Never put a link on it. Alias of `highlight`. `bg-evidence-tint`. Tailwind default: blue-100. */
+  --evidence-mark: var(--highlight); /* The highlighter laid over the quote in the page image. Always with `mix-blend-multiply`, so the scan's own ink stays visible through it. Alias of `highlight`. `fill-evidence-mark`, `bg-evidence-mark`. Tailwind default: blue-100. */
+  --evidence-line: var(--accent); /* 2px outline around the highlighted quote on the page image. Alias of `accent`. `stroke-evidence-line`, `outline-evidence-line`. Tailwind default: blue-600. */
+  --fictional-ink: #5b21b6; /* Text of the Fictional patient badge, 8.2:1 on `fictional-tint`. Violet is used for nothing else. `text-fictional-ink`. Tailwind default: violet-800. */
+  --fictional-tint: #f5f3ff; /* Fill of the Fictional patient badge. `bg-fictional-tint`. Tailwind default: violet-50. */
+  --fictional-line: #c4b5fd; /* Border of the Fictional patient badge. `border-fictional-line`. Tailwind default: violet-300. */
+  --frozen-ink: #334155; /* Text of the Frozen demo badge, 9.45:1 on `frozen-tint`. `text-frozen-ink`. Tailwind default: slate-700. */
+  --frozen-tint: #f1f5f9; /* Fill of the Frozen demo badge. `bg-frozen-tint`. Tailwind default: slate-100. */
+  --frozen-line: #94a3b8; /* Border of the Frozen demo badge (one step darker than today's slate-300 so the grey badge still shows on a projector). `border-frozen-line`. Tailwind default: slate-400. */
+  --state-met-solid: #115e59; /* Icon of **met** (filled circle). Darker and bluer than today's emerald-600 so it separates from `state-not-met-solid` in greyscale and for red-green colour blindness. 7.6:1 on `surface`. `bg-state-met-solid`, `fill-state-met-solid`. Tailwind default: teal-800. */
+  --state-met-glyph: #ffffff; /* The check inside the met icon, 7.6:1 on `state-met-solid`. `stroke-state-met-glyph`. Tailwind default: white. */
+  --state-met-ink: #134e4a; /* The word "met" and its count, 8.8:1 on `state-met-tint`, 9.5:1 on `surface`. `text-state-met-ink`. Tailwind default: teal-900. */
+  --state-met-tint: #eff8f6; /* Pill fill for met: a quiet grey-green, so settled rows stay calm. `bg-state-met-tint`. */
+  --state-met-line: #a7cfc9; /* Pill border for met. `border-state-met-line`. */
+  --state-not-met-solid: #d6341c; /* Icon of **not met** (filled square). A touch warmer than today's red-600 (`#DC2626`) so that, for protanopia, it stays apart from `state-met-solid`. 4.8:1 on `surface`. `bg-state-not-met-solid`, `fill-state-not-met-solid`. */
+  --state-not-met-glyph: #ffffff; /* The cross inside the not met icon, 4.8:1 on `state-not-met-solid`. `stroke-state-not-met-glyph`. Tailwind default: white. */
+  --state-not-met-ink: #7f1d1d; /* The words "not met" and the count, 9.2:1 on `state-not-met-tint` (one step darker than today's red-800 so it holds on a projector). `text-state-not-met-ink`. Tailwind default: red-900. */
+  --state-not-met-tint: #fef2f2; /* Pill fill for not met. `bg-state-not-met-tint`. Tailwind default: red-50. */
+  --state-not-met-line: #fecaca; /* Pill border for not met. `border-state-not-met-line`. Tailwind default: red-200. */
+  --state-not-found-solid: #64748b; /* The dashed ring and dash of **not found**, and the "not in the documents" marker on the case card. 4.8:1 on `surface`. `stroke-state-not-found-solid`. Tailwind default: slate-500. */
+  --state-not-found-ink: #334155; /* The words "not found" and "not in the documents", 10.4:1 on `surface`. `text-state-not-found-ink`. Tailwind default: slate-700. */
+  --state-not-found-tint: #ffffff; /* Pill fill for not found: hollow, because nothing was in the documents. `bg-state-not-found-tint`. Tailwind default: white. */
+  --state-not-found-line: var(--state-not-found-solid); /* Pill border for not found, always dashed (`border-dashed`). `border-state-not-found-line`. Tailwind default: slate-500. */
+  --state-clinician-solid: #fbbf24; /* Icon of **needs a clinician** (filled diamond, the flowchart shape for a decision). Lighter than every other state so it stands apart in greyscale. `fill-state-clinician-solid`. Tailwind default: amber-400. */
+  --state-clinician-glyph: #451a03; /* The "!" inside the diamond: dark on amber, 9.0:1 (white was 2.1:1). `fill-state-clinician-glyph`. Tailwind default: amber-950. */
+  --state-clinician-edge: #92400e; /* 1px outline of the diamond, so the light amber icon still has a 7:1 edge on white and on a washed-out projector. `stroke-state-clinician-edge`. Tailwind default: amber-800. */
+  --state-clinician-ink: #78350f; /* The words "needs a clinician" and the count, 8.8:1 on `state-clinician-tint`. `text-state-clinician-ink`. Tailwind default: amber-900. */
+  --state-clinician-tint: #fffbeb; /* Pill fill for needs a clinician. `bg-state-clinician-tint`. Tailwind default: amber-50. */
+  --state-clinician-line: #fde68a; /* Pill border for needs a clinician. `border-state-clinician-line`. Tailwind default: amber-200. */
+  --shadow-card: 0 1px 2px 0 rgba(15, 23, 42, 0.05); /* Cards at rest, if anything. The system is flat: a white card on `page` with a `line` border is enough. `shadow-card`. */
+  --shadow-raised: 0 4px 12px -2px rgba(15, 23, 42, 0.12), 0 2px 4px -2px rgba(15, 23, 42, 0.08); /* Things that float over content: the expanded source list, the stuck matrix header. `shadow-raised`. */
+  --shadow-panel: -16px 0 40px -16px rgba(15, 23, 42, 0.28); /* The evidence side panel, pinned to the right edge. `shadow-panel`. */
+}
+:root {
+  --space-1: 4px; /* Gap between a source chip's icon and its text; between stacked chips. `gap-1`, `p-1`. */
+  --space-1\.5: 6px; /* Gap between a state icon and its word inside a pill; left padding of pills. `gap-1.5`, `pl-1.5`. */
+  --space-2: 8px; /* Gap between pills in a row, between chips, between a label and its input. `gap-2`. */
+  --space-2\.5: 10px; /* Right padding of pills and badges. `pr-2.5`, `px-2.5`. */
+  --space-3: 12px; /* Input and small-button padding; vertical padding of table rows. `px-3`, `py-3`. */
+  --space-4: 16px; /* Button padding; cell padding; gap between field rows. `px-4`, `gap-4`. */
+  --space-5: 20px; /* Page side gutters (as today) and card padding. `px-5`, `p-5`. */
+  --space-6: 24px; /* Gap between case-card sections; evidence panel padding. `gap-6`, `p-6`. */
+  --space-8: 32px; /* Gap between page regions (case card and trial list). `gap-8`. */
+  --space-10: 40px; /* Top padding of a page below the header. `pt-10`. */
+  --space-12: 48px; /* Empty-state padding; landing sections. `py-12`. */
+  --space-16: 64px; /* Header height and title-slide margins. `h-16`. */
+  --radius-md: 6px; /* Badges and source chips (as today). `rounded-md`. */
+  --radius-lg: 8px; /* Buttons, inputs, source tabs. `rounded-lg`. */
+  --radius-xl: 12px; /* Drop zone, the page-image frame, the expanded source list. `rounded-xl`. */
+  --radius-2xl: 16px; /* Cards (as today). `rounded-2xl`. */
+  --radius-full: 9999px; /* State pills, count pills, filter chips (as today). `rounded-full`. */
+  --size-icon-sm: 16px; /* State icons in pills, chips and the legend. `size-4`. */
+  --size-icon-md: 20px; /* Icons in buttons, the drop zone and the evidence panel header. `size-5`. */
+  --size-chip: 24px; /* Source chip height: the WCAG 2.2 minimum target. `h-6`. */
+  --size-pill: 28px; /* State pill, count pill and badge height. `h-7`. */
+  --size-control-sm: 32px; /* Small buttons and filter chips. `h-8`. */
+  --size-control-md: 40px; /* Buttons and inputs. `h-10`. */
+  --size-header: 64px; /* App header height (as today). `h-16`. */
+  --size-gutter: 20px; /* Page side gutters (as today). `px-5`. */
+  --size-content-max: 1400px; /* Content column (as today). With the 20px gutters it stays inside a 1920px projector image at 125% browser zoom (1536 CSS px). `max-w-content`. */
+  --size-panel: 520px; /* Evidence side panel width. `w-panel`. */
+  --size-text-floor: 14px; /* The smallest text allowed anywhere, on screen and on the projector. `text-small`, `text-label`. */
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --text-display: 700 40px/48px var(--font-sans); /* Landing hero and title slides only. `text-display`. */
+  --text-title: 700 28px/36px var(--font-sans); /* Page titles: the patient on the case card, the trial on the criterion matrix. Same size as today. `text-title`. */
+  --text-heading: 600 20px/28px var(--font-sans); /* Card and panel titles, the criterion in the evidence panel, empty-state headlines. `text-heading`. */
+  --text-body: 400 15px/22px var(--font-sans); /* Default for everything else: field values, criterion text, table cells, buttons (with `font-semibold`). Same size as today. `text-body`. */
+  --text-quote: 400 16px/26px var(--font-sans); /* Verbatim evidence quotes only, one step larger than body so evidence is the loudest text on screen. Keep the document's own language and punctuation. `text-quote`. */
+  --text-small: 400 14px/20px var(--font-sans); /* The floor: pills, chips, badges, metadata, helper text, the footer. Nothing in Karma is smaller than 14px. `text-small`. */
+  --text-label: 600 14px/20px var(--font-sans); /* Section labels and badge words, always set uppercase (`text-label uppercase`). Replaces today's 12px labels. */
+  --text-trial-id: 500 14px/20px var(--font-mono); /* NCT IDs, in the monospace stack with tabular figures (`font-mono text-small font-medium`). Same treatment as today, at the 14px floor. */
+}
+.display {
+  font-family: var(--font-sans);
+  font-size: 40px;
+  line-height: 48px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.title {
+  font-family: var(--font-sans);
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.heading {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.body {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.quote {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 26px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.small {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.label {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+.trial-id {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/Inter-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}

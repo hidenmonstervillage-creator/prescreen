@@ -1,0 +1,137 @@
+/*
+ * Karma: Tailwind v4 theme. Generated from the design system's tokens.json by karma-tailwind-build.mjs.
+ * Use: @import "tailwindcss"; @import "./karma-tailwind-v4-theme.css";
+ * Class names are the same as with the v3 preset: bg-page, text-state-met-ink, text-body, shadow-card ...
+ * The main palette is written as colours; every semantic token points at it with var(), so changing
+ * a palette colour here changes everything that uses it.
+ * Keep the woff2 next to this file (self-hosted, no network).
+ */
+
+@font-face {
+  font-family: "Geologica";
+  src: url("./Geologica-Sharp-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Overpass Mono";
+  src: url("./OverpassMono-Variable.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --color-carbon: #131313;
+  --color-navy: #132774;
+  --color-cobalt: #2443B8;
+  --color-accent: #4965EB;
+  --color-periwinkle: #818FF2;
+  --color-lavender: #B2B9F7;
+  --color-mist: #E7E7E7;
+  --color-white: #FFFFFF;
+  --color-page: #F6F6F6;
+  --color-fog: #DCDCDC;
+  --color-cloud: #BDBDBD;
+  --color-pewter: #6E6E6E;
+  --color-graphite: #4A4A4A;
+  --color-ice: #EFF1FE;
+  --color-highlight: #DBE0FC;
+  --color-surface: var(--color-white);
+  --color-surface-sunken: var(--color-mist);
+  --color-line: var(--color-fog);
+  --color-line-strong: var(--color-cloud);
+  --color-control: var(--color-pewter);
+  --color-control-hover: var(--color-graphite);
+  --color-ink: var(--color-carbon);
+  --color-ink-secondary: var(--color-graphite);
+  --color-ink-muted: var(--color-pewter);
+  --color-action: var(--color-ink);
+  --color-action-hover: var(--color-navy);
+  --color-action-ink: var(--color-white);
+  --color-disabled-fill: var(--color-fog);
+  --color-disabled-ink: var(--color-pewter);
+  --color-link: var(--color-cobalt);
+  --color-link-hover: var(--color-navy);
+  --color-focus-ring: var(--color-accent);
+  --color-selected-tint: var(--color-ice);
+  --color-selected-line: var(--color-accent);
+  --color-evidence-tint: var(--color-highlight);
+  --color-evidence-mark: var(--color-lavender);
+  --color-evidence-line: var(--color-accent);
+  --color-brand-ground: var(--color-carbon);
+  --color-brand-glow: var(--color-navy);
+  --color-brand-ink: var(--color-mist);
+  --color-brand-action: var(--color-mist);
+  --color-brand-action-ink: var(--color-carbon);
+  --color-brand-dot-1: var(--color-cobalt);
+  --color-brand-dot-2: var(--color-accent);
+  --color-brand-dot-3: var(--color-periwinkle);
+  --color-brand-dot-4: var(--color-lavender);
+  --color-brand-dot-5: var(--color-mist);
+  --color-fictional-ink: #5B21B6;
+  --color-fictional-tint: #F5F3FF;
+  --color-fictional-line: #C4B5FD;
+  --color-frozen-ink: #334155;
+  --color-frozen-tint: #F1F5F9;
+  --color-frozen-line: #94A3B8;
+  --color-state-met-solid: #115E59;
+  --color-state-met-glyph: #FFFFFF;
+  --color-state-met-ink: #134E4A;
+  --color-state-met-tint: #EFF8F6;
+  --color-state-met-line: #A7CFC9;
+  --color-state-not-met-solid: #D6341C;
+  --color-state-not-met-glyph: #FFFFFF;
+  --color-state-not-met-ink: #7F1D1D;
+  --color-state-not-met-tint: #FEF2F2;
+  --color-state-not-met-line: #FECACA;
+  --color-state-not-found-solid: #64748B;
+  --color-state-not-found-ink: #334155;
+  --color-state-not-found-tint: #FFFFFF;
+  --color-state-not-found-line: var(--color-state-not-found-solid);
+  --color-state-clinician-solid: #FBBF24;
+  --color-state-clinician-glyph: #451A03;
+  --color-state-clinician-edge: #92400E;
+  --color-state-clinician-ink: #78350F;
+  --color-state-clinician-tint: #FFFBEB;
+  --color-state-clinician-line: #FDE68A;
+
+  --font-sans: Geologica, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Overpass Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  --text-hero: 96px;
+  --text-hero--line-height: 102px;
+  --text-hero--letter-spacing: -0.035em;
+  --text-hero--font-weight: 700;
+  --text-display: 40px;
+  --text-display--line-height: 48px;
+  --text-display--letter-spacing: -0.03em;
+  --text-display--font-weight: 700;
+  --text-title: 28px;
+  --text-title--line-height: 36px;
+  --text-title--letter-spacing: -0.01em;
+  --text-title--font-weight: 700;
+  --text-heading: 20px;
+  --text-heading--line-height: 28px;
+  --text-heading--letter-spacing: -0.01em;
+  --text-heading--font-weight: 600;
+  --text-body: 15px;
+  --text-body--line-height: 22px;
+  --text-quote: 16px;
+  --text-quote--line-height: 26px;
+  --text-small: 14px;
+  --text-small--line-height: 20px;
+  --text-label: 14px;
+  --text-label--line-height: 20px;
+  --text-label--letter-spacing: 0.06em;
+  --text-label--font-weight: 600;
+
+  --shadow-card: 0 1px 2px 0 rgba(19, 19, 19, 0.05);
+  --shadow-raised: 0 4px 12px -2px rgba(19, 19, 19, 0.12), 0 2px 4px -2px rgba(19, 19, 19, 0.08);
+  --shadow-panel: -16px 0 40px -16px rgba(19, 19, 19, 0.28);
+
+  --container-content: 1400px;
+  --container-panel: 520px;
+}

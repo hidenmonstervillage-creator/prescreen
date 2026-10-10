@@ -1,0 +1,281 @@
+{
+  "v": 3,
+  "assetGroups": {
+    "Code": {
+      "files": {},
+      "name": "Code",
+      "order": []
+    },
+    "Icons": {
+      "files": {
+        "chevron-down.svg": {
+          "blob": "9f2487e5f589f2575b23f6bb21c7811c",
+          "name": "chevron-down.svg",
+          "size": 242,
+          "type": "image/svg+xml"
+        },
+        "chevron-right.svg": {
+          "blob": "eed18e144ce39e91cbf2d261ad654e63",
+          "name": "chevron-right.svg",
+          "size": 242,
+          "type": "image/svg+xml"
+        },
+        "close.svg": {
+          "blob": "13fa82cdcdcbb2d02d0b957d87bc77eb",
+          "name": "close.svg",
+          "size": 247,
+          "type": "image/svg+xml"
+        },
+        "document.svg": {
+          "blob": "57b1a79fe3564fdbe7b469477dcf037b",
+          "name": "document.svg",
+          "size": 395,
+          "type": "image/svg+xml"
+        },
+        "documents.svg": {
+          "blob": "23cec9e53b9279e0e8c25437f8423e2b",
+          "name": "documents.svg",
+          "size": 405,
+          "type": "image/svg+xml"
+        },
+        "spinner.svg": {
+          "blob": "5ec286dce7bf2feb3f7e12c0cca05e38",
+          "name": "spinner.svg",
+          "size": 255,
+          "type": "image/svg+xml"
+        },
+        "state-clinician.svg": {
+          "blob": "b3e1eb15e9906fca370ec47074f4642b",
+          "name": "state-clinician.svg",
+          "size": 382,
+          "type": "image/svg+xml"
+        },
+        "state-met.svg": {
+          "blob": "675f7c61b76f9cfec2f044b7852637af",
+          "name": "state-met.svg",
+          "size": 295,
+          "type": "image/svg+xml"
+        },
+        "state-not-found.svg": {
+          "blob": "4c69714f4cbf9883b020dca42f8e49bf",
+          "name": "state-not-found.svg",
+          "size": 350,
+          "type": "image/svg+xml"
+        },
+        "state-not-met.svg": {
+          "blob": "ea17564eaa32e8d4e93bd0c716945f0b",
+          "name": "state-not-met.svg",
+          "size": 311,
+          "type": "image/svg+xml"
+        },
+        "unavailable.svg": {
+          "blob": "d898dd01e9b2bb73d6077c72766ed7ed",
+          "name": "unavailable.svg",
+          "size": 282,
+          "type": "image/svg+xml"
+        },
+        "upload.svg": {
+          "blob": "2373d1dd1f0c9a96deca103124e5a153",
+          "name": "upload.svg",
+          "size": 339,
+          "type": "image/svg+xml"
+        }
+      },
+      "name": "Icons",
+      "order": [
+        "state-met.svg",
+        "state-not-met.svg",
+        "state-not-found.svg",
+        "state-clinician.svg",
+        "document.svg",
+        "documents.svg",
+        "chevron-down.svg",
+        "chevron-right.svg",
+        "close.svg",
+        "upload.svg",
+        "unavailable.svg",
+        "spinner.svg"
+      ],
+      "tile": "s"
+    },
+    "Logos": {
+      "files": {
+        "karma-icon.svg": {
+          "blob": "8a017ab4d420ec20b5f6465cbc522c5c",
+          "name": "karma-icon.svg",
+          "size": 860,
+          "type": "image/svg+xml"
+        },
+        "karma-lockup-reversed.svg": {
+          "blob": "b043bf1a01728e56c6a184ca6e0fd461",
+          "name": "karma-lockup-reversed.svg",
+          "size": 21337,
+          "type": "image/svg+xml"
+        },
+        "karma-lockup-solid-reversed.svg": {
+          "blob": "7da18f0fae672dfce02df35f6b713dfc",
+          "name": "karma-lockup-solid-reversed.svg",
+          "size": 3656,
+          "type": "image/svg+xml"
+        },
+        "karma-lockup-solid.svg": {
+          "blob": "844755f171989a13145c0fbb960277c5",
+          "name": "karma-lockup-solid.svg",
+          "size": 3656,
+          "type": "image/svg+xml"
+        },
+        "karma-lockup.svg": {
+          "blob": "f56f2e2df086eb631fb1b3a69ea28479",
+          "name": "karma-lockup.svg",
+          "size": 21337,
+          "type": "image/svg+xml"
+        },
+        "karma-mark-mono.svg": {
+          "blob": "1ff6ab3d93973e64696b5a18d936de7f",
+          "name": "karma-mark-mono.svg",
+          "size": 737,
+          "type": "image/svg+xml"
+        },
+        "karma-mark-reversed.svg": {
+          "blob": "f0092ef433ae25011936f6488ac7f644",
+          "name": "karma-mark-reversed.svg",
+          "size": 18413,
+          "type": "image/svg+xml"
+        },
+        "karma-mark-solid-reversed.svg": {
+          "blob": "ebc091037d20c718f6d6c1ac558202e1",
+          "name": "karma-mark-solid-reversed.svg",
+          "size": 732,
+          "type": "image/svg+xml"
+        },
+        "karma-mark-solid.svg": {
+          "blob": "f5337bc8f259c95bfeb7d8c42f304e4b",
+          "name": "karma-mark-solid.svg",
+          "size": 732,
+          "type": "image/svg+xml"
+        },
+        "karma-mark.svg": {
+          "blob": "f733b5bfb6b1f1d71f8b079c633948d9",
+          "name": "karma-mark.svg",
+          "size": 18413,
+          "type": "image/svg+xml"
+        },
+        "karma-wordmark-reversed.svg": {
+          "blob": "2f82d06f84cf5878b3bfd04a3c08e4e4",
+          "name": "karma-wordmark-reversed.svg",
+          "size": 2945,
+          "type": "image/svg+xml"
+        },
+        "karma-wordmark.svg": {
+          "blob": "30794591254a4002f2b036a08a425554",
+          "name": "karma-wordmark.svg",
+          "size": 2945,
+          "type": "image/svg+xml"
+        }
+      },
+      "name": "Logos",
+      "order": [
+        "karma-lockup.svg",
+        "karma-lockup-reversed.svg",
+        "karma-lockup-solid.svg",
+        "karma-lockup-solid-reversed.svg",
+        "karma-mark.svg",
+        "karma-mark-reversed.svg",
+        "karma-mark-solid.svg",
+        "karma-mark-solid-reversed.svg",
+        "karma-mark-mono.svg",
+        "karma-icon.svg",
+        "karma-wordmark.svg",
+        "karma-wordmark-reversed.svg"
+      ],
+      "tile": "l"
+    },
+    "Retired": {
+      "files": {
+        "karma-a-mark.svg": {
+          "blob": "920da9d1844399bdfa7706cdcfb96db5",
+          "name": "karma-a-mark.svg",
+          "size": 756,
+          "type": "image/svg+xml"
+        },
+        "karma-a-wordmark.svg": {
+          "blob": "64107c4c63bb46d4658484e7156170fd",
+          "name": "karma-a-wordmark.svg",
+          "size": 2780,
+          "type": "image/svg+xml"
+        },
+        "karma-b-mark.svg": {
+          "blob": "0d4ee07018a3ef9d766d8b895acc18d5",
+          "name": "karma-b-mark.svg",
+          "size": 580,
+          "type": "image/svg+xml"
+        },
+        "karma-b-wordmark.svg": {
+          "blob": "890053304177388e3baf2c1526c0fb9e",
+          "name": "karma-b-wordmark.svg",
+          "size": 4564,
+          "type": "image/svg+xml"
+        },
+        "karma-c-mark-two-colour.svg": {
+          "blob": "edaffa9ea2f71c817a720c29f778f2fa",
+          "name": "karma-c-mark-two-colour.svg",
+          "size": 1036,
+          "type": "image/svg+xml"
+        },
+        "karma-c-mark.svg": {
+          "blob": "71987c975f713447523d281045ca2b0e",
+          "name": "karma-c-mark.svg",
+          "size": 1036,
+          "type": "image/svg+xml"
+        },
+        "karma-c-wordmark.svg": {
+          "blob": "642fca6ab334949effbbc8fe97a4d0f1",
+          "name": "karma-c-wordmark.svg",
+          "size": 5535,
+          "type": "image/svg+xml"
+        }
+      },
+      "name": "Retired",
+      "order": [
+        "karma-a-wordmark.svg",
+        "karma-a-mark.svg",
+        "karma-b-wordmark.svg",
+        "karma-b-mark.svg",
+        "karma-c-wordmark.svg",
+        "karma-c-mark.svg",
+        "karma-c-mark-two-colour.svg"
+      ],
+      "tile": "l"
+    }
+  },
+  "blobs": {},
+  "createdOnFiles": {
+    "at": "2026-10-04T08:14:34Z",
+    "v": 1
+  },
+  "docs": {
+    "readme": "project/README.md",
+    "sections": [
+      "project/1-dos-and-donts.md",
+      "project/2-tailwind.md",
+      "project/3-accessibility.md"
+    ]
+  },
+  "groups": [
+    "Logos",
+    "Icons",
+    "Code",
+    "Retired"
+  ],
+  "lastChange": {
+    "at": "2026-10-08T14:37:16Z",
+    "by": "Ivayla Chomakovska",
+    "via": "Claude (Cowork)",
+    "note": "Added the Twin logo (Seed 2). Logos now holds 12 SVGs: the dotted and solid marks, lockups and wordmarks for light and dark grounds, a one-colour mark and the tab icon. The three earlier wordmark directions moved to a new Retired group. Brand notes, the Wordmark and App header previews and the cover now use the new logo."
+  },
+  "layout": "files",
+  "libraries": [],
+  "namespace": "Karma",
+  "sections": {},
+  "title": "Karma"
+}
