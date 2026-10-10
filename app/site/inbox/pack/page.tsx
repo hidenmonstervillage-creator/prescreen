@@ -8,7 +8,7 @@ import { buttonClass, cardClass, nctClass, sectionLabel } from "@/components/ui"
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = { title: "Lead pack · Pre-screen" };
+export const metadata: Metadata = { title: "Lead pack" };
 
 /** The preview before download. A pack is per trial; with several trials ready, pick one first. */
 export default async function LeadPackPage({ searchParams }: { searchParams: { trial?: string } }) {

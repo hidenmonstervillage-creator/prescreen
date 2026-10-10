@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import type { InboxRow } from "@/lib/trials";
 import { packable } from "@/lib/referral";
+import ContactText from "./ContactText";
 import CountsLine from "./CountsLine";
 import FictionalBadge from "./FictionalBadge";
 import ReferralReadyLabel from "./ReferralReadyLabel";
@@ -152,7 +153,7 @@ export default function InboxTable({ rows: initial }: { rows: InboxViewRow[] }) 
                 <td className="px-5 py-3 text-body text-ink">
                   <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
                     <span className="tabular-nums" data-contact>
-                      {r.contact}
+                      <ContactText contact={r.contact} />
                     </span>
                     <FictionalBadge />
                   </div>

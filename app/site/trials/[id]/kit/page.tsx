@@ -7,7 +7,7 @@ import TrialKit from "@/components/kit/TrialKit";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = { title: "Trial kit · Pre-screen" };
+export const metadata: Metadata = { title: "Trial kit" };
 
 /** The origin this request came in on, so the printed link matches the deployment. */
 function requestOrigin(): string {

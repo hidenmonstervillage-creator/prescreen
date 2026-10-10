@@ -11,7 +11,7 @@ import PublicHeader from "@/components/PublicHeader";
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
 
-export const metadata: Metadata = { title: "Find a recruiting trial for a patient" };
+export const metadata: Metadata = { title: { absolute: "Find a recruiting trial for a patient" } };
 
 type Params = Partial<Record<keyof FinderInput, string | string[]>>;
 

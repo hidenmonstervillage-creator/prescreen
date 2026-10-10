@@ -28,6 +28,9 @@ const FIX = JSON.parse(readFileSync(join(__dirname, "fixtures", "NCT06380751.gen
 const BANNED = /\b(in)?eligib\w*|\bviab\w*|\bqualif\w*|\b\w*likel\w*|\bscor\w*|\bfinder\w*|\bmatch\w*/i;
 const KARMA_LABEL = "Request records for a full match";
 
+/** The only phrases that may say "site" (CLAUDE.md): the contracted trial site a patient is referred to. */
+const SITE_PHRASES = ["contracted trial site", "trial site", "site network"];
+
 /** Visible text: tags dropped, the allowed footers and the Karma label taken out. */
 function visible(html: string): string {
   return html
@@ -48,7 +51,8 @@ function visible(html: string): string {
 function clean(html: string) {
   const text = visible(html);
   expect(text.match(BANNED)?.[0] ?? null).toBeNull();
-  expect(text.match(/\bsites?\b/i)?.[0] ?? null).toBeNull();
+  const withoutSitePhrases = SITE_PHRASES.reduce((t, p) => t.split(p).join(" "), text);
+  expect(withoutSitePhrases.match(/\bsites?\b/i)?.[0] ?? null).toBeNull();
   expect(hasEmDash(html)).toBe(false);
   return text;
 }
@@ -78,8 +82,10 @@ function inboxRow(id: string, over: Partial<InboxViewRow>): InboxViewRow {
 describe("landing hero", () => {
   it("headline and sub-line are exact, and staff sign in names the hospital", () => {
     const html = renderToStaticMarkup(<Home />);
-    expect(html).toContain("Patients, faster and cheaper, for the people who run clinical trials.");
-    expect(html).toContain("Pre-screened patients sourced from inside hospitals, delivered to CROs. The hospital earns a share.");
+    expect(html).toContain("Trials run through a dozen hospitals. Patients are everywhere else.");
+    expect(visible(html)).toContain(
+      "Atlas lets a doctor at any hospital pre-screen a patient against a trial’s criteria and refer them, consented and referral-ready, to a contracted trial site. CROs get patients their site network never sees.",
+    );
     expect(html).toContain("Hospital sign in");
     clean(html);
   });
@@ -91,16 +97,16 @@ describe("pricing", () => {
 
   it("three cards: CRO, hospital, patient, with the placeholders as written", () => {
     expect(html.match(/data-plan=/g)).toHaveLength(3);
-    expect(text).toContain("CRO Pay per pre-screened lead delivered. €[X] per lead, plus €[Z] when the patient enrols.");
+    expect(text).toContain("CRO Per trial or per country. €[X] per pre-screened lead delivered, plus €[Z] when the patient enrols.");
     expect(text).toContain("Trial plan: €990 per trial per month, [N] leads included, success fee on top.");
-    expect(text).toContain("Hospital Pays nothing. Earns [Y]% of every fee. Trial setup free.");
+    expect(text).toContain("Referring hospital Pays nothing. Earns [Y]% of every fee. Trial setup free.");
     expect(text).toContain("Patient Free.");
   });
 
   it("the principle line under all three, then the free leads line under the cards", () => {
     expect(PRINCIPLE_LINE).toBe("No verdicts. Every line cited. Missing means not found, never guessed.");
     expect(text.indexOf(PRINCIPLE_LINE)).toBeGreaterThan(text.indexOf("Patient Free."));
-    expect(text.indexOf("First 10 leads per hospital free to the CRO.")).toBeGreaterThan(text.indexOf(PRINCIPLE_LINE));
+    expect(text.indexOf("First 10 leads per trial free to the CRO.")).toBeGreaterThan(text.indexOf(PRINCIPLE_LINE));
     clean(html);
   });
 });
@@ -120,6 +126,12 @@ describe("hospital inbox", () => {
     expect(html.match(/>Confirmed by coordinator<\/label>/g)).toHaveLength(2);
     expect(html).toContain("Referral-ready only");
     clean(html);
+  });
+
+  it("phone numbers in the contact column stay on one line, and the contact text is unchanged", () => {
+    const html = renderToStaticMarkup(<InboxTable rows={[ready]} />);
+    expect(html).toMatch(/<span class="whitespace-nowrap" data-phone="true">\+359 00 000 0000<\/span>/);
+    expect(visible(html)).toContain("Fictional a (fictional patient), +359 00 000 0000");
   });
 
   it("Build lead pack is disabled until a referral-ready row is confirmed, then opens the preview", () => {
@@ -154,7 +166,8 @@ describe("lead pack preview", () => {
     const html = renderToStaticMarkup(<LeadPackPreview pack={pack} downloadHref="/api/site/pack?trial=t&amp;ids=s1" />);
     expect(html).toContain("Lora Primerna (fictional patient), +359 00 000 0001");
     expect(html).toContain("Consent given: 10 Oct 2026, 15:02");
-    expect(html).toContain("Hospital: [Hospital name]");
+    expect(html).toContain("For the research team at the contracted trial site.");
+    expect(visible(html)).toContain("Lead pack · NCT06380751 · Referred from: [Hospital name] · Date: 10 Oct 2026");
     expect(html).toContain(PACK_FOOTER_TEXT);
     expect(html.match(/data-criterion-id=/g)).toHaveLength(FIX.criteria.length);
     expect(html).toContain("Download PDF");
@@ -169,7 +182,9 @@ describe("public page and /find", () => {
     const html = renderToStaticMarkup(
       <PublicForm slug="nct06380751-md2jhsjd" questions={FIX.questions.map(({ id, text, type, options }) => ({ id, text, type, options }))} />,
     );
-    expect(html).toContain("The research team at the hospital");
+    expect(html).toContain(
+      "Answer these questions with your doctor, or on your own. The research team at the trial site reads your answers and contacts you.",
+    );
     clean(html);
   });
 

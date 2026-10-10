@@ -87,8 +87,8 @@ export default function PublicForm({ slug, questions }: { slug: string; question
         </ol>
         {step === 0 && (
           <p className="pt-2 text-[18px] leading-7 text-ink-secondary">
-            Answer what you know. You can choose &ldquo;Not sure&rdquo; or leave a question blank. The research team at the hospital
-            reads your answers and contacts you.
+            Answer these questions with your doctor, or on your own. The research team at the trial site reads your answers and
+            contacts you.
           </p>
         )}
       </div>

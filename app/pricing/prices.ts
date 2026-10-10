@@ -4,8 +4,8 @@
 /** CRO trial plan: euros per trial per month. */
 export const TRIAL_PLAN_EUR = 990;
 
-/** Leads per hospital that are free to the CRO. */
-export const FREE_LEADS_PER_HOSPITAL = 10;
+/** Leads per trial that are free to the CRO. */
+export const FREE_LEADS_PER_TRIAL = 10;
 
 export function euros(amount: number): string {
   return `€${amount.toLocaleString("en-IE")}`;

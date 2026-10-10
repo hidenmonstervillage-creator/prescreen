@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { hasSiteSession } from "@/lib/site-auth";
 import PasscodeForm from "@/components/PasscodeForm";
@@ -5,6 +6,8 @@ import PublicHeader from "@/components/PublicHeader";
 import { cardClass } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = { title: "Hospital sign in" };
 
 export default async function SiteGate() {
   if (await hasSiteSession()) redirect("/site/inbox");

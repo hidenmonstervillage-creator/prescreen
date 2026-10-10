@@ -2,24 +2,24 @@ import type { Metadata } from "next";
 import PublicHeader from "@/components/PublicHeader";
 import { cardClass, sectionLabel } from "@/components/ui";
 import { PRINCIPLE_LINE } from "@/lib/copy";
-import { FREE_LEADS_PER_HOSPITAL, TRIAL_PLAN_EUR, euros } from "./prices";
+import { FREE_LEADS_PER_TRIAL, TRIAL_PLAN_EUR, euros } from "./prices";
 
-export const metadata: Metadata = { title: "Pricing · Pre-screen" };
+export const metadata: Metadata = { title: "Pricing" };
 
-/** Three cards: who pays what. [X], [Z], [N] and [Y] are placeholders, shown as written. */
+/** Three cards: who pays what. The CRO buys; the referring hospital runs the inbox. [X], [Z], [N] and [Y] are placeholders, shown as written. */
 const PLANS = [
   {
     id: "cro",
     audience: "CRO",
-    headline: "Pay per pre-screened lead delivered.",
+    headline: "Per trial or per country.",
     points: [
-      "€[X] per lead, plus €[Z] when the patient enrols.",
+      "€[X] per pre-screened lead delivered, plus €[Z] when the patient enrols.",
       `Trial plan: ${euros(TRIAL_PLAN_EUR)} per trial per month, [N] leads included, success fee on top.`,
     ],
   },
   {
     id: "hospital",
-    audience: "Hospital",
+    audience: "Referring hospital",
     headline: "Pays nothing.",
     points: ["Earns [Y]% of every fee.", "Trial setup free."],
   },
@@ -61,7 +61,7 @@ export default function PricingPage() {
           {PRINCIPLE_LINE}
         </p>
         <p className="mt-4 text-[17px] leading-7 text-ink-secondary tabular-nums" data-free-leads>
-          First {FREE_LEADS_PER_HOSPITAL} leads per hospital free to the CRO.
+          First {FREE_LEADS_PER_TRIAL} leads per trial free to the CRO.
         </p>
       </main>
     </>

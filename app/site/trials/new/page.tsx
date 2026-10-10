@@ -1,8 +1,11 @@
+import type { Metadata } from "next";
 import { requireSitePage } from "@/lib/site-auth";
 import SiteShell from "@/components/SiteShell";
 import NewTrial from "@/components/NewTrial";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = { title: "New trial" };
 
 export default async function NewTrialPage() {
   await requireSitePage();

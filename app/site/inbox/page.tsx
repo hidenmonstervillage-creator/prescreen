@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { requireSitePage } from "@/lib/site-auth";
 import { listSubmissions } from "@/lib/trials";
 import { formatDate } from "@/lib/format";
@@ -5,6 +6,8 @@ import SiteShell from "@/components/SiteShell";
 import InboxTable from "@/components/InboxTable";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = { title: "Hospital inbox" };
 
 export default async function InboxPage() {
   await requireSitePage();

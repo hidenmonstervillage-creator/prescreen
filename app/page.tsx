@@ -28,10 +28,11 @@ export default function Home() {
       <main className="mx-auto grid w-full max-w-content flex-1 items-center gap-10 px-5 py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,30rem)] lg:py-20">
         <div className="max-w-4xl">
           <h1 className="text-hero text-brand-ink" style={{ fontSize: "clamp(44px, 6.6vw, 96px)", lineHeight: 1.0625 }} data-hero-headline>
-            Patients, faster and cheaper, for the people who run clinical trials.
+            Trials run through a dozen hospitals. Patients are everywhere else.
           </h1>
           <p className="mt-8 max-w-2xl text-[20px] leading-8 text-brand-ink" data-hero-subline>
-            Pre-screened patients sourced from inside hospitals, delivered to CROs. The hospital earns a share.
+            Atlas lets a doctor at any hospital pre-screen a patient against a trial&rsquo;s criteria and refer them, consented and
+            referral-ready, to a contracted trial site. CROs get patients their site network never sees.
           </p>
           <Link
             href="/find"

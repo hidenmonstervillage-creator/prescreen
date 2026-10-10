@@ -3,7 +3,8 @@ import MapFooter from "@/components/MapFooter";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Pre-screen",
+  // "Atlas" alone on the landing; "Atlas · <page name>" wherever a page names itself.
+  title: { default: "Atlas", template: "Atlas · %s" },
   description: "Per-trial pre-screen questions for hospitals that run clinical trials.",
   robots: { index: false, follow: false },
 };

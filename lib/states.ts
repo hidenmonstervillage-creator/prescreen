@@ -15,9 +15,10 @@ export function countStates(rows: Pick<MappingRow, "state">[]): Record<State, nu
   return counts;
 }
 
-/** "N met · M not met · K not found · J need a clinician", from counts already taken. */
+/** "N met · M not met · K not found · J need a clinician" ("1 needs a clinician" for one), from counts already taken. */
 export function countsText(c: Record<State, number>): string {
-  return `${c.met} met · ${c.not_met} not met · ${c.not_found} not found · ${c.needs_clinician} need a clinician`;
+  const clinician = c.needs_clinician === 1 ? "needs a clinician" : "need a clinician";
+  return `${c.met} met · ${c.not_met} not met · ${c.not_found} not found · ${c.needs_clinician} ${clinician}`;
 }
 
 /** "N met · M not met · K not found · J need a clinician" */

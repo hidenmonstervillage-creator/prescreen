@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { mapDeterministic, mapSubmission, stateFor } from "@/lib/mapping";
-import { countsLine } from "@/lib/states";
+import { countsLine, countsText } from "@/lib/states";
 import type { JsonCall, JsonResult, LlmJson } from "@/lib/openai";
 import type { Answers, Criterion, Question } from "@/lib/types";
 import { findVerdictWord } from "@/lib/wording";
@@ -87,6 +87,15 @@ describe("mapping on the NCT06380751 fixture", () => {
       expect(r.quoted_criterion).toBe(c.parent_quote ? `${c.parent_quote} ${c.quote}` : c.quote);
     }
     expect(countsLine(rows)).toBe("6 met · 4 not met · 9 not found · 15 need a clinician");
+  });
+
+  it("the counts sentence says needs for exactly one clinician count", () => {
+    expect(countsText({ met: 1, not_met: 1, not_found: 1, needs_clinician: 1 })).toBe(
+      "1 met · 1 not met · 1 not found · 1 needs a clinician",
+    );
+    expect(countsText({ met: 0, not_met: 0, not_found: 0, needs_clinician: 0 })).toBe(
+      "0 met · 0 not met · 0 not found · 0 need a clinician",
+    );
   });
 
   it("the exclusion flip, unanswered and not askable each behave as specified", async () => {

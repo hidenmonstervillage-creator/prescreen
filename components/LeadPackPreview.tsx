@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { LeadPack } from "@/lib/pack";
+import { PACK_AUDIENCE_LINE, type LeadPack } from "@/lib/pack";
 import { formatDate, formatDay } from "@/lib/format";
 import CountsLine from "./CountsLine";
 import CriteriaMatrix from "./CriteriaMatrix";
@@ -24,9 +24,11 @@ export default function LeadPackPreview({ pack, downloadHref }: { pack: LeadPack
         <div className="min-w-0 flex-1">
           <p className={sectionLabel}>Lead pack preview</p>
           <h1 className="mt-1 text-title text-ink">{pack.trial.title}</h1>
+          <p className="mt-1 text-body text-ink">{PACK_AUDIENCE_LINE}</p>
+          {/* The same line as the PDF (packHeaderLine), with the NCT ID set in mono. */}
           <p className="mt-1 text-body text-ink-secondary tabular-nums">
-            <span className={`text-ink ${nctClass}`}>{pack.trial.nct_id}</span> &middot; Hospital: {pack.hospital} &middot; Date:{" "}
-            {formatDay(pack.created_at)}
+            Lead pack &middot; <span className={`text-ink ${nctClass}`}>{pack.trial.nct_id}</span> &middot; Referred from: {pack.hospital}{" "}
+            &middot; Date: {formatDay(pack.created_at)}
           </p>
           <p className="mt-2 text-body text-ink tabular-nums">
             {total} {total === 1 ? "patient" : "patients"}: referral-ready, confirmed by a coordinator, with consent recorded. Each

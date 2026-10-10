@@ -1,7 +1,7 @@
 // The lead pack PDF. For each selected patient: contact details, consent timestamp, the counts
 // line and the full criteria matrix (criterion quoted, state, answer quoted), one A4 page per
-// patient. Every page carries the trial title and NCT ID, the hospital, the date and
-// PACK_FOOTER_TEXT. Built in memory with pdf-lib: nothing is sent anywhere.
+// patient, for the research team at the contracted trial site. Every page carries the trial title,
+// who the pack is for, the NCT ID, the referring hospital, the date and PACK_FOOTER_TEXT. Built in memory with pdf-lib: nothing is sent anywhere.
 // Each answer names its question id; the questions themselves are listed once per page, so
 // every answer still quotes the question it answers without doubling the row height.
 // The PDF is not a screen: StateCell stays the only renderer of a state in the UI, and the PDF
@@ -23,6 +23,14 @@ export type PackPatient = {
   confirmed_at: string;
   rows: MappingRow[];
 };
+
+/** Under the trial title, on every page and on the preview: who the pack is for. */
+export const PACK_AUDIENCE_LINE = "For the research team at the contracted trial site.";
+
+/** "Lead pack · <NCT ID> · Referred from: <hospital> · Date: <day>". The hospital is the referring one. */
+export function packHeaderLine(pack: Pick<LeadPack, "trial" | "hospital" | "created_at">): string {
+  return `Lead pack · ${pack.trial.nct_id} · Referred from: ${pack.hospital} · Date: ${formatDay(pack.created_at)}`;
+}
 
 export type LeadPack = {
   trial: { id: string; nct_id: string; title: string; criteria: Criterion[]; questions: Question[] };
@@ -228,8 +236,9 @@ function questionList(m: Measure, f: Fonts, pack: LeadPack, p: PackPatient, s: n
 
 function headerParas(m: Measure, f: Fonts, pack: LeadPack): Para[] {
   return [
-    para(m, pack.trial.title, f.semibold, 12, INK, WIDTH, 3),
-    para(m, `Lead pack · ${pack.trial.nct_id} · Hospital: ${pack.hospital} · Date: ${formatDay(pack.created_at)}`, f.regular, 8.5, SECONDARY, WIDTH),
+    para(m, pack.trial.title, f.semibold, 12, INK, WIDTH, 2),
+    para(m, PACK_AUDIENCE_LINE, f.regular, 9, INK, WIDTH, 2),
+    para(m, packHeaderLine(pack), f.regular, 8.5, SECONDARY, WIDTH),
   ];
 }
 

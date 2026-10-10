@@ -1,6 +1,6 @@
 # Pre-screen funnel
 
-Per-trial pre-screen funnel, run by hospitals and sold to CROs. The hospital's research team pastes an NCT ID; the app fetches the study from ClinicalTrials.gov, splits its criteria text into quoted criteria, writes plain-language questions, and publishes a public page. Each submission lands in the hospital inbox as a criterion-by-criterion map that quotes its sources; referral-ready rows a coordinator confirms go into a downloadable lead pack for the CRO. In UI copy the roles are hospital, research team and hospital inbox, never "site".
+Per-trial pre-screen funnel, run by hospitals and sold to CROs. The hospital's research team pastes an NCT ID; the app fetches the study from ClinicalTrials.gov, splits its criteria text into quoted criteria, writes plain-language questions, and publishes a public page. Each submission lands in the hospital inbox as a criterion-by-criterion map that quotes its sources; referral-ready rows a coordinator confirms go into a downloadable lead pack for the CRO. In UI copy the roles are hospital, research team and hospital inbox, never "site". The one exception is the place a patient is referred to: "trial site", "contracted trial site" and "site network" (landing, public page, pricing, lead pack); facility names quoted from ClinicalTrials.gov are source.
 
 Built for the Crossroads AI Hackathon, started 2026-10-10. Screens, routes and data model: docs/handoff.md.
 

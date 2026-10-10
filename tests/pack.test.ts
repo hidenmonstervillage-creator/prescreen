@@ -5,7 +5,7 @@ import { describe, it, expect } from "vitest";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { PDFDocument } from "pdf-lib";
-import { buildPackPdf, packFileName, PACK_FONT_FILES, type LeadPack, type PackPatient } from "@/lib/pack";
+import { buildPackPdf, packFileName, PACK_AUDIENCE_LINE, PACK_FONT_FILES, type LeadPack, type PackPatient } from "@/lib/pack";
 import { mapDeterministic } from "@/lib/mapping";
 import { countsLine } from "@/lib/states";
 import { FOOTER_TEXT, PACK_FOOTER_TEXT, findVerdictWord, hasEmDash } from "@/lib/wording";
@@ -74,7 +74,8 @@ describe("lead pack PDF", async () => {
   it("every page has the trial, NCT ID, hospital, date, the footer and its page number", () => {
     pages.forEach((p, i) => {
       expect(p.texts).toContain("Saruparib (AZD5305) Plus Camizestrant or Plus Endocrine Therapy");
-      expect(p.texts).toContain("Lead pack · NCT06380751 · Hospital: [Hospital name] · Date: 10 Oct 2026");
+      expect(p.texts).toContain("Lead pack · NCT06380751 · Referred from: [Hospital name] · Date: 10 Oct 2026");
+      expect(p.texts).toContain(PACK_AUDIENCE_LINE);
       expect(p.texts).toContain(PACK_FOOTER_TEXT);
       expect(p.texts).toContain(`Page ${i + 1} of 3`);
     });
