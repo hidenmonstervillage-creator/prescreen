@@ -183,7 +183,7 @@ describe("public page and /find", () => {
       <PublicForm slug="nct06380751-md2jhsjd" questions={FIX.questions.map(({ id, text, type, options }) => ({ id, text, type, options }))} />,
     );
     expect(html).toContain(
-      "Answer these questions with your doctor, or on your own. The research team at the trial site reads your answers and contacts you.",
+      "Answer these questions with your doctor, or on your own. You can choose “Not sure” or leave a question blank. The research team at the trial site reads your answers and contacts you.",
     );
     clean(html);
   });

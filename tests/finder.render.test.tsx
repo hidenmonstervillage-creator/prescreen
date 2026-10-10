@@ -108,7 +108,7 @@ describe("/find page copy", () => {
 
   it("heading and subline are exact, and the page never calls itself a finder", () => {
     expect(page).toContain("Find a recruiting trial for a patient");
-    expect(page).toMatch(/the research team at the hospital contacts the patient after the pre-screen/);
+    expect(page).toMatch(/the research team at the trial site contacts the patient after the pre-screen/);
     expect(page.toLowerCase()).not.toContain("trial finder");
     const form = renderToStaticMarkup(<FinderForm values={{ condition: "breast cancer", markers: "", city: "Plovdiv" }} errors={[]} />);
     expect(form.toLowerCase()).not.toContain("finder");

@@ -5,7 +5,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   // "Atlas" alone on the landing; "Atlas · <page name>" wherever a page names itself.
   title: { default: "Atlas", template: "Atlas · %s" },
-  description: "Per-trial pre-screen questions for hospitals that run clinical trials.",
+  description: "Per-trial pre-screen questions for doctors at any hospital and the research teams at trial sites.",
   robots: { index: false, follow: false },
 };
 
