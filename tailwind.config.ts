@@ -1,24 +1,13 @@
 import type { Config } from "tailwindcss";
-import karma from "./styles/karma-tailwind-v3-preset.js";
+import designSystem from "./docs/design-system/project/assets/Code/karma-tailwind-v3-preset.js";
 
+// The design system's Tailwind v3 preset, used as shipped (docs/design-system/VENDORED.md). It extends
+// the default theme with every token, one class each: bg-page, text-ink, text-state-met-ink, text-title.
+// Components use the semantic classes, never the palette ones. The fonts are declared in app/globals.css.
 const config: Config = {
   // The preset is generated plain JS; its fontSize tuples infer as arrays, hence the cast.
-  presets: [karma as unknown as Partial<Config>],
+  presets: [designSystem as unknown as Partial<Config>],
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
-  theme: {
-    extend: {
-      // The Karma families, loaded by next/font in app/layout.tsx, which sets these variables.
-      fontFamily: {
-        sans: ["var(--font-sans)", ...karma.theme.extend.fontFamily.sans],
-        mono: ["var(--font-mono)", ...karma.theme.extend.fontFamily.mono],
-      },
-      colors: {
-        // tests/matrix.render.test.tsx pins the class bg-green-50 on the met state, so it is
-        // aliased to Karma's state-met-tint and StateCell keeps that class name.
-        green: { 50: karma.theme.extend.colors["state-met-tint"] },
-      },
-    },
-  },
   plugins: [],
 };
 

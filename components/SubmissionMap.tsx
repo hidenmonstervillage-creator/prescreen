@@ -4,19 +4,19 @@ import { formatDate } from "@/lib/format";
 import { countStates } from "@/lib/states";
 import { referralReady } from "@/lib/referral";
 import CountsLine from "./CountsLine";
+import FictionalBadge from "./FictionalBadge";
 import KarmaButton from "./KarmaButton";
 import CriteriaMatrix from "./CriteriaMatrix";
-import MapFooter from "./MapFooter";
 import RebuildMapButton from "./RebuildMapButton";
 import ReferralReadyLabel from "./ReferralReadyLabel";
-import { cardClass, focusRing, nctClass } from "./ui";
+import { cardClass, nctClass, quietLinkClass } from "./ui";
 
 /** Screen 5: one submission's criteria map. Built for a projector: the states carry it. */
 export default function SubmissionMap({ detail: s }: { detail: SubmissionDetail }) {
   return (
     <div data-submission-detail={s.id}>
-      <p className="mb-2">
-        <Link href="/site/inbox" className={`rounded-sm text-body font-semibold text-link hover:text-link-hover hover:underline ${focusRing}`}>
+      <p className="mb-3">
+        <Link href="/site/inbox" className={`text-body ${quietLinkClass}`}>
           <span aria-hidden="true">&larr;</span> Back to hospital inbox
         </Link>
       </p>
@@ -26,14 +26,20 @@ export default function SubmissionMap({ detail: s }: { detail: SubmissionDetail 
           {s.trial.title}
         </p>
       </header>
-      <p className="mt-1 text-body text-ink">
-        Submitted {formatDate(s.created_at)} &middot; Contact: <span data-contact className="font-semibold">{s.contact}</span>{" "}
-        &middot; Consent: {s.consent_given && s.consent_at ? `given ${formatDate(s.consent_at)}` : "not recorded"}
-      </p>
-      <section className={`${cardClass} my-4 flex flex-wrap items-center justify-between gap-x-8 gap-y-3 px-6 py-4`}>
+      <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1.5 text-body text-ink tabular-nums">
+        <span>Submitted {formatDate(s.created_at)}</span>
+        <span aria-hidden="true">&middot;</span>
+        <span>
+          Contact: <span data-contact className="font-semibold">{s.contact}</span>
+        </span>
+        <FictionalBadge />
+        <span aria-hidden="true">&middot;</span>
+        <span>Consent: {s.consent_given && s.consent_at ? `given ${formatDate(s.consent_at)}` : "not recorded"}</span>
+      </div>
+      <section className={`${cardClass} my-5 flex flex-wrap items-center justify-between gap-x-8 gap-y-3 p-5`}>
         {s.rows.length > 0 ? (
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <CountsLine rows={s.rows} />
+            <CountsLine rows={s.rows} look="pills" />
             {referralReady(countStates(s.rows)) && <ReferralReadyLabel />}
           </div>
         ) : (
@@ -46,7 +52,6 @@ export default function SubmissionMap({ detail: s }: { detail: SubmissionDetail 
       ) : (
         <RebuildMapButton submissionId={s.id} />
       )}
-      <MapFooter />
     </div>
   );
 }

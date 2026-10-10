@@ -10,7 +10,7 @@ export default function TrialKit({ trial, publicUrl }: { trial: Trial; publicUrl
   const s = trial.source ?? ({} as Partial<Trial["source"]>);
   const meta = [trial.nct_id, s.sponsor, (s.phases ?? []).join(", ").replace(/PHASE(\d)/g, "Phase $1")].filter(Boolean).join(" · ");
   return (
-    <div data-trial-kit={trial.id} className="min-h-screen bg-page print:bg-white">
+    <div data-trial-kit={trial.id} className="min-h-screen bg-page print:bg-surface">
       <div className="sticky top-0 z-10 border-b border-line bg-surface print:hidden">
         <div className="mx-auto flex max-w-[210mm] flex-wrap items-center justify-between gap-4 px-4 py-4">
           <div>

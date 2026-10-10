@@ -1,11 +1,11 @@
 import SiteNav from "./SiteNav";
 
-/** Site staff page frame: the header bar and one content column. `wide` is for the three-column trial screen. */
-export default function SiteShell({ children, wide = false }: { children: React.ReactNode; wide?: boolean }) {
+/** The research team's page frame: the header bar and the 1400px content column with 20px gutters. */
+export default function SiteShell({ children }: { children: React.ReactNode }) {
   return (
     <>
       <SiteNav />
-      <main className={`mx-auto px-6 py-6 ${wide ? "max-w-[1760px]" : "max-w-content"}`}>{children}</main>
+      <main className="mx-auto w-full max-w-content px-5 pb-12 pt-10">{children}</main>
     </>
   );
 }

@@ -9,7 +9,7 @@ const YES_NO = [
   { value: "unsure", label: "Not sure" },
 ];
 
-const field = `rounded-xl border-2 border-control bg-surface px-4 text-[20px] text-ink hover:border-control-hover ${focusRing}`;
+const field = `rounded-lg border border-control bg-surface px-4 text-[20px] text-ink hover:border-control-hover ${focusRing}`;
 
 export default function QuestionField({
   question,
@@ -30,7 +30,7 @@ export default function QuestionField({
           {radios.map((r) => (
             <label
               key={r.value}
-              className="flex min-h-14 cursor-pointer items-center gap-3 rounded-xl border-2 border-line bg-surface px-4 py-2.5 text-[19px] text-ink hover:border-control has-[:checked]:border-selected-line has-[:checked]:bg-selected-tint has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-focus-ring"
+              className="flex min-h-14 cursor-pointer items-center gap-3 rounded-lg border border-control bg-surface px-4 py-2.5 text-[19px] text-ink hover:border-control-hover has-[:checked]:border-selected-line has-[:checked]:bg-selected-tint has-[:checked]:ring-1 has-[:checked]:ring-inset has-[:checked]:ring-selected-line has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-focus-ring"
             >
               <input
                 type="radio"
@@ -38,7 +38,7 @@ export default function QuestionField({
                 value={r.value}
                 checked={value === r.value}
                 onChange={() => onChange(r.value)}
-                className="size-5 shrink-0 accent-accent"
+                className="size-5 shrink-0 accent-selected-line"
               />
               {r.label}
             </label>

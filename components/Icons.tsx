@@ -1,4 +1,4 @@
-// Karma interface icons, inlined from public/icons so they need no request and take the text colour.
+// The design system's interface icons, inlined from public/icons so they need no request and take the text colour.
 // State icons are not here: they live in StateCell, the only place a criterion state is rendered.
 
 type IconProps = { className?: string };
@@ -58,7 +58,7 @@ export function Spinner({ className = "size-5" }: IconProps) {
   );
 }
 
-/** One line of error text: slashed circle and a sentence in ink, never red (Karma). */
+/** One line of error text: slashed circle and a sentence in ink, never red (red belongs to a criterion state). */
 export function ErrorLine({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
     <p role="alert" className={`flex items-start gap-2 text-small font-medium text-ink ${className}`}>

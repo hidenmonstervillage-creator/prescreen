@@ -22,7 +22,7 @@ export default function CriteriaChecklist({ criteria, questions }: { criteria: C
   return (
     <section data-checklist className={`${cardClass} flex min-w-0 flex-col lg:max-h-[78vh]`}>
       <h2 className="border-b border-line px-5 py-3.5 text-heading text-ink">
-        Checklist <span className="font-normal text-ink-secondary">({criteria.length} criteria)</span>
+        Checklist <span className="font-normal text-ink-secondary tabular-nums">({criteria.length} criteria)</span>
       </h2>
       <ol className="min-h-0 flex-1 space-y-2.5 overflow-y-auto px-5 py-4">
         {criteria.map((c, i) => (
@@ -35,8 +35,8 @@ export default function CriteriaChecklist({ criteria, questions }: { criteria: C
               {c.parent_quote && <p className="mt-0.5 text-small text-ink-secondary">&ldquo;{c.parent_quote}&rdquo;</p>}
               <blockquote className="mt-0.5 text-quote text-ink">&ldquo;{c.quote}&rdquo;</blockquote>
               <p
-                className={`mt-2 inline-flex rounded-md px-2 py-0.5 text-small font-medium ${
-                  c.askable && askedIn.has(c.id) ? "bg-ice text-ink" : "bg-surface-sunken text-ink-secondary"
+                className={`mt-2 inline-flex rounded-md border px-2 py-0.5 text-small font-medium ${
+                  c.askable && askedIn.has(c.id) ? "border-line-strong bg-surface text-ink" : "border-transparent bg-surface-sunken text-ink-secondary"
                 }`}
                 data-criterion-status
               >

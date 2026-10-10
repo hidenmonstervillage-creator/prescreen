@@ -20,7 +20,7 @@ export default async function LeadPackPage({ searchParams }: { searchParams: { t
     else
       return (
         <SiteShell>
-          <section className={`${cardClass} px-8 py-8`} data-pack-choose>
+          <section className={`${cardClass} p-6`} data-pack-choose>
             <p className={sectionLabel}>Lead pack</p>
             {trials.length === 0 ? (
               <>
@@ -54,7 +54,7 @@ export default async function LeadPackPage({ searchParams }: { searchParams: { t
   if ("missing" in loaded) {
     return (
       <SiteShell>
-        <section className={`${cardClass} px-8 py-8`} data-pack-empty>
+        <section className={`${cardClass} p-6`} data-pack-empty>
           <h1 className="text-title text-ink">No patient is ready for a lead pack for this trial</h1>
           <Link href="/site/inbox" className={`mt-6 ${buttonClass("secondary")}`}>
             Back to hospital inbox

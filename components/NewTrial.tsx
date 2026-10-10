@@ -9,7 +9,7 @@ import GenerationSummary from "./GenerationSummary";
 import TrialSummary from "./TrialSummary";
 import PublishPanel from "./PublishPanel";
 import { ErrorLine, Spinner } from "./Icons";
-import { buttonClass, cardClass, focusRing, helpClass, labelClass } from "./ui";
+import { buttonClass, cardClass, helpClass, inputClass, labelClass } from "./ui";
 
 export default function NewTrial() {
   const [nct, setNct] = useState("");
@@ -38,7 +38,7 @@ export default function NewTrial() {
 
   return (
     <div className="space-y-6">
-      <form onSubmit={onSubmit} className={`${cardClass} flex flex-wrap items-end gap-4 px-6 py-5`} data-nct-form>
+      <form onSubmit={onSubmit} className={`${cardClass} flex flex-wrap items-end gap-4 p-5`} data-nct-form>
         <div>
           <label htmlFor="nct-input" className={labelClass}>
             NCT ID
@@ -49,7 +49,7 @@ export default function NewTrial() {
             onChange={(e) => setNct(e.target.value)}
             placeholder="NCT00000000"
             aria-describedby="nct-help"
-            className={`mt-1.5 h-14 w-72 rounded-lg border border-control bg-surface px-4 font-mono text-[22px] font-medium text-ink placeholder:text-ink-muted hover:border-control-hover ${focusRing}`}
+            className={`mt-1.5 ${inputClass} w-72 font-mono font-medium`}
             data-nct-input
             required
           />
@@ -58,7 +58,7 @@ export default function NewTrial() {
           type="submit"
           disabled={busy || !nct.trim()}
           aria-busy={busy}
-          className={buttonClass(trial ? "secondary" : "primary", "lg")}
+          className={buttonClass(trial ? "secondary" : "primary")}
           data-fetch-generate
         >
           {busy && <Spinner />}
@@ -81,7 +81,7 @@ export default function NewTrial() {
       )}
       {trial && (
         <div className="space-y-5" data-trial-id={trial.id}>
-          <section className={`${cardClass} grid items-start gap-6 px-6 py-5 lg:grid-cols-[minmax(0,1fr)_auto]`}>
+          <section className={`${cardClass} grid items-start gap-6 p-5 lg:grid-cols-[minmax(0,1fr)_auto]`}>
             <TrialSummary trial={trial} />
             <PublishPanel trialId={trial.id} initialSlug={trial.published_at ? trial.slug : null} />
           </section>

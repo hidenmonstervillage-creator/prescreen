@@ -42,7 +42,7 @@ export default function PublishPanel({ trialId, initialSlug }: { trialId: string
           onClick={publish}
           disabled={busy}
           aria-busy={busy}
-          className={`${buttonClass("primary", "lg")} w-full lg:w-auto lg:min-w-[14rem]`}
+          className={`${buttonClass("primary")} w-full lg:w-auto lg:min-w-[14rem]`}
           data-publish
         >
           {busy && <Spinner />}
@@ -53,7 +53,7 @@ export default function PublishPanel({ trialId, initialSlug }: { trialId: string
         href={`/site/trials/${trialId}/kit`}
         target="_blank"
         rel="noreferrer"
-        className={`${buttonClass("secondary", "lg")} w-full lg:w-auto lg:min-w-[14rem]`}
+        className={`${buttonClass("secondary")} w-full lg:w-auto lg:min-w-[14rem]`}
         data-download-kit
       >
         Download kit

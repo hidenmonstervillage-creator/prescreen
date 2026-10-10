@@ -1,21 +1,6 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import MapFooter from "@/components/MapFooter";
 import "./globals.css";
-
-// Karma's two families, self-hosted from public/fonts and bundled by next/font: no network requests.
-const sans = localFont({
-  src: "../public/fonts/Geologica-Sharp-Variable.woff2",
-  weight: "100 900",
-  variable: "--font-sans",
-  display: "swap",
-});
-
-const mono = localFont({
-  src: "../public/fonts/OverpassMono-Variable.woff2",
-  weight: "300 700",
-  variable: "--font-mono",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Pre-screen",
@@ -23,10 +8,19 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+// Both families come from public/fonts (@font-face in globals.css); the preloads fetch them from this
+// origin before first paint. Every screen ends with the footer.
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable}`}>
-      <body className="min-h-screen bg-page font-sans text-body text-ink antialiased">{children}</body>
+    <html lang="en">
+      <head>
+        <link rel="preload" href="/fonts/Geologica-Sharp-Variable.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/OverpassMono-Variable.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+      </head>
+      <body className="flex min-h-screen flex-col bg-page font-sans text-body text-ink antialiased">
+        <div className="flex flex-1 flex-col">{children}</div>
+        <MapFooter />
+      </body>
     </html>
   );
 }

@@ -32,7 +32,7 @@ export default function AnswerQuote({
         </p>
       )}
       {row.quoted_answer ? (
-        <blockquote className="rounded-r-md border-l-4 border-evidence-line bg-evidence-tint px-3 py-1.5 text-[18px] font-medium leading-7 text-ink">
+        <blockquote className="rounded-r-md border-l-4 border-evidence-line bg-evidence-tint px-3 py-1 text-quote font-medium text-ink">
           &ldquo;{answerLabel(q, row.quoted_answer)}&rdquo;
         </blockquote>
       ) : (
