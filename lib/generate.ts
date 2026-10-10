@@ -5,14 +5,12 @@
 import { MODEL, openaiJson, addUsage, emptyUsage, type ChatMessage, type LlmJson } from "./openai";
 import { wordingProblems } from "./wording";
 import type { Criterion, Question, QuestionRule, QuestionType, Section, TokenUsage } from "./types";
+import { normalizeWs, visibleText } from "./text";
+
+export { normalizeWs, visibleText };
 
 // ---------------------------------------------------------------------------
 // Text helpers
-
-/** Collapses every run of whitespace to one space and trims. */
-export function normalizeWs(s: string): string {
-  return s.replace(/\s+/g, " ").trim();
-}
 
 const BULLET_RE = /^\s*(?:[*\-•]|\d+[.)])\s+/;
 
@@ -21,10 +19,13 @@ export function stripBullet(s: string): string {
   return s.replace(BULLET_RE, "");
 }
 
-/** True when `quote` appears in `text` exactly, ignoring only whitespace differences. */
+/**
+ * True when `quote` appears in `text` exactly, ignoring only whitespace differences and
+ * markdown backslash escapes (which are markup, not text: "\<50%" reads "<50%").
+ */
 export function isVerbatim(quote: string, text: string): boolean {
-  const q = normalizeWs(quote);
-  return q.length > 0 && normalizeWs(text).includes(q);
+  const q = visibleText(quote);
+  return q.length > 0 && visibleText(text).includes(q);
 }
 
 /** Bullet and numbered lines under the inclusion and exclusion headings, in order. */
@@ -34,14 +35,14 @@ export function criteriaLines(text: string): { section: Section; line: string }[
   for (const raw of text.split(/\r?\n/)) {
     if (/^\s*\**\s*inclusion criteria/i.test(raw)) section = "inclusion";
     else if (/^\s*\**\s*exclusion criteria/i.test(raw)) section = "exclusion";
-    else if (section && BULLET_RE.test(raw)) out.push({ section, line: normalizeWs(stripBullet(raw)) });
+    else if (section && BULLET_RE.test(raw)) out.push({ section, line: visibleText(stripBullet(raw)) });
   }
   return out;
 }
 
-/** Offset in the normalized text where the exclusion heading starts, or -1. */
+/** Offset in the visible text where the exclusion heading starts, or -1. */
 function exclusionStart(text: string): number {
-  const m = /exclusion criteria/i.exec(normalizeWs(text));
+  const m = /exclusion criteria/i.exec(visibleText(text));
   return m ? m.index : -1;
 }
 
@@ -104,7 +105,7 @@ const FALLBACK_REASON = "needs a clinician's review";
 /** Problems with one raw criterion item against the source text. */
 export function criterionProblems(c: Criterion, text: string, seenQuotes: Set<string>): string[] {
   const problems: string[] = [];
-  const quote = normalizeWs(c.quote ?? "");
+  const quote = visibleText(c.quote ?? "");
   if (quote.length < 8) problems.push("quote is empty or too short to cite");
   else if (!isVerbatim(quote, text)) problems.push("quote is not an exact copy of the text");
   else if (seenQuotes.has(quote)) problems.push("quote repeats another item");
@@ -114,7 +115,7 @@ export function criterionProblems(c: Criterion, text: string, seenQuotes: Set<st
   if (c.section !== "inclusion" && c.section !== "exclusion") problems.push("section is not inclusion or exclusion");
   const ex = exclusionStart(text);
   if (ex >= 0 && quote.length >= 8 && isVerbatim(quote, text)) {
-    const at = normalizeWs(text).indexOf(quote);
+    const at = visibleText(text).indexOf(quote);
     const inExclusion = at > ex;
     if (inExclusion && c.section !== "exclusion") problems.push("quote sits under the exclusion heading but section says inclusion");
     if (!inExclusion && c.section !== "inclusion") problems.push("quote sits under the inclusion heading but section says exclusion");
@@ -130,8 +131,8 @@ function cleanCriterion(c: Criterion): Criterion {
   return {
     id: String(c.id ?? ""),
     section: c.section,
-    quote: normalizeWs(stripBullet(c.quote ?? "")),
-    parent_quote: c.parent_quote ? normalizeWs(stripBullet(c.parent_quote)) : null,
+    quote: visibleText(stripBullet(c.quote ?? "")),
+    parent_quote: c.parent_quote ? visibleText(stripBullet(c.parent_quote)) : null,
     askable: Boolean(c.askable),
     not_askable_reason: c.askable ? null : c.not_askable_reason ? normalizeWs(c.not_askable_reason) : null,
   };
@@ -164,7 +165,7 @@ export function checkCriteria(items: Criterion[], text: string): { ok: Criterion
 
 /** Sorts by position in the text and renumbers i1.. and e1.. so ids are stable and gap free. */
 export function renumber(items: Criterion[], text: string): Criterion[] {
-  const norm = normalizeWs(text);
+  const norm = visibleText(text);
   const sorted = [...items].sort((a, b) => norm.indexOf(a.quote) - norm.indexOf(b.quote));
   let i = 0;
   let e = 0;

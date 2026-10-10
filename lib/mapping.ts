@@ -4,7 +4,7 @@
 // and its quote must be a verbatim substring of the answer. The exclusion flip is
 // always done here in code, never by the model.
 import { openaiJson, addUsage, emptyUsage, type LlmJson } from "./openai";
-import { normalizeWs } from "./generate";
+import { normalizeWs } from "./text";
 import type { Answers, Criterion, MappingRow, Question, QuestionRule, Section, State, TokenUsage } from "./types";
 
 /** What an answer shows about a criterion's text, before the section is taken into account. */

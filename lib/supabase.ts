@@ -11,6 +11,8 @@ export function db(): SupabaseClient {
   assertSupabaseEnv(process.env, { requireServiceKey: true });
   client = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
     auth: { persistSession: false, autoRefreshToken: false },
+    // Next 14 caches fetch in server components by default; database reads must never be cached.
+    global: { fetch: (input, init) => fetch(input, { ...init, cache: "no-store" }) },
   });
   return client;
 }

@@ -50,7 +50,6 @@ export const openaiJson: LlmJson = async <T>(call: JsonCall): Promise<JsonResult
     signal: AbortSignal.timeout(180_000),
     cache: "no-store",
   });
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   const body: any = await res.json().catch(() => null);
   if (!res.ok) {
     throw new OpenAIError(`OpenAI ${res.status}: ${body?.error?.message ?? "no error message"}`, res.status);

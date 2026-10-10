@@ -41,6 +41,13 @@ export type Question = {
   rules: QuestionRule[];
 };
 
+/** What the public page receives: no criterion links, no rules, nothing result-shaped. */
+export type PublicQuestion = Pick<Question, "id" | "text" | "type" | "options">;
+
+export function toPublicQuestion(q: Question): PublicQuestion {
+  return { id: q.id, text: q.text, type: q.type, options: q.options };
+}
+
 /** The four states, and only these (CLAUDE.md rule 2). */
 export const STATES = ["met", "not_met", "not_found", "needs_clinician"] as const;
 export type State = (typeof STATES)[number];

@@ -8,8 +8,9 @@ export default defineConfig({
       "server-only": fileURLToPath(new URL("./tests/stubs/server-only.ts", import.meta.url)),
     },
   },
+  esbuild: { jsx: "automatic" },
   test: {
-    include: ["tests/**/*.test.ts"],
+    include: ["tests/**/*.test.ts", "tests/**/*.test.tsx"],
     environment: "node",
   },
 });

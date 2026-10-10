@@ -69,6 +69,25 @@ describe("verbatim check on the NCT06380751 fixture", () => {
     expect(isVerbatim("", TEXT)).toBe(false);
   });
 
+  it("treats markdown backslash escapes as markup, not text (NCT05774951 fixture)", () => {
+    const escaped = readFileSync(join(__dirname, "fixtures", "NCT05774951.criteria.md"), "utf8");
+    expect(escaped).toContain("Known LVEF \\<50%");
+    // The visible text and the escaped source both count as verbatim.
+    expect(isVerbatim("Known LVEF <50% with heart failure NYHA Grade ≥2.", escaped)).toBe(true);
+    expect(isVerbatim("Known LVEF \\<50% with heart failure NYHA Grade ≥2.", escaped)).toBe(true);
+    expect(isVerbatim("Mean resting QTcF interval >480 ms at screening", escaped)).toBe(true);
+    // Still strict on everything else.
+    expect(isVerbatim("Mean resting QTcF interval >450 ms at screening", escaped)).toBe(false);
+    expect(isVerbatim("Known LVEF below 50%", escaped)).toBe(false);
+    // Coverage lines and stored quotes use the visible text.
+    expect(criteriaLines(escaped).map((l) => l.line)).toContain("Known LVEF <50% with heart failure NYHA Grade ≥2.");
+    const { ok } = checkCriteria(
+      [{ id: "e5", section: "exclusion", quote: "Known LVEF \\<50% with heart failure NYHA Grade ≥2.", parent_quote: null, askable: false, not_askable_reason: "needs heart tests" }],
+      escaped,
+    );
+    expect(ok.map((c) => c.quote)).toEqual(["Known LVEF <50% with heart failure NYHA Grade ≥2."]);
+  });
+
   it("finds the bullet lines of both sections, including the numbered sub-lists", () => {
     const lines = criteriaLines(TEXT);
     expect(lines.filter((l) => l.section === "inclusion")).toHaveLength(7);

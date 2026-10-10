@@ -58,7 +58,6 @@ export function normalizeNctId(input: string): string | null {
   return m ? `NCT${m[2]}` : null;
 }
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /** Maps one v2 study JSON object to the fields this product uses. */
 export function parseStudy(json: any): CtgovStudy {
   const p = json?.protocolSection;
@@ -85,7 +84,6 @@ export function parseStudy(json: any): CtgovStudy {
     maximumAge: e.maximumAge ?? null,
   };
 }
-/* eslint-enable @typescript-eslint/no-explicit-any */
 
 async function getJson(url: string, fetchImpl: FetchLike): Promise<unknown> {
   const res = await fetchImpl(url, {
@@ -121,7 +119,6 @@ export function searchUrl(params: CtgovSearchParams): string {
 
 /** GET /studies: finder search. Implemented and tested; not wired into a screen yet. */
 export async function searchStudies(params: CtgovSearchParams, fetchImpl: FetchLike = fetch): Promise<CtgovSearchResult> {
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   const json = (await getJson(searchUrl(params), fetchImpl)) as any;
   return {
     studies: (json?.studies ?? []).map(parseStudy),
