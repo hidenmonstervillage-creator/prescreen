@@ -5,6 +5,7 @@ import CountsLine from "./CountsLine";
 import CriteriaMatrix from "./CriteriaMatrix";
 import FictionalBadge from "./FictionalBadge";
 import PackFooter from "./PackFooter";
+import SummaryCard from "./SummaryCard";
 import { buttonClass, cardClass, nctClass, quietLinkClass, sectionLabel } from "./ui";
 
 /**
@@ -60,6 +61,7 @@ export default function LeadPackPreview({ pack, downloadHref }: { pack: LeadPack
             </p>
             <div className="my-4">
               <CountsLine rows={p.rows} />
+              <SummaryCard rows={p.rows} look="line" />
             </div>
             <CriteriaMatrix rows={p.rows} criteria={pack.trial.criteria} questions={pack.trial.questions} />
             <PackFooter />

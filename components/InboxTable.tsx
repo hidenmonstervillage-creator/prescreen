@@ -9,7 +9,7 @@ import CountsLine from "./CountsLine";
 import FictionalBadge from "./FictionalBadge";
 import ReferralReadyLabel from "./ReferralReadyLabel";
 import { ErrorLine } from "./Icons";
-import { buttonClass, cardClass, checkClass, focusRing, nctClass, sectionLabel } from "./ui";
+import { buttonClass, cardClass, checkClass, focusRing, inputClass, labelClass, nctClass, quietLinkClass, sectionLabel } from "./ui";
 
 /** An inbox row with its submitted date already formatted on the server. */
 export type InboxViewRow = InboxRow & { submitted: string };
@@ -21,13 +21,46 @@ function withConfirmation(r: InboxViewRow, confirmed: boolean, at: string | null
 
 const hasMap = (r: InboxRow) => Object.values(r.counts).some((n) => n > 0);
 
+export type Readiness = "all" | "ready" | "ready_confirmed" | "not_ready";
+
+export const READINESS_OPTIONS: { value: Readiness; label: string }[] = [
+  { value: "all", label: "All" },
+  { value: "ready", label: "Referral-ready" },
+  { value: "ready_confirmed", label: "Referral-ready and confirmed" },
+  { value: "not_ready", label: "Not referral-ready" },
+];
+
+export type InboxFilters = { trial: string; text: string; readiness: Readiness };
+
+export const NO_FILTERS: InboxFilters = { trial: "", text: "", readiness: "all" };
+
+/** The rows the three filters keep, combined: trial, free text over contact and trial (title and NCT ID), readiness. */
+export function filterInboxRows<R extends InboxRow>(rows: R[], f: InboxFilters): R[] {
+  const words = f.text.toLowerCase().split(/\s+/).filter(Boolean);
+  return rows.filter((r) => {
+    if (f.trial && r.trial?.id !== f.trial) return false;
+    if (f.readiness === "ready" && !r.referral_ready) return false;
+    if (f.readiness === "ready_confirmed" && !(r.referral_ready && r.confirmed_by_coordinator)) return false;
+    if (f.readiness === "not_ready" && r.referral_ready) return false;
+    const hay = [r.contact, r.trial?.title ?? "", r.trial?.nct_id ?? ""].join(" ").toLowerCase();
+    return words.every((w) => hay.includes(w));
+  });
+}
+
+/** Every trial that has a submission, once, in NCT ID order. */
+export function inboxTrials(rows: InboxRow[]): { id: string; nct_id: string; title: string }[] {
+  const byId = new Map<string, { id: string; nct_id: string; title: string }>();
+  for (const r of rows) if (r.trial && !byId.has(r.trial.id)) byId.set(r.trial.id, r.trial);
+  return [...byId.values()].sort((a, b) => a.nct_id.localeCompare(b.nct_id));
+}
+
 /**
  * Screen 4: one row per submission with its four counts, the referral-ready label and the
  * coordinator's checkbox. "Build lead pack" opens the preview once a referral-ready row is confirmed.
  */
-export default function InboxTable({ rows: initial }: { rows: InboxViewRow[] }) {
+export default function InboxTable({ rows: initial, filters: initialFilters = NO_FILTERS }: { rows: InboxViewRow[]; filters?: InboxFilters }) {
   const [rows, setRows] = useState(initial);
-  const [readyOnly, setReadyOnly] = useState(false);
+  const [filters, setFilters] = useState<InboxFilters>(initialFilters);
   const [saving, setSaving] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -46,8 +79,11 @@ export default function InboxTable({ rows: initial }: { rows: InboxViewRow[] }) 
     );
   }
 
-  const shown = readyOnly ? rows.filter((r) => r.referral_ready) : rows;
+  const shown = filterInboxRows(rows, filters);
+  const trials = inboxTrials(rows);
+  const filtered = filters.trial !== "" || filters.text.trim() !== "" || filters.readiness !== "all";
   const forPack = rows.filter((r) => r.packable).length;
+  const setFilter = <K extends keyof InboxFilters>(key: K, value: InboxFilters[K]) => setFilters((f) => ({ ...f, [key]: value }));
 
   async function confirm(id: string, confirmed: boolean) {
     setError(null);
@@ -71,37 +107,88 @@ export default function InboxTable({ rows: initial }: { rows: InboxViewRow[] }) 
 
   return (
     <div className="space-y-4">
-      <section className={`${cardClass} flex flex-wrap items-center justify-between gap-x-8 gap-y-4 px-5 py-4`} data-inbox-toolbar>
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-          <label className="inline-flex cursor-pointer items-center gap-2.5 text-body font-semibold text-ink">
+      <section className={`${cardClass} space-y-4 px-5 py-4`} data-inbox-toolbar>
+        <div className="grid gap-x-4 gap-y-3 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,0.9fr)]" data-inbox-filters>
+          <div>
+            <label htmlFor="inbox-filter-trial" className={labelClass}>
+              Trial
+            </label>
+            <select
+              id="inbox-filter-trial"
+              value={filters.trial}
+              onChange={(e) => setFilter("trial", e.target.value)}
+              className={`mt-1.5 ${inputClass}`}
+              data-filter-trial
+            >
+              <option value="">All trials ({trials.length})</option>
+              {trials.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.nct_id} &middot; {t.title.length > 60 ? `${t.title.slice(0, 57)}...` : t.title}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="inbox-filter-text" className={labelClass}>
+              Search contact or trial title
+            </label>
             <input
-              type="checkbox"
-              checked={readyOnly}
-              onChange={(e) => setReadyOnly(e.target.checked)}
-              className={checkClass}
-              data-filter-ready
+              id="inbox-filter-text"
+              type="search"
+              value={filters.text}
+              onChange={(e) => setFilter("text", e.target.value)}
+              placeholder="Name, phone or trial"
+              autoComplete="off"
+              className={`mt-1.5 ${inputClass}`}
+              data-filter-search
             />
-            Referral-ready only
-          </label>
-          <p className="text-body text-ink-secondary tabular-nums" aria-live="polite">
-            Showing {shown.length} of {rows.length}
-          </p>
+          </div>
+          <div>
+            <label htmlFor="inbox-filter-ready" className={labelClass}>
+              Referral-ready
+            </label>
+            <select
+              id="inbox-filter-ready"
+              value={filters.readiness}
+              onChange={(e) => setFilter("readiness", e.target.value as Readiness)}
+              className={`mt-1.5 ${inputClass}`}
+              data-filter-ready
+            >
+              {READINESS_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-          <p className="max-w-md text-small text-ink-secondary tabular-nums">
-            {forPack > 0
-              ? `${forPack} referral-ready ${forPack === 1 ? "row" : "rows"} confirmed by a coordinator, with consent.`
-              : "Tick “Confirmed by coordinator” on a referral-ready row to build a pack."}
-          </p>
-          {forPack > 0 ? (
-            <Link href="/site/inbox/pack" className={buttonClass("primary")} data-build-pack>
-              Build lead pack
-            </Link>
-          ) : (
-            <button type="button" disabled className={buttonClass("primary")} data-build-pack>
-              Build lead pack
-            </button>
-          )}
+        <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-line pt-4">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <p className="text-body text-ink-secondary tabular-nums" aria-live="polite" data-inbox-count>
+              Showing {shown.length} of {rows.length}
+            </p>
+            {filtered && (
+              <button type="button" onClick={() => setFilters(NO_FILTERS)} className={`text-body ${quietLinkClass}`} data-filter-clear>
+                Clear filters
+              </button>
+            )}
+          </div>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <p className="max-w-md text-small text-ink-secondary tabular-nums">
+              {forPack > 0
+                ? `${forPack} referral-ready ${forPack === 1 ? "row" : "rows"} confirmed by a coordinator, with consent.`
+                : "Tick “Confirmed by coordinator” on a referral-ready row to build a pack."}
+            </p>
+            {forPack > 0 ? (
+              <Link href="/site/inbox/pack" className={buttonClass("primary")} data-build-pack>
+                Build lead pack
+              </Link>
+            ) : (
+              <button type="button" disabled className={buttonClass("primary")} data-build-pack>
+                Build lead pack
+              </button>
+            )}
+          </div>
         </div>
       </section>
       {error && <ErrorLine className="text-body">{error}</ErrorLine>}
@@ -133,7 +220,7 @@ export default function InboxTable({ rows: initial }: { rows: InboxViewRow[] }) 
             {shown.length === 0 && (
               <tr className="border-t border-line">
                 <td colSpan={6} className="px-5 py-6 text-body text-ink-secondary" data-inbox-filtered-empty>
-                  No referral-ready submission yet.
+                  No submission matches these filters.
                 </td>
               </tr>
             )}

@@ -12,6 +12,7 @@ import fontkit from "@pdf-lib/fontkit";
 import { answerLabel } from "./answers";
 import { formatDate, formatDay } from "./format";
 import { STATE_LABEL, countStates, countsText } from "./states";
+import { summaryText } from "./summary";
 import { PACK_FOOTER_TEXT } from "./wording";
 import type { Criterion, MappingRow, Question, Section, State } from "./types";
 
@@ -55,13 +56,13 @@ export const MATRIX_SIZES = [9, 8.5, 8, 7.5, 7, 6.75, 6.5, 6.25, 6] as const;
 // Page geometry (points) and colours (Karma tokens)
 
 const A4 = { w: 595.28, h: 841.89 };
-const MARGIN = 28;
+const MARGIN = 24;
 const WIDTH = A4.w - 2 * MARGIN;
 const PAD_X = 4;
 const COL = {
-  criterion: { x: MARGIN, w: 330 },
-  state: { x: MARGIN + 330, w: 76 },
-  answer: { x: MARGIN + 406, w: WIDTH - 406 },
+  criterion: { x: MARGIN, w: 338 },
+  state: { x: MARGIN + 338, w: 76 },
+  answer: { x: MARGIN + 414, w: WIDTH - 414 },
 };
 const LEAD = 1.2;
 const COLUMN_GAP = 14;
@@ -252,7 +253,8 @@ function patientParas(m: Measure, f: Fonts, p: PackPatient, n: number, total: nu
     para(m, `PATIENT ${n} OF ${total}${continued ? " (CONTINUED)" : ""}`, f.semibold, 7.5, SECONDARY, WIDTH, 3),
     para(m, p.contact, f.semibold, 11.5, INK, WIDTH, 3),
     para(m, meta, f.regular, 8, SECONDARY, WIDTH, 4),
-    para(m, countsText(countStates(p.rows)), f.semibold, 10, INK, WIDTH),
+    para(m, countsText(countStates(p.rows)), f.semibold, 10, INK, WIDTH, 2),
+    para(m, summaryText(p.rows) ?? "", f.regular, 7.5, INK, WIDTH),
   ];
 }
 

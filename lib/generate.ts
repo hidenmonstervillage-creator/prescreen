@@ -1,9 +1,12 @@
 // Generation for one trial: (a) split the criteria text into quoted criteria,
-// (b) write 8 to 12 plain-language questions that serve the askable ones.
+// (b) write 8 to 12 plain-language questions that serve the askable ones. Between the two, the
+// must-ask table (lib/must-ask.ts) asks age, sex, menopause, pregnancy, other cancers, medicines,
+// prior treatment and visits in code; the model writes the rest.
 // One model call each (gpt-4o, temperature 0, JSON), at most one re-ask each.
 // Every check here is deterministic code; the model's output is never trusted as is.
 import { MODEL, openaiJson, addUsage, emptyUsage, type ChatMessage, type LlmJson } from "./openai";
 import { wordingProblems } from "./wording";
+import { applyMustAsk, type MustAskTag } from "./must-ask";
 import type { Criterion, Question, QuestionRule, QuestionType, Section, TokenUsage } from "./types";
 import { normalizeWs, visibleText } from "./text";
 
@@ -266,6 +269,11 @@ export async function splitCriteria(
 // ---------------------------------------------------------------------------
 // (b) Questions
 
+/** The questions prompt for a given count range; 8 to 12 when the must-ask table asked nothing. */
+function questionsSystem(min: number, max: number): string {
+  return QUESTIONS_SYSTEM.replace("Write between 8 and 12 questions", `Write between ${min} and ${max} questions`);
+}
+
 const QUESTIONS_SYSTEM = `You write plain-language pre-screen questions that a member of the public answers about themselves before a clinical trial site contacts them. You get a list of criteria, each with an id and its exact text.
 
 Rules:
@@ -357,6 +365,8 @@ export type QuestionsReport = {
   links_removed: string[];
   /** Askable criteria no kept question serves (they map to not found). */
   askable_without_question: string[];
+  /** Criteria the must-ask table recognised: the question that serves each, or why it was left to the model. */
+  must_ask?: MustAskTag[];
 };
 
 function overlaps(a: { min: number | null; max: number | null }, b: { min: number | null; max: number | null }): boolean {
@@ -447,10 +457,10 @@ function cleanQuestion(q: Question): Question {
 }
 
 /** Whole-set problems: count, duplicate ids, a criterion served twice. */
-export function questionSetProblems(qs: Question[]): string[] {
+export function questionSetProblems(qs: Question[], min = MIN_QUESTIONS, max = MAX_QUESTIONS): string[] {
   const problems: string[] = [];
-  if (qs.length < MIN_QUESTIONS || qs.length > MAX_QUESTIONS) {
-    problems.push(`there are ${qs.length} questions; write between ${MIN_QUESTIONS} and ${MAX_QUESTIONS}`);
+  if (qs.length < min || qs.length > max) {
+    problems.push(`there are ${qs.length} questions; write between ${min} and ${max}`);
   }
   const ids = qs.map((q) => q.id);
   if (new Set(ids).size !== ids.length) problems.push("question ids repeat");
@@ -460,15 +470,63 @@ export function questionSetProblems(qs: Question[]): string[] {
   return problems;
 }
 
+/**
+ * The questions for one trial. `fixed` are the must-ask table's questions (already checked, ids q1..qk):
+ * they come first, and the model writes questions only for the askable criteria they do not serve,
+ * within the slots left under MAX_QUESTIONS.
+ */
 export async function writeQuestions(
   criteria: Criterion[],
   llm: LlmJson = openaiJson,
   usage: TokenUsage = emptyUsage(),
+  fixed: Question[] = [],
 ): Promise<{ questions: Question[]; report: QuestionsReport }> {
   const askable = criteria.filter((c) => c.askable);
-  const list = askable.map((c) => ({ id: c.id, text: c.parent_quote ? `${c.parent_quote} ${c.quote}` : c.quote }));
+  const fixedServed = new Set(fixed.flatMap((q) => q.criterion_ids));
+  // The model sees, and may serve, only what the table left.
+  const open = criteria.filter((c) => !fixedServed.has(c.id));
+  const openAskable = open.filter((c) => c.askable);
+  const slots = MAX_QUESTIONS - fixed.length;
+  const min = fixed.length ? Math.max(1, Math.min(MIN_QUESTIONS - fixed.length, openAskable.length)) : MIN_QUESTIONS;
+
+  const describe = (qs: Question[]) => [
+    ...questionSetProblems(qs, min, slots),
+    ...qs.flatMap((q) => questionProblems(q, open).map((p) => `${q.id}: ${p}`)),
+  ];
+
+  const m = openAskable.length && slots > 0 ? await modelQuestions(open, openAskable, min, slots, describe, llm, usage) : null;
+  const fromModel = m?.questions ?? [];
+  // Table questions keep q1..qk; the model's follow on. Without table questions the ids stay the model's.
+  const qs = fixed.length ? [...fixed, ...fromModel.map((q, k) => ({ ...q, id: `q${fixed.length + k + 1}` }))] : fromModel;
+  const served = new Set(qs.flatMap((q) => q.criterion_ids));
+
+  return {
+    questions: qs,
+    report: {
+      returned: m?.returned ?? 0,
+      kept: qs.length,
+      reasked: m?.reasked ?? false,
+      first_problems: m?.first_problems ?? [],
+      dropped: m?.dropped ?? [],
+      links_removed: m?.links_removed ?? [],
+      askable_without_question: askable.filter((c) => !served.has(c.id)).map((c) => c.id),
+    },
+  };
+}
+
+/** One questions call, at most one re-ask, then the deterministic clean-up. */
+async function modelQuestions(
+  open: Criterion[],
+  openAskable: Criterion[],
+  min: number,
+  slots: number,
+  describe: (qs: Question[]) => string[],
+  llm: LlmJson,
+  usage: TokenUsage,
+): Promise<{ questions: Question[] } & Pick<QuestionsReport, "returned" | "reasked" | "first_problems" | "dropped" | "links_removed">> {
+  const list = openAskable.map((c) => ({ id: c.id, text: c.parent_quote ? `${c.parent_quote} ${c.quote}` : c.quote }));
   const messages: ChatMessage[] = [
-    { role: "system", content: QUESTIONS_SYSTEM },
+    { role: "system", content: questionsSystem(min, slots) },
     { role: "user", content: `Criteria:\n${JSON.stringify(list, null, 2)}` },
   ];
   const first = await llm<{ questions: Question[] }>({
@@ -478,11 +536,6 @@ export async function writeQuestions(
     schema: QUESTIONS_SCHEMA,
   });
   addUsage(usage, first.usage);
-
-  const describe = (qs: Question[]) => [
-    ...questionSetProblems(qs),
-    ...qs.flatMap((q) => questionProblems(q, criteria).map((p) => `${q.id}: ${p}`)),
-  ];
 
   let qs = first.data.questions.map(cleanQuestion);
   const returned = qs.length;
@@ -511,7 +564,7 @@ export async function writeQuestions(
   // After the one re-ask: drop questions that still fail, then remove double links.
   const dropped: QuestionsReport["dropped"] = [];
   qs = qs.filter((q) => {
-    const p = questionProblems(q, criteria);
+    const p = questionProblems(q, open);
     if (p.length) dropped.push({ id: q.id, text: q.text, problems: p });
     return p.length === 0;
   });
@@ -543,25 +596,11 @@ export async function writeQuestions(
       dropped.push({ id: q.id, text: q.text, problems: ["covered no criterion after removing double links"] });
       return false;
     });
-  // Still over the limit after the one re-ask: keep the first MAX_QUESTIONS in the model's order.
-  for (const q of qs.slice(MAX_QUESTIONS)) {
+  // Still over the limit after the one re-ask: keep the first `slots` in the model's order.
+  for (const q of qs.slice(slots)) {
     dropped.push({ id: q.id, text: q.text, problems: [`over the ${MAX_QUESTIONS} question limit`] });
   }
-  qs = qs.slice(0, MAX_QUESTIONS);
-  const served = new Set(qs.flatMap((q) => q.criterion_ids));
-
-  return {
-    questions: qs,
-    report: {
-      returned,
-      kept: qs.length,
-      reasked,
-      first_problems: firstProblems,
-      dropped,
-      links_removed: linksRemoved,
-      askable_without_question: askable.filter((c) => !served.has(c.id)).map((c) => c.id),
-    },
-  };
+  return { questions: qs.slice(0, slots), returned, reasked, first_problems: firstProblems, dropped, links_removed: linksRemoved };
 }
 
 // ---------------------------------------------------------------------------
@@ -582,15 +621,19 @@ export async function generateForTrial(
 ): Promise<{ criteria: Criterion[]; questions: Question[]; report: GenerationReport }> {
   const usage = emptyUsage();
   const a = await splitCriteria(text, llm, usage);
-  const b = await writeQuestions(a.criteria, llm, usage);
-  const open = questionSetProblems(b.questions);
+  // The must-ask table, in code, before the questions call: these criteria are always asked.
+  const must = applyMustAsk(a.criteria, MAX_QUESTIONS);
+  const tableProblems = must.questions.flatMap((q) => questionProblems(q, must.criteria).map((p) => `${q.id}: ${p}`));
+  const b = await writeQuestions(must.criteria, llm, usage, must.questions);
+  const open = [...tableProblems, ...questionSetProblems(b.questions)];
   console.log(
-    `[generate] ${a.criteria.length} criteria (${a.report.dropped.length} dropped), ${b.questions.length} questions; ` +
+    `[generate] ${a.criteria.length} criteria (${a.report.dropped.length} dropped), ${b.questions.length} questions ` +
+      `(${must.questions.length} from the must-ask table); ` +
       `${usage.calls} calls, ${usage.prompt_tokens} in, ${usage.completion_tokens} out`,
   );
   return {
-    criteria: a.criteria,
+    criteria: must.criteria,
     questions: b.questions,
-    report: { model: MODEL, usage, criteria: a.report, questions: b.report, open_problems: open },
+    report: { model: MODEL, usage, criteria: a.report, questions: { ...b.report, must_ask: must.tags }, open_problems: open },
   };
 }

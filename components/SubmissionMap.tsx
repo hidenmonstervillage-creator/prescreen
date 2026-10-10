@@ -9,6 +9,7 @@ import KarmaButton from "./KarmaButton";
 import CriteriaMatrix from "./CriteriaMatrix";
 import RebuildMapButton from "./RebuildMapButton";
 import ReferralReadyLabel from "./ReferralReadyLabel";
+import SummaryCard from "./SummaryCard";
 import { cardClass, nctClass, quietLinkClass } from "./ui";
 
 /** Screen 5: one submission's criteria map. Built for a projector: the states carry it. */
@@ -48,7 +49,10 @@ export default function SubmissionMap({ detail: s }: { detail: SubmissionDetail 
         <KarmaButton />
       </section>
       {s.rows.length > 0 ? (
-        <CriteriaMatrix rows={s.rows} criteria={s.trial.criteria} questions={s.trial.questions} />
+        <>
+          <CriteriaMatrix rows={s.rows} criteria={s.trial.criteria} questions={s.trial.questions} />
+          <SummaryCard rows={s.rows} />
+        </>
       ) : (
         <RebuildMapButton submissionId={s.id} />
       )}

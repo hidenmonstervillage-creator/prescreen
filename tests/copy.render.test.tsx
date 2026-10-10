@@ -124,7 +124,9 @@ describe("hospital inbox", () => {
     expect(html.match(/>referral-ready</g)).toHaveLength(1);
     expect(html.match(/data-confirm/g)).toHaveLength(2);
     expect(html.match(/>Confirmed by coordinator<\/label>/g)).toHaveLength(2);
-    expect(html).toContain("Referral-ready only");
+    // The readiness filter replaced the "Referral-ready only" toggle and keeps its data-filter-ready hook.
+    expect(html).toMatch(/<select[^>]*data-filter-ready[^>]*>/);
+    expect(html).toContain("Referral-ready and confirmed");
     clean(html);
   });
 
