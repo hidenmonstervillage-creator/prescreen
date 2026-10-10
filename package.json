@@ -9,14 +9,16 @@
     "lint": "next lint",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "env:check": "node scripts/env-check.mjs",
-    "db:migrate": "node scripts/db/migrate.mjs"
+    "env:check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/env-check.mjs",
+    "db:migrate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/db/migrate.mjs",
+    "db:verify-rls": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/db/verify-rls.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.117.3",
     "next": "14.2.35",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "server-only": "0.0.1"
   },
   "devDependencies": {
     "@types/node": "20.19.43",
