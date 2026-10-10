@@ -1,0 +1,1878 @@
+{
+  "protocolSection": {
+    "identificationModule": {
+      "nctId": "NCT06380751",
+      "briefTitle": "Saruparib (AZD5305) Plus Camizestrant or Plus Endocrine Therapy, Compared With CDK4/6 Inhibitor Plus Endocrine Therapy or Plus Camizestrant in HR-Positive, HER2-Negative (IHC 0, 1+, 2+/ ISH Non-amplified), BRCA1, BRCA2, or PALB2m Advanced Breast Cancer",
+      "officialTitle": "A Randomised, Open-Label, Phase III Study of Saruparib (AZD5305) Plus Camizestrant or Plus Endocrine Therapy, Compared With Physician's Choice CDK4/6 Inhibitor Plus Endocrine Therapy or Plus Camizestrant for the First-Line Treatment of Patients With BRCA1, BRCA2, or PALB2 Mutations and Hormone Receptor Positive, HER2-Negative (IHC 0, 1+, 2+/ ISH Non-amplified) Advanced Breast Cancer (EvoPAR-Breast01)"
+    },
+    "statusModule": {
+      "overallStatus": "RECRUITING"
+    },
+    "sponsorCollaboratorsModule": {
+      "leadSponsor": {
+        "name": "AstraZeneca"
+      }
+    },
+    "conditionsModule": {
+      "conditions": [
+        "Advanced Breast Cancer"
+      ]
+    },
+    "designModule": {
+      "phases": [
+        "PHASE3"
+      ],
+      "studyType": "INTERVENTIONAL"
+    },
+    "eligibilityModule": {
+      "eligibilityCriteria": "Inclusion Criteria:\n\n* Adult females, pre/peri-menopausal and/or post-menopausal, and adult males\n* Histologically or cytologically documented diagnosis of HR-positive, HER2-negative breast cancer\n* Advanced breast cancer with either locally advanced disease not amenable to curative treatment or metastatic disease\n* ECOG performance status of 0 or 1 with no deterioration over the previous 2 weeks\n* FFPE tumour tissue from each participant\n* Documented germline tumour loss of function mutation in BRCA1, BRCA2, or PALB2\n* Adequate organ and marrow function\n\nExclusion Criteria:\n\n* Participants with history of MDS/AML or with features suggestive of MDS/AML\n* Participants with any known predisposition to bleeding\n* Any history of persisting severe cytopenia\n* Any evidence of severe or uncontrolled systemic diseases or active uncontrolled infections\n* Refractory nausea and vomiting, chronic GI disease, inability to swallow the formulated product, or previous significant bowel resection\n* History of another primary malignancy\n* Persistent toxicities (CTCAE Grade ≥ 2) caused by previous anti-cancer therapy excluding alopecia\n* Spinal cord compression, brain metastases, carcinomatous meningitis, or leptomeningeal disease\n* Evidence of active and uncontrolled hepatitis B and/or hepatitis C\n* Evidence of active and uncontrolled HIV infection\n* Active tuberculosis infection\n* Cardiac criteria, including history of arrythmia and cardiovascular disease\n* Concurrent exogenous reproductive hormone therapy or non-topical hormonal therapy for non-cancer-related conditions\n* Major surgical procedure or significant traumatic injury within 4 weeks of the first dose of study intervention or an anticipated need for major surgery during the study\n* Palliative radiotherapy with a limited field of radiation within 2 weeks or with wide field of radiation or to more than 30% of the bone marrow within 4 weeks before the first dose of study treatment\n* Prior treatment with systemic anti-cancer therapy for locoregionally recurrent or metastatic disease is not permitted, apart from treatment with ET for up to 28 days total before randomisation\n* Prior treatment within 28 days with blood product support or growth factor support\n* Any systemic concurrent anti-cancer treatment\n* Concomitant use of the following types of medications or herbal supplements within 21 days or at least 5 half-lives of randomisation:\n\n  1. Strong and moderate CYP3A4 inducers/inhibitors\n  2. Sensitive CYP2B6 substrates\n  3. Substrates of CYP2C9 and/or CYP2C19 which have a narrow therapeutic index, eg, warfarin (and other coumarin-derived vitamin K antagonist anticoagulants) and phenytoin.\n* Concomitant use of drugs that are known to prolong QT and have a known risk of TdP\n* Systemic use of atropine\n* The following exclusion criteria apply to treatments administered for early breast cancer:\n\n  1. Disease progression ≤ 84 days following the last dose of neo-adjuvant or adjuvant chemotherapy\n  2. Disease progression ≤ 1 year (365 days) from the last dose of treatment with a PARPi and/or platinum agent for early breast cancer\n  3. Disease progression ≤ 1 year (365 days) from the last dose with a CDK4/6i in the adjuvant setting\n  4. Disease progression ≤ 1 year (365 days) from the last dose of an oral SERD including camizestrant.",
+      "healthyVolunteers": false,
+      "sex": "ALL",
+      "minimumAge": "18 Years",
+      "stdAges": [
+        "ADULT",
+        "OLDER_ADULT"
+      ]
+    },
+    "contactsLocationsModule": {
+      "locations": [
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Gilbert",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Fountain Valley",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Glendale",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Los Angeles",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Newport Beach",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Aurora",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Grand Junction",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Hollywood",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Jacksonville",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Orlando",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Orlando",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Arlington Heights",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Chicago",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Evanston",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Park Ridge",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Schaumburg",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Urbana",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Winfield",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Indianapolis",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Louisville",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Baltimore",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Silver Spring",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Silver Spring",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Boston",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Dearborn",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Detroit",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Royal Oak",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Royal Oak",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Rochester",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Saint Joseph",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Springfield",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "St Louis",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Camden",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "New Brunswick",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Brooklyn",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Mineola",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "New Hyde Park",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "New York",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "New York",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "New York",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Shirley",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Stony Brook",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "The Bronx",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Westbury",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Hershey",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Philadelphia",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "SUSPENDED",
+          "city": "Pittsburgh",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Pittsburgh",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "West Columbia",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Chattanooga",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Nashville",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Houston",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Houston",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Houston",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "San Antonio",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Norfolk",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Richmond",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Tacoma",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Morgantown",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Milwaukee",
+          "country": "United States"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Ciudad Autónoma Buenos Aires",
+          "country": "Argentina"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Ciudad de Buenos Aires",
+          "country": "Argentina"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Ciudad de Buenos Aires",
+          "country": "Argentina"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Córdoba",
+          "country": "Argentina"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Rosario",
+          "country": "Argentina"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Salta",
+          "country": "Argentina"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "San Miguel de Tucumán",
+          "country": "Argentina"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Darlinghurst",
+          "country": "Australia"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Darlinghurst",
+          "country": "Australia"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Malvern",
+          "country": "Australia"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Melbourne",
+          "country": "Australia"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Graz",
+          "country": "Austria"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Innsbruck",
+          "country": "Austria"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Linz",
+          "country": "Austria"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Vienna",
+          "country": "Austria"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Cachoeira de Itapemirim",
+          "country": "Brazil"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Curitiba",
+          "country": "Brazil"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Fortaleza",
+          "country": "Brazil"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Goiânia",
+          "country": "Brazil"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Jaú",
+          "country": "Brazil"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Porto Alegre",
+          "country": "Brazil"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Ribeirão Preto",
+          "country": "Brazil"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Salvador",
+          "country": "Brazil"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "São Paulo",
+          "country": "Brazil"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "São Paulo",
+          "country": "Brazil"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Plovdiv",
+          "country": "Bulgaria"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Sofia",
+          "country": "Bulgaria"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Stara Zagora",
+          "country": "Bulgaria"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Vratsa",
+          "country": "Bulgaria"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Toronto",
+          "country": "Canada"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Greenfield Park",
+          "country": "Canada"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Montreal",
+          "country": "Canada"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Montreal",
+          "country": "Canada"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Montreal",
+          "country": "Canada"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Saskatoon",
+          "country": "Canada"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Toronto",
+          "country": "Canada"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Providencia",
+          "country": "Chile"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Recoleta",
+          "country": "Chile"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Santiago",
+          "country": "Chile"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Talca",
+          "country": "Chile"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Viña del Mar",
+          "country": "Chile"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Beijing",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Bengbu",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Changchun",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Changchun",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Changsha",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Changsha",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Chengdu",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Chengdu",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Chongqing",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Foshan",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Fuzhou",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Guangzhou",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Guangzhou",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Guangzhou",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Hangzhou",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Hangzhou",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Harbin",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Hefei",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Hohhot",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Jining",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Kunming",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Liuzhou",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Luoyang",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Nanchang",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Nanchang",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Nanjing",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Shandong",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Shanghai",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Shanghai",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Shenyang",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Shijiazhuang",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Tianjin",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Weifang",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Wuhan",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Wuhan",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Wuhan",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Xi'an",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Xi'an",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Xiamen",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Xiangyang",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Xinxiang",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Zhengzhou",
+          "country": "China"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Brno",
+          "country": "Czechia"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Hořovice",
+          "country": "Czechia"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Hradec Králové",
+          "country": "Czechia"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Olomouc",
+          "country": "Czechia"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Prague",
+          "country": "Czechia"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Prague",
+          "country": "Czechia"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Angers",
+          "country": "France"
+        },
+        {
+          "facility": "Research Site",
+          "status": "SUSPENDED",
+          "city": "Besançon",
+          "country": "France"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Lille",
+          "country": "France"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Lyon",
+          "country": "France"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Marseille",
+          "country": "France"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Paris",
+          "country": "France"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Rouen",
+          "country": "France"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Saint-Herblain",
+          "country": "France"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Toulouse",
+          "country": "France"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Villejuif",
+          "country": "France"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Aachen",
+          "country": "Germany"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Augsburg",
+          "country": "Germany"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Berlin",
+          "country": "Germany"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Cologne",
+          "country": "Germany"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Dessau",
+          "country": "Germany"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Düsseldorf",
+          "country": "Germany"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Erlangen",
+          "country": "Germany"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Göttingen",
+          "country": "Germany"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Hamburg",
+          "country": "Germany"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Hanover",
+          "country": "Germany"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Heidelberg",
+          "country": "Germany"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Kiel",
+          "country": "Germany"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Leipzig",
+          "country": "Germany"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Ludwigsburg",
+          "country": "Germany"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "München",
+          "country": "Germany"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Münster",
+          "country": "Germany"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Witten",
+          "country": "Germany"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Hong Kong",
+          "country": "Hong Kong"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Hong Kong",
+          "country": "Hong Kong"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Budapest",
+          "country": "Hungary"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Budapest",
+          "country": "Hungary"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Budapest",
+          "country": "Hungary"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Budapest",
+          "country": "Hungary"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Debrecen",
+          "country": "Hungary"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Miskolc",
+          "country": "Hungary"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Zalaegerszeg",
+          "country": "Hungary"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Delhi",
+          "country": "India"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Kolkata",
+          "country": "India"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Lucknow",
+          "country": "India"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Mumbai",
+          "country": "India"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Mumbai",
+          "country": "India"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Mysuru",
+          "country": "India"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Nagpur",
+          "country": "India"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Nashik",
+          "country": "India"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "New Delhi",
+          "country": "India"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Surat",
+          "country": "India"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Thiruvananthapuram",
+          "country": "India"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Jerusalem",
+          "country": "Israel"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Jerusalem",
+          "country": "Israel"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Petah Tikva",
+          "country": "Israel"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Ramat Gan",
+          "country": "Israel"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Tel Aviv",
+          "country": "Israel"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Bergamo",
+          "country": "Italy"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Bologna",
+          "country": "Italy"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Milan",
+          "country": "Italy"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Milan",
+          "country": "Italy"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Modena",
+          "country": "Italy"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Naples",
+          "country": "Italy"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Padova",
+          "country": "Italy"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Reggio Emilia",
+          "country": "Italy"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Rome",
+          "country": "Italy"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Rozzano",
+          "country": "Italy"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Chiba",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Hidaka-shi",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Hirakata-shi",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Isehara-shi",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Kagoshima",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Kashiwa",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Kōtoku",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Kumamoto",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Kyoto",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Matsuyama",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Nagoya",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Nagoya",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Nagoya",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Osaka",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Ota-shi",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Sapporo",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Sendai",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Shinagawa-ku",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Suita-shi",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Sunto-gun",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Takasaki-shi",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Tsu",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Yokohama",
+          "country": "Japan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Bandar Puncak Alam",
+          "country": "Malaysia"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Johor Bahru",
+          "country": "Malaysia"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Kuala Lumpur",
+          "country": "Malaysia"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Kuala Selangor",
+          "country": "Malaysia"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Malacca",
+          "country": "Malaysia"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Bellavista",
+          "country": "Peru"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Jesus Maria, Lima",
+          "country": "Peru"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Lima",
+          "country": "Peru"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Lima",
+          "country": "Peru"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Biała Podlaska",
+          "country": "Poland"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Koszalin",
+          "country": "Poland"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Lodz",
+          "country": "Poland"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Lublin",
+          "country": "Poland"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Poznan",
+          "country": "Poland"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Poznan",
+          "country": "Poland"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Radom",
+          "country": "Poland"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Warsaw",
+          "country": "Poland"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Coimbra",
+          "country": "Portugal"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Lisbon",
+          "country": "Portugal"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Lisbon",
+          "country": "Portugal"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Matosinhos Municipality",
+          "country": "Portugal"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Porto",
+          "country": "Portugal"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Vila Real",
+          "country": "Portugal"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "San Juan",
+          "country": "Puerto Rico"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Daegu",
+          "country": "South Korea"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Seongnam-si",
+          "country": "South Korea"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Seoul",
+          "country": "South Korea"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Seoul",
+          "country": "South Korea"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Seoul",
+          "country": "South Korea"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Seoul",
+          "country": "South Korea"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Seoul",
+          "country": "South Korea"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Seoul",
+          "country": "South Korea"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "A Coruña",
+          "country": "Spain"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Barcelona",
+          "country": "Spain"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Cáceres",
+          "country": "Spain"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Granada",
+          "country": "Spain"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "L'Hospitalet de Llobregat",
+          "country": "Spain"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Madrid",
+          "country": "Spain"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Madrid",
+          "country": "Spain"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Málaga",
+          "country": "Spain"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Pamplona",
+          "country": "Spain"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Seville",
+          "country": "Spain"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Valencia",
+          "country": "Spain"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Zaragoza",
+          "country": "Spain"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "New Taipei City",
+          "country": "Taiwan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Taichung",
+          "country": "Taiwan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Tainan",
+          "country": "Taiwan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Taipei",
+          "country": "Taiwan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Taipei",
+          "country": "Taiwan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Taipei",
+          "country": "Taiwan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Taoyuan",
+          "country": "Taiwan"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Bangkok",
+          "country": "Thailand"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Bangkok",
+          "country": "Thailand"
+        },
+        {
+          "facility": "Research Site",
+          "status": "TERMINATED",
+          "city": "Dusit",
+          "country": "Thailand"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Hat Yai",
+          "country": "Thailand"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Muang",
+          "country": "Thailand"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Ratchathewi",
+          "country": "Thailand"
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Ratchathewi",
+          "country": "Thailand"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Adapazarı",
+          "country": "Turkey (Türkiye)"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Altındağ-Ankara",
+          "country": "Turkey (Türkiye)"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Ankara",
+          "country": "Turkey (Türkiye)"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Çankaya",
+          "country": "Turkey (Türkiye)"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Istanbul",
+          "country": "Turkey (Türkiye)"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Kayseri",
+          "country": "Turkey (Türkiye)"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Cambridge",
+          "country": "United Kingdom"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Guildford",
+          "country": "United Kingdom"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "London",
+          "country": "United Kingdom"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Manchester",
+          "country": "United Kingdom"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Oxford",
+          "country": "United Kingdom"
+        },
+        {
+          "facility": "Research Site",
+          "status": "WITHDRAWN",
+          "city": "Swansea",
+          "country": "United Kingdom"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Taunton",
+          "country": "United Kingdom"
+        },
+        {
+          "facility": "Research Site",
+          "status": "RECRUITING",
+          "city": "Truro",
+          "country": "United Kingdom"
+        }
+      ]
+    }
+  }
+}

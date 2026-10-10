@@ -6,7 +6,13 @@ Per-trial pre-screen funnel for clinical trial sites. Rules: `CLAUDE.md` (read i
 
 On the deployed URL, not localhost: one real trial pasted, published, submitted against with a fictional patient, and showing in the inbox mapped criterion by criterion.
 
-**Demo trial:** to be chosen in session A1 step 4 and recorded here.
+**Demo trial: NCT06380751.** Saruparib (AZD5305) plus camizestrant or endocrine therapy vs CDK4/6 inhibitor plus endocrine therapy in HR-positive, HER2-negative, BRCA1, BRCA2 or PALB2 mutated advanced breast cancer (AstraZeneca, Phase 3, RECRUITING). Chosen in session A1 from `GET /studies?query.cond=cancer&filter.overallStatus=RECRUITING&query.locn=Bulgaria` (55 results) because:
+- 36 criteria lines (7 inclusion, 29 exclusion, two short numbered sub-lists), inside the 15 to 50 target.
+- 3 of its 4 Bulgarian sites are themselves RECRUITING (Plovdiv, Sofia, Stara Zagora). The first pick, NCT05774951, was dropped because none of its Bulgarian sites was recruiting.
+- A clear mix of patient-askable items (sex and menopausal status, advanced disease, other cancers, hepatitis, HIV, TB, recent surgery, hormone therapy, swallowing) and clinician-only items (histology, ECOG, tumour tissue, organ function, CYP drug interactions, QT drugs).
+- No markdown escapes and no em dashes in the source text, so verbatim quoting is clean.
+
+Fixture copy (contacts stripped): `tests/fixtures/NCT06380751.study.json`, verbatim criteria text: `tests/fixtures/NCT06380751.criteria.md`.
 
 ## The five screens
 
