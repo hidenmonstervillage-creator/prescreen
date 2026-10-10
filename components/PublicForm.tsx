@@ -64,7 +64,7 @@ export default function PublicForm({ slug, questions }: { slug: string; question
 
   if (done) {
     return (
-      <p role="status" className="rounded-xl border border-line bg-surface px-6 py-10 text-title text-ink shadow-card" data-confirmation>
+      <p role="status" className="rounded-2xl border border-line bg-surface px-6 py-10 text-title text-ink shadow-card" data-confirmation>
         {CONFIRMATION_TEXT}
       </p>
     );
@@ -73,7 +73,7 @@ export default function PublicForm({ slug, questions }: { slug: string; question
   return (
     <form onSubmit={onSubmit} className="space-y-8" data-public-form data-step={step}>
       <div ref={topRef} className="scroll-mt-6 space-y-3">
-        <p className="text-[17px] font-semibold text-ink" aria-live="polite">
+        <p className="text-[17px] font-semibold text-ink tabular-nums" aria-live="polite">
           Screen {step + 1} of {contactStep + 1}
           <span className="font-normal text-ink-secondary">
             {" "}
@@ -118,7 +118,7 @@ export default function PublicForm({ slug, questions }: { slug: string; question
             maxLength={300}
             aria-describedby="contact-help"
             autoComplete="off"
-            className={`mt-3 h-14 w-full rounded-xl border-2 border-control bg-surface px-4 text-[20px] text-ink placeholder:text-ink-muted hover:border-control-hover ${focusRing}`}
+            className={`mt-3 h-14 w-full rounded-lg border border-control bg-surface px-4 text-[20px] text-ink tabular-nums placeholder:text-ink-muted hover:border-control-hover ${focusRing}`}
             data-contact-input
             required
           />

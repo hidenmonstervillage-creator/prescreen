@@ -2,13 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { buttonClass, focusRing } from "./ui";
+import Wordmark from "./Wordmark";
+import { buttonClass, navItemClass } from "./ui";
 
 const NAV = [
   { href: "/site/inbox", label: "Hospital inbox", nav: "inbox" },
   { href: "/site/trials/new", label: "New trial", nav: "new-trial" },
 ];
 
+/** The research team's 64px header (AppHeader recipe). It stays on top so the matrix header can stick under it. */
 export default function SiteNav() {
   const pathname = usePathname() ?? "";
   async function signOut() {
@@ -16,25 +18,25 @@ export default function SiteNav() {
     window.location.href = "/site";
   }
   return (
-    <header className="h-16 border-b border-line bg-surface print:hidden">
-      <nav className="mx-auto flex h-full max-w-content items-center gap-2 px-6">
-        <span className="mr-4 text-heading text-ink">Pre-screen</span>
-        {NAV.map((n) => {
-          const current = pathname === n.href || pathname.startsWith(`${n.href}/`);
-          return (
-            <Link
-              key={n.href}
-              href={n.href}
-              aria-current={current ? "page" : undefined}
-              data-nav={n.nav}
-              className={`inline-flex h-full items-center border-b-2 px-3 text-body ${
-                current ? "border-ink font-semibold text-ink" : "border-transparent font-medium text-ink-secondary hover:border-line-strong hover:text-ink"
-              } ${focusRing} focus-visible:outline-offset-[-4px]`}
-            >
-              {n.label}
-            </Link>
-          );
-        })}
+    <header className="sticky top-0 z-20 h-16 border-b border-line bg-surface print:hidden">
+      <nav aria-label="Main" className="mx-auto flex h-full max-w-content items-center gap-5 px-5">
+        <Wordmark href="/site/inbox" />
+        <div className="flex h-full items-center">
+          {NAV.map((n) => {
+            const current = pathname === n.href || pathname.startsWith(`${n.href}/`);
+            return (
+              <Link
+                key={n.href}
+                href={n.href}
+                aria-current={current ? "page" : undefined}
+                data-nav={n.nav}
+                className={navItemClass(current)}
+              >
+                {n.label}
+              </Link>
+            );
+          })}
+        </div>
         <button type="button" onClick={signOut} className={`ml-auto ${buttonClass("ghost")}`} data-nav="sign-out">
           Sign out
         </button>

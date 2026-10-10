@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ErrorLine, Spinner } from "./Icons";
-import { buttonClass, inputClass, labelClass } from "./ui";
+import { buttonClass, inputClass, inputErrorClass, labelClass } from "./ui";
 
 export default function PasscodeForm() {
   const [passcode, setPasscode] = useState("");
@@ -40,7 +40,7 @@ export default function PasscodeForm() {
           value={passcode}
           onChange={(e) => setPasscode(e.target.value)}
           aria-invalid={error ? true : undefined}
-          className={`mt-1.5 ${inputClass} h-12 ${error ? "border-2 border-ink" : ""}`}
+          className={`mt-1.5 ${inputClass} ${error ? inputErrorClass : ""}`}
           data-passcode-input
           required
         />
@@ -49,7 +49,7 @@ export default function PasscodeForm() {
         type="submit"
         disabled={busy || !passcode}
         aria-busy={busy}
-        className={`${buttonClass("primary")} h-12`}
+        className={buttonClass("primary")}
         data-passcode-submit
       >
         {busy && <Spinner />}

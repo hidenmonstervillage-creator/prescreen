@@ -20,7 +20,7 @@ export default function PlainCriteria({ lines, status }: { lines: PlainLine[]; s
             <li key={l.criterion_id} data-criterion-line={l.criterion_id} title={l.quote}>
               <details className="group">
                 <summary
-                  className={`flex cursor-pointer list-none items-start gap-3 px-3.5 py-3 text-[16px] leading-6 text-ink hover:bg-page group-open:bg-page [&::-webkit-details-marker]:hidden ${focusRing} focus-visible:outline-offset-[-2px]`}
+                  className={`flex cursor-pointer list-none items-start gap-3 px-3.5 py-3 text-body text-ink hover:bg-page group-open:bg-page [&::-webkit-details-marker]:hidden ${focusRing} focus-visible:outline-offset-[-2px]`}
                 >
                   <ChevronRight className="mt-0.5 size-5 text-ink-secondary transition-transform group-open:rotate-90 motion-reduce:transition-none" />
                   <span className="flex min-w-0 flex-col items-start gap-1 sm:flex-row sm:gap-3">
@@ -33,7 +33,7 @@ export default function PlainCriteria({ lines, status }: { lines: PlainLine[]; s
                   </span>
                 </summary>
                 <blockquote
-                  className="mb-3 ml-3.5 mr-3.5 rounded-r-md border-l-4 border-evidence-line bg-evidence-tint px-3 py-2 text-[15px] leading-6 text-ink sm:ml-11"
+                  className="mb-3 ml-3.5 mr-3.5 rounded-r-md border-l-4 border-evidence-line bg-evidence-tint px-3 py-2 text-quote text-ink sm:ml-11"
                   data-criterion-quote
                 >
                   &ldquo;{l.quote}&rdquo;

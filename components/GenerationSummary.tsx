@@ -17,7 +17,7 @@ export default function GenerationSummary({ report, criteria }: { report: Partia
   const c = report.criteria;
   const q = report.questions;
   return (
-    <section data-generation-summary className="rounded-xl border border-line bg-surface-sunken/60 px-6 py-4 text-body text-ink">
+    <section data-generation-summary className="rounded-2xl border border-line bg-surface-sunken/60 px-5 py-4 text-body text-ink tabular-nums">
       <p className="text-[17px]">
         <strong className="font-semibold">{criteria.length} criteria:</strong> {askable} a patient can answer,{" "}
         {criteria.length - askable} for the research team.{q ? <strong className="font-semibold"> {q.kept} questions.</strong> : ""}

@@ -75,7 +75,10 @@ Site pages and site API routes are gated twice: `middleware.ts`, then a session 
 
 - Branch `ui/<topic>` from `main`. Change `app/` pages and layouts, `components/`, styles and `tailwind.config.ts` only.
 - Keep each screen piece its own component, and keep the `data-*` hooks: `data-nct-input`, `data-publish`, `data-criterion-id`, `data-question-id`, `data-submit`, `data-submission-id`, `data-state`, and on `/find` `data-trial-nct` (each result) and `data-prescreen-link` (the button). `tests/finder.render.test.tsx` checks the last two.
-- `StateCell` is the only component that renders a criterion state.
+- `StateCell` is the only component that renders a criterion state. It exports the StatePill (default), `CountPill`, `CountPills` and `CountsLineIcons`; `CountsLine` picks pills or the line.
+- Design system: `docs/design-system/` (Karma's, vendored; `VENDORED.md` lists the edits). `tailwind.config.ts` loads its v3 preset; components use the semantic classes (`bg-page`, `text-ink`, `text-state-met-ink`), recipes live in `components/ui.ts`. Fonts: `@font-face` in `app/globals.css` from `public/fonts`, no other host.
+- Atlas, not Karma: the wordmark is the word "Atlas" (`components/Wordmark.tsx`); no Karma logo or name in the UI except the disabled Karma button. The footer (`components/MapFooter.tsx`, Atlas's own sentence) is rendered once by `app/layout.tsx` on every screen. The landing hero is the only dark surface; everything from "Hospital sign in" on is light.
+- "Fictional patient" (`components/FictionalBadge.tsx`) sits after every patient's name: inbox, submission map, pack preview. "Recruiting" and "referral-ready" are neutral pills (`neutralPill`), never green. One primary button per view.
 - Run `npm test` before pushing: the wording test fails on verdict words and em dashes.
 - Never deploy, never run migrations or seeds; Mike merges and deploys.
 - Open question: the data-backed pages need the Supabase service role key to run locally. Until Mike decides how to share it (or adds a fixture mode), `tests/matrix.render.test.tsx` renders the matrix from `tests/fixtures/NCT06380751.generated.json` without a database.

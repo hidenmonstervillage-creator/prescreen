@@ -26,7 +26,7 @@ describe("rendered UI", () => {
     const met = renderToStaticMarkup(<StateCell state="met" />);
     expect(met).toContain("✓");
     expect(met).toContain(">met<");
-    expect(met).toContain("bg-green-50");
+    expect(met).toContain("bg-state-met-tint");
     expect(renderToStaticMarkup(<StateCell state="not_met" />)).toContain("not met");
     expect(renderToStaticMarkup(<StateCell state="not_found" />)).toContain("not found");
     expect(renderToStaticMarkup(<StateCell state="needs_clinician" />)).toContain("needs a clinician");

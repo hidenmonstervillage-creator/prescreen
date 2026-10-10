@@ -6,7 +6,7 @@ export default function KarmaButton() {
         type="button"
         disabled
         data-karma
-        className="inline-flex h-12 cursor-not-allowed items-center rounded-lg border border-line bg-surface px-5 text-[17px] font-semibold text-disabled-ink"
+        className="inline-flex h-10 cursor-not-allowed items-center rounded-lg border border-line bg-surface px-4 text-body font-semibold text-disabled-ink"
       >
         Request records for a full match
       </button>

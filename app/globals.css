@@ -2,15 +2,87 @@
 @tailwind components;
 @tailwind utilities;
 
+/* The two families of the design system, self-hosted from public/fonts (SIL OFL 1.1, licences beside
+   the files). The names match the preset's font stacks. No font is ever fetched from another host. */
+@font-face {
+  font-family: "Geologica";
+  src: url("/fonts/Geologica-Sharp-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Overpass Mono";
+  src: url("/fonts/OverpassMono-Variable.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
-  /* Karma: the focus ring is always visible, 2px accent outside the element. */
+  /* The focus ring is always visible: a solid 2px outline, 2px off the element. */
   :focus-visible {
     outline: 2px solid theme("colors.focus-ring");
     outline-offset: 2px;
   }
 
   ::selection {
-    background-color: theme("colors.highlight");
+    background-color: theme("colors.evidence-tint");
+  }
+}
+
+@layer components {
+  /* The light made of dots, on the landing hero only (components/DotLight.tsx). Five dot grids on the
+     same 10px spacing, stacked exactly. Each layer has a bigger, paler dot and a smaller visible area,
+     so the core shows the biggest, palest dot and the edge the smallest, bluest one. One paint, no
+     script, nothing moves. */
+  .dot-light {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    pointer-events: none;
+  }
+
+  .dot-light > span {
+    position: absolute;
+    inset: 0;
+    background-size: 10px 10px;
+    background-position: center;
+  }
+
+  .dot-light > .dot-light-glow {
+    inset: -12%;
+    background: radial-gradient(closest-side, theme("colors.brand-glow / 70%"), transparent);
+  }
+
+  .dot-light-1 {
+    background-image: radial-gradient(circle at 5px 5px, theme("colors.brand-dot-1") 1.1px, transparent 1.6px);
+    -webkit-mask-image: radial-gradient(closest-side, #000 70%, transparent 100%);
+    mask-image: radial-gradient(closest-side, #000 70%, transparent 100%);
+  }
+
+  .dot-light-2 {
+    background-image: radial-gradient(circle at 5px 5px, theme("colors.brand-dot-2") 1.7px, transparent 2.2px);
+    -webkit-mask-image: radial-gradient(closest-side, #000 52%, transparent 80%);
+    mask-image: radial-gradient(closest-side, #000 52%, transparent 80%);
+  }
+
+  .dot-light-3 {
+    background-image: radial-gradient(circle at 5px 5px, theme("colors.brand-dot-3") 2.4px, transparent 2.9px);
+    -webkit-mask-image: radial-gradient(closest-side, #000 36%, transparent 62%);
+    mask-image: radial-gradient(closest-side, #000 36%, transparent 62%);
+  }
+
+  .dot-light-4 {
+    background-image: radial-gradient(circle at 5px 5px, theme("colors.brand-dot-4") 3px, transparent 3.5px);
+    -webkit-mask-image: radial-gradient(closest-side, #000 22%, transparent 46%);
+    mask-image: radial-gradient(closest-side, #000 22%, transparent 46%);
+  }
+
+  .dot-light-5 {
+    background-image: radial-gradient(circle at 5px 5px, theme("colors.brand-dot-5") 3.5px, transparent 4px);
+    -webkit-mask-image: radial-gradient(closest-side, #000 10%, transparent 30%);
+    mask-image: radial-gradient(closest-side, #000 10%, transparent 30%);
   }
 }
 
@@ -23,7 +95,7 @@
 @media print {
   html,
   body {
-    background: #fff;
+    background: theme("colors.surface");
     font-size: 11pt;
   }
 

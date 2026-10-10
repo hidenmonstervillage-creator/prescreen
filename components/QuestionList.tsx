@@ -23,7 +23,7 @@ export default function QuestionList({ questions }: { questions: Question[] }) {
   return (
     <section data-question-list className={`${cardClass} flex min-w-0 flex-col lg:max-h-[78vh]`}>
       <h2 className="border-b border-line px-5 py-3.5 text-heading text-ink">
-        Questions <span className="font-normal text-ink-secondary">({questions.length})</span>
+        Questions <span className="font-normal text-ink-secondary tabular-nums">({questions.length})</span>
       </h2>
       <ol className="min-h-0 flex-1 space-y-2.5 overflow-y-auto px-5 py-4">
         {questions.map((q) => (

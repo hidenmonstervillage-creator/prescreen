@@ -6,6 +6,7 @@ import { finderDeps } from "@/lib/finder-store";
 import FinderForm from "@/components/FinderForm";
 import FinderResultList from "@/components/FinderResultList";
 import { ErrorLine, Spinner } from "@/components/Icons";
+import PublicHeader from "@/components/PublicHeader";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -26,27 +27,30 @@ export default function FindPage({ searchParams }: { searchParams: Params }) {
   const submitted = "condition" in searchParams || "city" in searchParams;
   const parsed = submitted ? cleanFinderInput(values) : null;
   return (
-    <main className="mx-auto max-w-5xl px-4 pb-16 pt-8 sm:px-6 md:pt-12">
-      <h1 className="text-title text-ink md:text-display">Find a recruiting trial for a patient</h1>
-      <p className="mt-3 max-w-3xl text-[17px] leading-7 text-ink-secondary md:text-[19px] md:leading-8">
-        Studies recruiting at hospitals in Bulgaria, from ClinicalTrials.gov. When a study is on the platform, the patient answers
-        its pre-screen questions, and the research team at the hospital contacts the patient after the pre-screen.
-      </p>
-      <FinderForm values={values} errors={parsed && !parsed.ok ? parsed.errors : []} searched={Boolean(parsed?.ok)} />
-      {parsed?.ok && (
-        <Suspense
-          key={JSON.stringify(parsed.value)}
-          fallback={
-            <p role="status" className="mt-8 flex items-center gap-2 text-[17px] font-medium text-ink" data-find-searching>
-              <Spinner />
-              Searching ClinicalTrials.gov. The first search for a study can take about 20 seconds.
-            </p>
-          }
-        >
-          <Results input={parsed.value} />
-        </Suspense>
-      )}
-    </main>
+    <>
+      <PublicHeader />
+      <main className="mx-auto w-full max-w-content px-5 pb-16 pt-8 md:pt-10">
+        <h1 className="text-title text-ink md:text-display">Find a recruiting trial for a patient</h1>
+        <p className="mt-3 max-w-4xl text-[17px] leading-7 text-ink-secondary md:text-[19px] md:leading-8">
+          Studies recruiting at hospitals in Bulgaria, from ClinicalTrials.gov. When a study is on the platform, the patient answers
+          its pre-screen questions, and the research team at the hospital contacts the patient after the pre-screen.
+        </p>
+        <FinderForm values={values} errors={parsed && !parsed.ok ? parsed.errors : []} searched={Boolean(parsed?.ok)} />
+        {parsed?.ok && (
+          <Suspense
+            key={JSON.stringify(parsed.value)}
+            fallback={
+              <p role="status" className="mt-8 flex items-center gap-2 text-[17px] font-medium text-ink" data-find-searching>
+                <Spinner />
+                Searching ClinicalTrials.gov. The first search for a study can take about 20 seconds.
+              </p>
+            }
+          >
+            <Results input={parsed.value} />
+          </Suspense>
+        )}
+      </main>
+    </>
   );
 }
 
