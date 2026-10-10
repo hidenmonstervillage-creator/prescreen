@@ -9,7 +9,8 @@
 // Time windows. A criterion that names a time window ("within 4 weeks before", "at least 2 weeks
 // since", a washout period) and that the must-ask table does not ask is served only by a number
 // question whose rule compares the number (confirm_range or deny_range). A yes or no question, or a
-// choice, on a time window is rejected.
+// choice, on a time window is rejected. A window measured in half-lives is never asked: a patient
+// cannot know a half-life, so no number settles it (halfLifeGuard, before the model).
 //
 // Permissions ("may have received", "is allowed") are guarded earlier, in lib/must-ask.ts: never asked.
 import type { Criterion, Question } from "./types";
@@ -62,6 +63,24 @@ export const RESEARCH_TEAM_REASON: Record<Guard, string> = {
   time_window: "a time window the research team checks",
   polarity: "the answer alone cannot settle it",
 };
+
+export const HALF_LIFE_REASON = "a time window that depends on a medicine's half-life";
+
+const HALF_LIFE_RE = /\bhalf-?\s?li(?:fe|ves)\b/i;
+
+/**
+ * A time window measured in half-lives ("2 weeks or 5 half-lives, whichever is shorter") turns on a number
+ * the patient cannot know: no day count settles it. Sent to the research team before the model sees it.
+ */
+export function halfLifeGuard(criteria: Criterion[]): { criteria: Criterion[]; sent: ResearchTeamItem[] } {
+  const sent: ResearchTeamItem[] = [];
+  const out = criteria.map((c) => {
+    if (!c.askable || !HALF_LIFE_RE.test(criterionText(c))) return c;
+    sent.push({ criterion_id: c.id, guard: "time_window", reason: HALF_LIFE_REASON });
+    return { ...c, askable: false, not_askable_reason: HALF_LIFE_REASON };
+  });
+  return { criteria: out, sent };
+}
 
 /**
  * The line on the New trial screen: "N questions written, M criteria sent to the research team because

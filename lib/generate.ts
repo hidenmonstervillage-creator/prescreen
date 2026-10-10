@@ -7,7 +7,7 @@
 import { MODEL, openaiJson, addUsage, emptyUsage, type ChatMessage, type LlmJson } from "./openai";
 import { wordingProblems } from "./wording";
 import { applyMustAsk, permissionGuard, type MustAskTag } from "./must-ask";
-import { RESEARCH_TEAM_REASON, isTimeWindow, ruleRejections, type ResearchTeamItem, type RuleRejection } from "./rule-guard";
+import { RESEARCH_TEAM_REASON, halfLifeGuard, isTimeWindow, ruleRejections, type ResearchTeamItem, type RuleRejection } from "./rule-guard";
 import type { Criterion, Question, QuestionRule, QuestionType, Section, TokenUsage } from "./types";
 import { normalizeWs, visibleText } from "./text";
 
@@ -707,14 +707,15 @@ export async function generateForTrial(
 ): Promise<{ criteria: Criterion[]; questions: Question[]; report: GenerationReport }> {
   const usage = emptyUsage();
   const a = await splitCriteria(text, llm, usage);
-  // Permissions go to the research team before anything is asked (lib/must-ask.ts guard list).
+  // Permissions, and time windows measured in half-lives, go to the research team before anything is asked.
   const permitted = permissionGuard(a.criteria);
+  const halfLife = halfLifeGuard(permitted.criteria);
   // The must-ask table, in code, before the questions call: these criteria are always asked.
-  const must = applyMustAsk(permitted.criteria, MAX_QUESTIONS);
+  const must = applyMustAsk(halfLife.criteria, MAX_QUESTIONS);
   const tableProblems = must.questions.flatMap((q) => questionProblems(q, must.criteria).map((p) => `${q.id}: ${p}`));
   const b = await writeQuestions(must.criteria, llm, usage, must.questions);
   const open = [...tableProblems, ...questionSetProblems(b.questions)];
-  const researchTeam = [...permitted.sent, ...(b.report.research_team ?? [])];
+  const researchTeam = [...permitted.sent, ...halfLife.sent, ...(b.report.research_team ?? [])];
   console.log(
     `[generate] ${a.criteria.length} criteria (${a.report.dropped.length} dropped), ${b.questions.length} questions ` +
       `(${must.questions.length} from the must-ask table), ${(b.report.rejected_rules ?? []).length} model rules refused, ` +

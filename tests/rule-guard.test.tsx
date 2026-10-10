@@ -12,7 +12,7 @@ import { criteriaLines, generateForTrial, writeQuestions } from "@/lib/generate"
 import { applyMustAsk, isPermissive, permissionGuard } from "@/lib/must-ask";
 import { mapDeterministic } from "@/lib/mapping";
 import type { JsonCall, JsonResult, LlmJson } from "@/lib/openai";
-import { NEGATIVE_STEM_RE, guardSummaryText, isTimeWindow, rejectedRulesText, ruleRejections } from "@/lib/rule-guard";
+import { NEGATIVE_STEM_RE, guardSummaryText, halfLifeGuard, isTimeWindow, rejectedRulesText, ruleRejections } from "@/lib/rule-guard";
 import type { Criterion, Question, QuestionRule, Section } from "@/lib/types";
 import { findVerdictWord, hasEmDash } from "@/lib/wording";
 
@@ -121,6 +121,27 @@ describe("guard 3: a time window takes a number question (the q9 case)", () => {
     "not a time window: %s",
     (quote) => expect(isTimeWindow({ quote, parent_quote: null })).toBe(false),
   );
+
+  it("a window measured in half-lives (e4, e5) goes to the research team before the model; e6 and e7 stay", () => {
+    const criteria = WASHOUT.map((q, k) => crit(`e${k + 4}`, "exclusion", q, WASHOUT_PARENT));
+    const g = halfLifeGuard(criteria);
+    expect(g.sent).toEqual([
+      { criterion_id: "e4", guard: "time_window", reason: "a time window that depends on a medicine's half-life" },
+      { criterion_id: "e5", guard: "time_window", reason: "a time window that depends on a medicine's half-life" },
+    ]);
+    expect(g.criteria.map((c) => c.askable)).toEqual([false, false, true, true]);
+    // Production's 606503e wrote "how many days ago" for e4 with 0 to 13 giving not met; with a short
+    // half-life the washout may already be over at 10 days, so that answer cannot settle it.
+    const q8: Question = {
+      id: "q8",
+      text: "How many days ago did you last receive chemotherapy, small molecules, or checkpoint inhibitors?",
+      type: "number",
+      options: null,
+      criterion_ids: ["e4"],
+      rules: [{ criterion_id: "e4", confirm_answers: [], deny_answers: [], confirm_range: { min: 0, max: 13 }, deny_range: { min: 14, max: null } }],
+    };
+    expect(mapDeterministic(g.criteria, [q8], { q8: 10 }).rows[0].state).toBe("needs_clinician");
+  });
 
   it("refuses the production q9 (a choice on e4 to e7) and a yes or no, accepts a number question that compares", () => {
     const criteria = WASHOUT.map((q, k) => crit(`e${k + 4}`, "exclusion", q, WASHOUT_PARENT));
@@ -258,7 +279,8 @@ describe("NCT06064877 end to end, with the production model's own questions", ()
     return out;
   }
 
-  // Production q7, q8, q9 and q10 (q6, the feeding tube, cannot come back: i11 never reaches the model).
+  // The first production run's q7, q8, q9 and q10 (q6, the feeding tube, cannot come back: i11 never
+  // reaches the model; e4 and e5, measured in half-lives, do not either, so q9 is left with e6 and e7).
   const MODEL: Question[] = [
     yesNo("q1", "Have you had more than 2 prior lines of anticancer therapy or treatment with cetuximab or other EGFR inhibitors for R/M HNSCC?", "e1"),
     yesNo("q2", "Have you ever had a severe allergic reaction to recombinant proteins or excipients in the investigational agent or cetuximab?", "e2"),
@@ -266,14 +288,9 @@ describe("NCT06064877 end to end, with the production model's own questions", ()
       id: "q3",
       text: "Have you completed the required washout period after any investigational drug, biologic agent, or radiation therapy?",
       type: "choice",
-      options: ["Yes, for chemotherapeutic agents, small molecules, and checkpoint inhibitors", "Yes, for antibody-drug conjugates", "Yes, for cell therapies", "Yes, for radiation therapy", "No"],
-      criterion_ids: ["e4", "e5", "e6", "e7"],
-      rules: [
-        rule("e4", ["Yes, for chemotherapeutic agents, small molecules, and checkpoint inhibitors"], ["No"]),
-        rule("e5", ["Yes, for antibody-drug conjugates"], ["No"]),
-        rule("e6", ["Yes, for cell therapies"], ["No"]),
-        rule("e7", ["Yes, for radiation therapy"], ["No"]),
-      ],
+      options: ["Yes, for cell therapies", "Yes, for radiation therapy", "No"],
+      criterion_ids: ["e6", "e7"],
+      rules: [rule("e6", ["Yes, for cell therapies"], ["No"]), rule("e7", ["Yes, for radiation therapy"], ["No"])],
     },
     yesNo("q4", "Do you have any significant heart problems, such as heart failure, recent heart attack, or serious heart rhythm issues?", "e9"),
   ];
@@ -281,27 +298,13 @@ describe("NCT06064877 end to end, with the production model's own questions", ()
 
   it("sends i11, i9, e4 to e7 and e9 to the research team, keeps the rest, and writes the summary line", async () => {
     expect(split()).toHaveLength(26);
-    const llm = fakeLlm([
-      { criteria: split() },
-      { questions: MODEL },
-      STILL_YES_NO("e4"),
-      STILL_YES_NO("e5"),
-      STILL_YES_NO("e6"),
-      STILL_YES_NO("e7"),
-      STILL_YES_NO("e9"),
-    ]);
+    const llm = fakeLlm([{ criteria: split() }, { questions: MODEL }, STILL_YES_NO("e6"), STILL_YES_NO("e7"), STILL_YES_NO("e9")]);
     const out = await generateForTrial(TEXT, llm);
-    expect(llm.calls.map((c) => c.label)).toEqual([
-      "criteria",
-      "questions",
-      "questions re-ask e4",
-      "questions re-ask e5",
-      "questions re-ask e6",
-      "questions re-ask e7",
-      "questions re-ask e9",
-    ]);
-    // The model never sees the permission.
-    expect(llm.calls[1].messages[1].content).not.toContain("feeding tubes");
+    expect(llm.calls.map((c) => c.label)).toEqual(["criteria", "questions", "questions re-ask e6", "questions re-ask e7", "questions re-ask e9"]);
+    // The model never sees the permission or the half-life windows.
+    const sent = llm.calls[1].messages[1].content;
+    expect(sent).not.toContain("feeding tubes");
+    expect(sent).not.toContain("half-lives");
     expect(out.questions.map((q) => [q.id, q.criterion_ids.join()])).toEqual([
       ["q1", "i1"],
       ["q2", "i5"],
@@ -311,7 +314,7 @@ describe("NCT06064877 end to end, with the production model's own questions", ()
       ["q6", "e1"],
       ["q7", "e2"],
     ]);
-    expect(out.report.questions.rejected_rules?.map((r) => r.criterion_id)).toEqual(["e4", "e5", "e6", "e7", "e9"]);
+    expect(out.report.questions.rejected_rules?.map((r) => r.criterion_id)).toEqual(["e6", "e7", "e9"]);
     expect(out.report.research_team?.map((r) => [r.criterion_id, r.guard])).toEqual([
       ["i11", "permission"],
       ["e4", "time_window"],
@@ -326,7 +329,7 @@ describe("NCT06064877 end to end, with the production model's own questions", ()
     const line = guardSummaryText(out.report);
     expect(line).toBe("7 questions written, 7 criteria sent to the research team because the answer alone cannot settle them.");
     expect(rejectedRulesText(out.report.questions)).toBe(
-      "5 model rules refused by the polarity and time-window checks; 5 criteria re-asked once, 0 passed the second time.",
+      "3 model rules refused by the polarity and time-window checks; 3 criteria re-asked once, 0 passed the second time.",
     );
     const html = renderToStaticMarkup(<GenerationSummary report={out.report} criteria={out.criteria} />);
     expect(html).toContain(line!);
