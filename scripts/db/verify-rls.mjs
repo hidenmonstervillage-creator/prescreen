@@ -1,5 +1,5 @@
 // npm run db:verify-rls: prove with the anon key that RLS and grants hold.
-// anon: SELECT on every table refused, INSERT into submissions refused for an unpublished
+// anon: SELECT on every table refused, INSERT into finder_rewrites and submit_attempts refused, INSERT into submissions refused for an unpublished
 // or unknown trial and allowed for a published one, UPDATE and DELETE refused.
 // Uses a temporary fictional trial row (service role) and deletes it afterwards.
 // Prints check names and pass or fail only, never a value.
@@ -24,7 +24,7 @@ function record(name, pass, detail = "") {
 const refused = (error) => Boolean(error);
 const describe = (error) => (error ? `${error.code ?? ""} ${error.message ?? ""}`.trim() : "no error");
 
-for (const table of ["trials", "mappings", "submissions", "login_attempts"]) {
+for (const table of ["trials", "mappings", "submissions", "login_attempts", "finder_rewrites", "submit_attempts"]) {
   const { data, error } = await anon.from(table).select("*").limit(1);
   record(`anon SELECT ${table} is refused`, refused(error) && !data, describe(error));
 }
@@ -43,6 +43,14 @@ const unknownTrial = "00000000-0000-4000-8000-000000000000";
     submission_id: unknownTrial, criterion_id: "i1", state: "met", quoted_criterion: "x",
   });
   record("anon INSERT mappings is refused", refused(error), describe(error));
+}
+{
+  const { error } = await anon.from("finder_rewrites").insert({ nct_id: "NCT00000001", lines: [] });
+  record("anon INSERT finder_rewrites is refused", refused(error), describe(error));
+}
+{
+  const { error } = await anon.from("submit_attempts").insert({ ip_hash: "rls check", trial_id: unknownTrial });
+  record("anon INSERT submit_attempts is refused", refused(error), describe(error));
 }
 {
   const { error } = await anon.rpc("trial_is_published", { t: unknownTrial });

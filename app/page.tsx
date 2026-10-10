@@ -9,6 +9,11 @@ export default function Home() {
         criterion it speaks to, with its source quoted.
       </p>
       <p className="mt-6">
+        <Link href="/find" className="text-blue-700 underline" data-nav="find">
+          Find a recruiting trial for a patient
+        </Link>
+      </p>
+      <p className="mt-2">
         <Link href="/site" className="text-blue-700 underline" data-nav="site">
           Site staff sign in
         </Link>
