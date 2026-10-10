@@ -3,9 +3,9 @@ import { cardClass, sectionLabel } from "./ui";
 
 const SECTION_TITLE: Record<Section, string> = { inclusion: "Inclusion", exclusion: "Exclusion" };
 
-/** How a criterion is covered: the question that asks it, or why it is left to the site team. */
+/** How a criterion is covered: the question that asks it, or why it is left to the research team. */
 export function criterionStatus(c: Criterion, askedIn: Map<string, string[]>): string {
-  if (!c.askable) return `Not asked: ${c.not_askable_reason ?? "for the site team"}`;
+  if (!c.askable) return `Not asked: ${c.not_askable_reason ?? "for the research team"}`;
   const qs = askedIn.get(c.id);
   return qs ? `Asked in ${qs.join(", ")}` : "Not asked: no question covers it";
 }

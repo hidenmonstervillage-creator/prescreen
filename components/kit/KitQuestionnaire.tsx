@@ -8,8 +8,8 @@ export default function KitQuestionnaire({ title, meta, questions }: { title: st
   return (
     <Sheet part="questionnaire" label="Part 2 · Pre-screen questionnaire" title={title} meta={meta}>
       <p className="text-[15px] leading-6">
-        Answer what you know. You can tick &ldquo;Not sure&rdquo; or leave a question blank. The trial site reads your answers and
-        contacts you.
+        Answer what you know. You can tick &ldquo;Not sure&rdquo; or leave a question blank. The research team at the hospital reads
+        your answers and contacts you.
       </p>
       <ol className="mt-3">
         {questions.map((q, i) => {
@@ -46,7 +46,7 @@ export default function KitQuestionnaire({ title, meta, questions }: { title: st
         })}
       </ol>
       <div className="mt-4 break-inside-avoid">
-        <p className="text-[15px] font-semibold">How should the site contact you?</p>
+        <p className="text-[15px] font-semibold">How should the research team contact you?</p>
         <p className="text-small text-ink-secondary">Your name and a phone number or email address.</p>
         <WriteLine label="Name:" />
         <WriteLine label="Phone or email:" />

@@ -1,29 +1,33 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { cardClass, focusRing, sectionLabel } from "@/components/ui";
-import { FREE_TRIAL_DAYS, SITE_PRICE_EUR, SPONSOR_PRICE_EUR, euros } from "./prices";
+import { PRINCIPLE_LINE } from "@/lib/copy";
+import { FREE_LEADS_PER_HOSPITAL, TRIAL_PLAN_EUR, euros } from "./prices";
 
 export const metadata: Metadata = { title: "Pricing · Pre-screen" };
 
+/** Three cards: who pays what. [X], [Z], [N] and [Y] are placeholders, shown as written. */
 const PLANS = [
   {
-    id: "site",
-    audience: "For sites",
-    price: SITE_PRICE_EUR,
-    unit: "per active trial per month",
+    id: "cro",
+    audience: "CRO",
+    headline: "Pay per pre-screened lead delivered.",
     points: [
-      "Checklist and plain-language questions from the trial's ClinicalTrials.gov criteria",
-      "A public pre-screen page for the trial",
-      "An inbox with a criteria map for every submission",
-      "A download kit for coordinators and local doctors",
+      "€[X] per lead, plus €[Z] when the patient enrols.",
+      `Trial plan: ${euros(TRIAL_PLAN_EUR)} per trial per month, [N] leads included, success fee on top.`,
     ],
   },
   {
-    id: "sponsor",
-    audience: "For sponsors",
-    price: SPONSOR_PRICE_EUR,
-    unit: "per trial per month across all its sites",
-    points: ["Everything a site gets, for every site running the trial"],
+    id: "hospital",
+    audience: "Hospital",
+    headline: "Pays nothing.",
+    points: ["Earns [Y]% of every fee.", "Trial setup free."],
+  },
+  {
+    id: "patient",
+    audience: "Patient",
+    headline: "Free.",
+    points: [],
   },
 ];
 
@@ -34,30 +38,32 @@ export default function PricingPage() {
         Pre-screen
       </Link>
       <h1 className="mt-4 text-display text-ink">Pricing</h1>
-      <p className="mt-3 text-[19px] leading-8 text-ink-secondary">
-        First trial free for {FREE_TRIAL_DAYS} days. Cancel any time.
-      </p>
-      <div className="mt-10 grid gap-6 md:grid-cols-2">
+      <div className="mt-10 grid gap-6 md:grid-cols-3">
         {PLANS.map((p) => (
           <section key={p.id} data-plan={p.id} className={`${cardClass} flex flex-col px-8 py-8`}>
             <h2 className={sectionLabel}>{p.audience}</h2>
-            <p className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <span className="text-hero tabular-nums text-ink" data-price>
-                {euros(p.price)}
-              </span>{" "}
-              <span className="text-heading font-medium text-ink-secondary">{p.unit}</span>
+            <p className="mt-4 text-title text-ink" data-plan-headline>
+              {p.headline}
             </p>
-            <ul className="mt-6 space-y-2.5 border-t border-line pt-6 text-[17px] leading-7 text-ink">
-              {p.points.map((pt) => (
-                <li key={pt} className="flex gap-3">
-                  <span aria-hidden="true" className="mt-3 size-1.5 shrink-0 rounded-full bg-ink" />
-                  {pt}
-                </li>
-              ))}
-            </ul>
+            {p.points.length > 0 && (
+              <ul className="mt-6 space-y-2.5 border-t border-line pt-6 text-[17px] leading-7 text-ink">
+                {p.points.map((pt) => (
+                  <li key={pt} className="flex gap-3">
+                    <span aria-hidden="true" className="mt-3 size-1.5 shrink-0 rounded-full bg-ink" />
+                    {pt}
+                  </li>
+                ))}
+              </ul>
+            )}
           </section>
         ))}
       </div>
+      <p className="mt-6 rounded-xl border border-line bg-surface-sunken px-8 py-5 text-heading text-ink" data-principle>
+        {PRINCIPLE_LINE}
+      </p>
+      <p className="mt-4 text-[17px] leading-7 text-ink-secondary" data-free-leads>
+        First {FREE_LEADS_PER_HOSPITAL} leads per hospital free to the CRO.
+      </p>
     </main>
   );
 }

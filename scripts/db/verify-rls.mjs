@@ -1,6 +1,7 @@
 // npm run db:verify-rls: prove with the anon key that RLS and grants hold.
 // anon: SELECT on every table refused, INSERT into finder_rewrites and submit_attempts refused, INSERT into submissions refused for an unpublished
-// or unknown trial and allowed for a published one, UPDATE and DELETE refused.
+// or unknown trial, refused without consent, refused with the coordinator's columns, and allowed for a published one with
+// consent; UPDATE and DELETE refused.
 // Uses a temporary fictional trial row (service role) and deletes it afterwards.
 // Prints check names and pass or fail only, never a value.
 import { createClient } from "@supabase/supabase-js";
@@ -87,10 +88,23 @@ if (temp?.id) {
     record("set up unpublished temporary trial", false, describe(unpubErr));
   }
 
-  const { error: insErr } = await anon
-    .from("submissions")
-    .insert({ trial_id: temp.id, answers: { q1: "yes" }, contact: "Fictional Tester, +359 00 000 0000" });
-  record("anon INSERT submissions for a published trial is allowed", !insErr, describe(insErr));
+  {
+    const { error } = await anon.from("submissions").insert({ trial_id: temp.id, answers: {}, contact: "rls check" });
+    record("anon INSERT submissions without consent is refused", refused(error), describe(error));
+  }
+  {
+    const { error } = await anon.from("submissions").insert({
+      trial_id: temp.id, answers: {}, contact: "rls check", consent_given: true, consent_at: new Date().toISOString(),
+      confirmed_by_coordinator: true, confirmed_at: new Date().toISOString(),
+    });
+    record("anon INSERT submissions with the coordinator's columns is refused", refused(error), describe(error));
+  }
+
+  const { error: insErr } = await anon.from("submissions").insert({
+    trial_id: temp.id, answers: { q1: "yes" }, contact: "Fictional Tester, +359 00 000 0000",
+    consent_given: true, consent_at: new Date().toISOString(),
+  });
+  record("anon INSERT submissions for a published trial, with consent, is allowed", !insErr, describe(insErr));
 
   const { error: updErr, count: updCount } = await anon
     .from("submissions")

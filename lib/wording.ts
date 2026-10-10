@@ -3,9 +3,12 @@
 // tests/ui.wording.test.ts scans the repo with these patterns; lib/generate.ts uses
 // them to reject generated text.
 
-/** The one allowed sentence that uses the word "eligibility". Inbox footer only. */
+/** The inbox footer: the first allowed use of the word "eligibility". */
 export const FOOTER_TEXT =
   "A criteria map, not an eligibility decision. Every line quotes its source.";
+
+/** The lead pack footer, on every page of the PDF and its preview: the second allowed use. */
+export const PACK_FOOTER_TEXT = `${FOOTER_TEXT} The research organisation makes the eligibility decision.`;
 
 /** Verdict and scoring words. Banned in UI text, generated output, copy, identifiers and logs. */
 export const VERDICT_WORDS: readonly string[] = [
@@ -34,12 +37,12 @@ const VERDICT_RE = new RegExp(`\\b(${VERDICT_WORDS.join("|")})\\b`, "i");
 const EM_DASH = String.fromCharCode(0x2014);
 const EM_DASH_PATTERNS = [EM_DASH, "&" + "mdash;", "\\" + "u2014"];
 
-/** Removes the allowed footer sentence so it is not counted as a verdict word. */
+/** Removes the allowed footer sentences so they are not counted as verdict words. */
 export function stripAllowed(text: string): string {
-  return text.split(FOOTER_TEXT).join(" ");
+  return text.split(PACK_FOOTER_TEXT).join(" ").split(FOOTER_TEXT).join(" ");
 }
 
-/** First banned verdict word in `text`, or null. The footer sentence is allowed. */
+/** First banned verdict word in `text`, or null. The footer sentences are allowed. */
 export function findVerdictWord(text: string): string | null {
   const m = VERDICT_RE.exec(stripAllowed(text));
   return m ? m[1] : null;

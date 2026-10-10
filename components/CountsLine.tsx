@@ -1,10 +1,19 @@
-import { countsLine } from "@/lib/states";
-import type { MappingRow } from "@/lib/types";
+import { countsLine, countsText } from "@/lib/states";
+import type { MappingRow, State } from "@/lib/types";
 
-export default function CountsLine({ rows }: { rows: Pick<MappingRow, "state">[] }) {
+/** The four counts, from map rows or from counts already taken. `compact` is the inbox row size. */
+export default function CountsLine({
+  rows,
+  counts,
+  compact = false,
+}: {
+  rows?: Pick<MappingRow, "state">[];
+  counts?: Record<State, number>;
+  compact?: boolean;
+}) {
   return (
-    <p data-counts className="text-title tabular-nums text-ink">
-      {countsLine(rows)}
+    <p data-counts className={`${compact ? "text-body font-medium" : "text-title"} tabular-nums text-ink`}>
+      {counts ? countsText(counts) : countsLine(rows ?? [])}
     </p>
   );
 }

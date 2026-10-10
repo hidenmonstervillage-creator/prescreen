@@ -217,7 +217,7 @@ describe("labels and sites", () => {
       ],
     };
     expect(recruitingSites(s, "Varna")).toEqual([
-      { facility: "Site name not given", city: "Varna" },
+      { facility: "Hospital name not given", city: "Varna" },
       { facility: "A Hospital", city: "Sofia" },
     ]);
   });

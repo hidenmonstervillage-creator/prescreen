@@ -68,7 +68,7 @@ describe("fixed copy", () => {
   it("footer and confirmation text are exact", () => {
     expect(FOOTER_TEXT).toBe("A criteria map, not an eligibility decision. Every line quotes its source.");
     expect(read("components/MapFooter.tsx")).toContain("{FOOTER_TEXT}");
-    expect(CONFIRMATION_TEXT).toBe("Thank you. The site will contact you.");
+    expect(CONFIRMATION_TEXT).toBe("Thank you. The research team will contact you.");
   });
 
   it("the public form shows nothing but the confirmation after submit", () => {

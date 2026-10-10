@@ -1,6 +1,6 @@
 # Handoff: pre-screen funnel
 
-Per-trial pre-screen funnel for clinical trial sites. Rules: `CLAUDE.md` (read it first). Repo: https://github.com/hidenmonstervillage-creator/prescreen
+Per-trial pre-screen funnel, run by hospitals and sold to CROs. Rules: `CLAUDE.md` (read it first). Repo: https://github.com/hidenmonstervillage-creator/prescreen
 
 ## 22:00 checkpoint, 2026-10-10
 
@@ -20,19 +20,20 @@ Fixture copy (contacts stripped): `tests/fixtures/NCT06380751.study.json`, verba
 - Fictional submission ("Mira Fictiva (fictional patient), +359 00 000 0000"): counts line **9 met · 1 not met · 9 not found · 15 need a clinician**. e6 ("History of another primary malignancy", answered yes) shows the exclusion flip; q5 "Not sure" and the blank q12 are not found.
 - Screenshots: `reports/A1/checkpoint-matrix-01.jpg` to `-07.jpg` (local, gitignored).
 
-## The five screens
+## The screens
 
 | # | Screen | Route | Who | What it does |
 |---|--------|-------|-----|--------------|
 | 1 | Passcode gate | `/site` | site staff | One passcode field. Sets an httpOnly cookie for 30 days. 5 wrong attempts per 10 minutes per address, then 429. Signed-in staff go on to the inbox. |
 | 2 | New trial | `/site/trials/new` | site staff | Paste an NCT ID, fetch from ClinicalTrials.gov, generate. Shows the criteria checklist (every line with its quote) and the questions side by side with the source criteria text. Publish creates the slug and the public page. "Download kit" is a stub for now (Ivayla's session builds the export). |
-| 3 | Public pre-screen | `/s/[slug]` | public | The questions, a contact field, submit. Confirmation text only: "Thank you. The site will contact you." No result is ever shown to the submitter. |
-| 4 | Inbox | `/site/inbox` | site staff | One row per submission: trial, date, contact. |
-| 5 | Submission map | `/site/inbox/[submissionId]` | site staff | The matrix: criterion quote, state (colour + icon + word, `StateCell` only), quoted answer. Counts line "N met · M not met · K not found · J need a clinician". Disabled "Request records for a full match" button, caption "coming: Karma". Footer: "A criteria map, not an eligibility decision. Every line quotes its source." |
+| 3 | Public pre-screen | `/s/[slug]` | public | The questions, a contact field, the required consent box (English and Bulgarian side by side), submit. Confirmation text only: "Thank you. The research team will contact you." No result is ever shown to the submitter. |
+| 4 | Hospital inbox | `/site/inbox` | research team | One row per submission: trial, date, contact, the four counts, the "referral-ready" label, the "Confirmed by coordinator" checkbox. "Referral-ready only" filter and "Build lead pack" above the list (A3). |
+| 5 | Submission map | `/site/inbox/[submissionId]` | research team | The matrix: criterion quote, state (colour + icon + word, `StateCell` only), quoted answer. Counts line "N met · M not met · K not found · J need a clinician". Disabled "Request records for a full match" button, caption "coming: Karma". Footer: "A criteria map, not an eligibility decision. Every line quotes its source." |
+| 6 | Lead pack preview | `/site/inbox/pack` | research team | The patients a pack holds, as the PDF shows them, and "Download PDF" (A3). |
 
 ## Routes
 
-Pages: `/`, `/find` (public, added in A2), `/site`, `/site/trials/new`, `/s/[slug]`, `/site/inbox`, `/site/inbox/[submissionId]`.
+Pages: `/`, `/find` (public, added in A2), `/pricing`, `/site`, `/site/trials/new`, `/s/[slug]`, `/site/inbox`, `/site/inbox/[submissionId]`, `/site/inbox/pack` (A3).
 
 API (all server side, service role; built in session A1):
 
@@ -44,7 +45,9 @@ API (all server side, service role; built in session A1):
 | POST | `/api/site/trials` | `{ nct, regenerate? }` to fetch, generate and store a draft trial (an existing trial is returned without spend) |
 | POST | `/api/site/trials/[id]/publish` | set `slug` (NCT plus 8 random characters) and `published_at`; idempotent |
 | POST | `/api/site/submissions/[id]/map` | rebuild one submission's map if the first build failed |
-| POST | `/api/s/[slug]/submit` | public: store answers and contact, then the mappings; returns only `{ ok: true }`. 10 per 10 minutes per address per trial, then 429 (A2) |
+| POST | `/api/s/[slug]/submit` | public: store answers, contact and consent, then the mappings; returns only `{ ok: true }`. 10 per 10 minutes per address per trial, then 429 (A2). Without `consent: true`, 400 and nothing stored (A3) |
+| POST | `/api/site/submissions/[id]/confirm` | `{ confirmed }`: the coordinator checkbox (A3) |
+| GET | `/api/site/pack?trial=<id>&ids=<ids>` | the lead pack PDF as a download; 409 if the selection changed since the preview (A3) |
 
 Site pages and site API routes are gated twice: `middleware.ts`, then a session check inside each page and route.
 
@@ -53,12 +56,12 @@ Site pages and site API routes are gated twice: `middleware.ts`, then a session 
 - **trials**: `id` uuid, `nct_id` text unique, `title`, `raw_eligibility` text (verbatim criteria markdown), `criteria` jsonb, `questions` jsonb, `slug` text unique, `published_at` timestamptz, `created_at`. Added in A1: `source` jsonb (ClinicalTrials.gov status, conditions, sex, ages, sites; no contacts) and `generation` jsonb (model, token spend, re-asked and dropped items).
   - `criteria[]`: `{ id: "i1" | "e1", section: "inclusion" | "exclusion", quote, parent_quote, askable, not_askable_reason }`. `quote` (and `parent_quote`, the line that introduces a numbered sub-list) is a verbatim substring of the visible criteria text: whitespace normalised, markdown backslash escapes removed.
   - `questions[]`: `{ id, text, type: "yes_no" | "choice" | "number" | "free_text", options, criterion_ids, rules }`. Each rule lists, per criterion served, the answers (or number ranges) that confirm the criterion's text and those that deny it; code turns that into met or not met per section. The public page gets only `id, text, type, options`.
-- **submissions**: `id`, `trial_id` fk, `answers` jsonb, `contact` text, `created_at`.
+- **submissions**: `id`, `trial_id` fk, `answers` jsonb, `contact` text, `created_at`. Added in A3 (migration 0003): `consent_given` boolean, `consent_at` timestamptz, `confirmed_by_coordinator` boolean, `confirmed_at` timestamptz; each timestamp is set exactly when its flag is true.
 - **mappings**: `id`, `submission_id` fk, `criterion_id` text, `state` in `met`, `not_met`, `not_found`, `needs_clinician`, `quoted_criterion`, `quoted_answer`. Added in A1: `question_id`.
 - **login_attempts** (added in A1): wrong passcodes by keyed hash of the address, for the 5 per 10 minutes limit.
 - **finder_rewrites** (added in A2): `nct_id` primary key, `lines` jsonb (`[{ criterion_id, section, text, quote }]`), `report` jsonb (model, `prompt_version`, token spend, dropped lines and why), `created_at`. The plain-word lines for `/find`, one row per NCT ID.
 - **submit_attempts** (added in A2): `ip_hash`, `trial_id`, `created_at`. Every POST to the public submit route for a published trial, for the 10 per 10 minutes limit.
-- Access: anon may INSERT into `submissions` only, and only for a published trial; it can SELECT nothing (verified with the anon key: `npm run db:verify-rls`). Everything else goes through the server with the service role.
+- Access: anon may INSERT into `submissions` only, only for a published trial, only with consent recorded, and only the columns `trial_id, answers, contact, consent_given, consent_at` (A3); it can SELECT nothing (verified with the anon key: `npm run db:verify-rls`). Everything else goes through the server with the service role.
 
 ## How a criterion gets its state
 
@@ -110,3 +113,15 @@ NCT06380751 lines: i2, i3, i6, e6, e8. Warming the query cost 3 calls (4125 toke
 A's 7 not found are the askable exclusions no question serves (e13 to e18, e23); its 15 need a clinician are the criteria a patient cannot answer. All 12 questions are yes or no, or choice, so mapping these rows made no model call.
 
 **Public submit rate limit:** 10 per 10 minutes per address per trial, then 429 with `retry-after: 600` and "Too many submissions from this address. Try again in 10 minutes." Every POST for a published trial counts, also one that fails validation; an unknown slug does not. Stored in `submit_attempts` as a keyed hash (`hashAddress(address, SITE_PASSCODE, "submit")`), the `login_attempts` pattern. Tested in `tests/submit.rate-limit.test.ts` and live: after A, B and C, seven invalid bodies got 400 and the 11th request got 429.
+
+## Atlas rework (session A3, 2026-10-10)
+
+Sold to CROs, run by hospitals. UI copy says hospital, research team and hospital inbox; never "site".
+
+**Consent.** The public page's last screen has one required checkbox above the submit button, English and Bulgarian side by side (`CONSENT_TEXT` in `lib/consent.ts`). Submit stays disabled until it is ticked; `submitAnswers` refuses without it (400, nothing stored), stores `consent_given` and `consent_at`, and the anon INSERT policy requires it too.
+
+**Referral-ready.** `referralReady(counts)` in `lib/referral.ts`: `not_met == 0` on a map that exists. Not found and needs a clinician are shown as counts and never block it. Computed in code, never stored. The inbox shows the four counts, the label "referral-ready" and the "Confirmed by coordinator" checkbox per row.
+
+**Lead pack.** A patient goes into a pack when referral-ready, confirmed by a coordinator, and with consent recorded (`packable`). "Build lead pack" opens the preview (`/site/inbox/pack`, one trial per pack; with several trials ready it asks which), and "Download PDF" fetches `/api/site/pack` with the exact submission ids the preview showed. PDF (`lib/pack.ts`, pdf-lib): A4, one page per patient. Each page: trial title, then "Lead pack · NCT ID · Hospital · Date"; the patient (n of N), contact, consent time, submitted time, coordinator confirmation time; the counts line; the matrix (criterion id and quote, state shape and word, question id and quoted answer, or why there is none), grouped into inclusion and exclusion; the questions the answers cite, as the patient read them, in two columns; the footer `PACK_FOOTER_TEXT` and "Page i of N". The matrix type size shrinks from 9 pt until the patient fits one page (6.5 pt for the 34-criteria demo trial); a trial too long for one page at 6 pt continues on a page marked "(continued)". Fonts: static Geologica Regular and SemiBold TTFs cut from the variable WOFF2 with fontTools (fontkit cannot subset WOFF2; the variable default is Thin), OFL, no reserved name. Hospital name: `HOSPITAL_NAME`, else "[Hospital name]". No sending, download only.
+
+**Demo rows.** The four A1/A2 rows predate the consent box; `npm run db:demo-consent` (Mike only) recorded consent on exactly those four, stamped at the time it ran. Referral-ready: A and B yes; C no (e11 not met); the checkpoint row no (e6 not met, 1 not met). Two later fictional rows (Nadya Izmislenova, Darina Primerova) are referral-ready but have no consent recorded, so they cannot go into a pack; a row with contact "iii" has 1 not met.

@@ -29,8 +29,8 @@ export default function FindPage({ searchParams }: { searchParams: Params }) {
     <main className="mx-auto max-w-5xl px-4 pb-16 pt-8 sm:px-6 md:pt-12">
       <h1 className="text-title text-ink md:text-display">Find a recruiting trial for a patient</h1>
       <p className="mt-3 max-w-3xl text-[17px] leading-7 text-ink-secondary md:text-[19px] md:leading-8">
-        Studies recruiting at sites in Bulgaria, from ClinicalTrials.gov. When a study is on the platform, the patient answers its
-        pre-screen questions, and the site contacts the patient after the pre-screen.
+        Studies recruiting at hospitals in Bulgaria, from ClinicalTrials.gov. When a study is on the platform, the patient answers
+        its pre-screen questions, and the research team at the hospital contacts the patient after the pre-screen.
       </p>
       <FinderForm values={values} errors={parsed && !parsed.ok ? parsed.errors : []} searched={Boolean(parsed?.ok)} />
       {parsed?.ok && (

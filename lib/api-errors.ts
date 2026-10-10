@@ -1,9 +1,13 @@
 // Turns thrown errors into JSON responses with a plain message and no secrets.
 import { CtgovError } from "./ctgov";
 import { OpenAIError } from "./openai";
+import { ConsentRequiredError } from "./consent";
 
 export function errorResponse(err: unknown, label: string): Response {
   const e = err as Error;
+  if (err instanceof ConsentRequiredError) {
+    return Response.json({ error: e.message }, { status: 400 });
+  }
   if (err instanceof CtgovError) {
     return Response.json({ error: e.message }, { status: err.status === 404 || err.status === 400 ? err.status : 502 });
   }

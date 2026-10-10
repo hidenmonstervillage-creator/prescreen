@@ -1,11 +1,8 @@
 // Shows the question asked and the answer quoted, or why there is no answer.
+import { answerLabel } from "@/lib/answers";
 import type { Criterion, MappingRow, Question } from "@/lib/types";
 
-const YES_NO_LABEL: Record<string, string> = { yes: "Yes", no: "No", unsure: "Not sure" };
-
-export function answerLabel(q: Question | undefined, value: string): string {
-  return q?.type === "yes_no" ? (YES_NO_LABEL[value] ?? value) : value;
-}
+export { answerLabel };
 
 export default function AnswerQuote({
   row,
@@ -20,7 +17,7 @@ export default function AnswerQuote({
   if (criterion && !criterion.askable) {
     return (
       <p className="text-body text-ink-secondary">
-        Not asked: {criterion.not_askable_reason ?? "for the site team"}
+        Not asked: {criterion.not_askable_reason ?? "for the research team"}
       </p>
     );
   }

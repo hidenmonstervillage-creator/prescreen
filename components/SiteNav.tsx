@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { buttonClass, focusRing } from "./ui";
 
 const NAV = [
-  { href: "/site/inbox", label: "Inbox", nav: "inbox" },
+  { href: "/site/inbox", label: "Hospital inbox", nav: "inbox" },
   { href: "/site/trials/new", label: "New trial", nav: "new-trial" },
 ];
 

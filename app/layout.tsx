@@ -19,7 +19,7 @@ const mono = localFont({
 
 export const metadata: Metadata = {
   title: "Pre-screen",
-  description: "Per-trial pre-screen questions for clinical trial sites.",
+  description: "Per-trial pre-screen questions for hospitals that run clinical trials.",
   robots: { index: false, follow: false },
 };
 

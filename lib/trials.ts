@@ -5,7 +5,10 @@ import { db } from "./supabase";
 import { fetchStudy, type CtgovLocation } from "./ctgov";
 import { generateForTrial, type GenerationReport } from "./generate";
 import { mapSubmission } from "./mapping";
-import type { Answers, Criterion, MappingRow, Question } from "./types";
+import { countStates } from "./states";
+import { packable, referralReady } from "./referral";
+import { ConsentRequiredError } from "./consent";
+import type { Answers, Criterion, MappingRow, Question, State } from "./types";
 
 export type TrialSource = {
   overallStatus: string | null;
@@ -135,24 +138,60 @@ export async function listTrials(): Promise<Pick<Trial, "id" | "nct_id" | "title
 // ---------------------------------------------------------------------------
 // Submissions
 
-export type InboxRow = {
+/** Consent and the coordinator's confirmation, as stored on a submission. */
+export type SubmissionFlags = {
+  consent_given: boolean;
+  consent_at: string | null;
+  confirmed_by_coordinator: boolean;
+  confirmed_at: string | null;
+};
+
+export type InboxRow = SubmissionFlags & {
   id: string;
   created_at: string;
   contact: string;
-  trial: { nct_id: string; title: string } | null;
+  trial: { id: string; nct_id: string; title: string } | null;
+  /** The four state counts of the map; all zero when there is no map yet. */
+  counts: Record<State, number>;
+  referral_ready: boolean;
+  /** Referral-ready, confirmed and with consent: may go into a lead pack. */
+  packable: boolean;
 };
+
+const FLAG_COLUMNS = "consent_given, consent_at, confirmed_by_coordinator, confirmed_at";
 
 export async function listSubmissions(): Promise<InboxRow[]> {
   const { data, error } = await db()
     .from("submissions")
-    .select("id, created_at, contact, trial:trials(nct_id, title)")
+    .select(`id, created_at, contact, ${FLAG_COLUMNS}, trial:trials(id, nct_id, title), mappings(state)`)
     .order("created_at", { ascending: false })
     .limit(500);
   if (error) fail("inbox load failed", error);
-  return (data ?? []) as unknown as InboxRow[];
+  type Raw = Omit<InboxRow, "counts" | "referral_ready" | "packable"> & { mappings: Pick<MappingRow, "state">[] | null };
+  return ((data ?? []) as unknown as Raw[]).map(({ mappings, ...s }) => {
+    const counts = countStates(mappings ?? []);
+    const ready = referralReady(counts);
+    return { ...s, counts, referral_ready: ready, packable: packable({ ...s, referral_ready: ready }) };
+  });
 }
 
-export type SubmissionDetail = {
+/** The inbox checkbox "Confirmed by coordinator". Returns null for an unknown submission. */
+export async function setCoordinatorConfirmation(
+  id: string,
+  confirmed: boolean,
+): Promise<Pick<SubmissionFlags, "confirmed_by_coordinator" | "confirmed_at"> | null> {
+  if (!/^[0-9a-f-]{36}$/.test(id)) return null;
+  const { data, error } = await db()
+    .from("submissions")
+    .update({ confirmed_by_coordinator: confirmed, confirmed_at: confirmed ? new Date().toISOString() : null })
+    .eq("id", id)
+    .select("confirmed_by_coordinator, confirmed_at")
+    .maybeSingle();
+  if (error) fail("confirmation save failed", error);
+  return data ?? null;
+}
+
+export type SubmissionDetail = SubmissionFlags & {
   id: string;
   created_at: string;
   contact: string;
@@ -165,7 +204,7 @@ export async function getSubmissionDetail(id: string): Promise<SubmissionDetail 
   if (!/^[0-9a-f-]{36}$/.test(id)) return null;
   const { data: sub, error } = await db()
     .from("submissions")
-    .select("id, created_at, contact, answers, trial_id")
+    .select(`id, created_at, contact, answers, trial_id, ${FLAG_COLUMNS}`)
     .eq("id", id)
     .maybeSingle();
   if (error) fail("submission load failed", error);
@@ -177,11 +216,25 @@ export async function getSubmissionDetail(id: string): Promise<SubmissionDetail 
     .select("criterion_id, state, quoted_criterion, quoted_answer, question_id")
     .eq("submission_id", id);
   if (mErr) fail("mapping load failed", mErr);
-  const order = new Map(trial.criteria.map((c, i) => [c.id, i]));
-  const rows = ((maps ?? []) as MappingRow[]).sort(
-    (a, b) => (order.get(a.criterion_id) ?? 1e9) - (order.get(b.criterion_id) ?? 1e9),
-  );
-  return { id: sub.id, created_at: sub.created_at, contact: sub.contact, answers: sub.answers ?? {}, trial, rows };
+  const rows = inCriteriaOrder((maps ?? []) as MappingRow[], trial.criteria);
+  return {
+    id: sub.id,
+    created_at: sub.created_at,
+    contact: sub.contact,
+    answers: sub.answers ?? {},
+    consent_given: sub.consent_given,
+    consent_at: sub.consent_at,
+    confirmed_by_coordinator: sub.confirmed_by_coordinator,
+    confirmed_at: sub.confirmed_at,
+    trial,
+    rows,
+  };
+}
+
+/** Map rows in the order of the trial's criteria. */
+export function inCriteriaOrder(rows: MappingRow[], criteria: Criterion[]): MappingRow[] {
+  const order = new Map(criteria.map((c, i) => [c.id, i]));
+  return [...rows].sort((a, b) => (order.get(a.criterion_id) ?? 1e9) - (order.get(b.criterion_id) ?? 1e9));
 }
 
 async function writeMappings(submissionId: string, rows: MappingRow[]): Promise<void> {
@@ -193,15 +246,20 @@ async function writeMappings(submissionId: string, rows: MappingRow[]): Promise<
   if (error) fail("mapping save failed", error);
 }
 
-/** Stores the submission, then its map. A map failure leaves the submission for a rebuild. */
+/**
+ * Stores the submission, then its map. A map failure leaves the submission for a rebuild.
+ * Refused without consent: this is the one place a submission is stored, so no path skips it.
+ */
 export async function submitAnswers(
   trial: PublicTrial,
   answers: Answers,
   contact: string,
+  consent: boolean,
 ): Promise<{ submissionId: string; mapped: boolean }> {
+  if (consent !== true) throw new ConsentRequiredError();
   const { data, error } = await db()
     .from("submissions")
-    .insert({ trial_id: trial.id, answers, contact })
+    .insert({ trial_id: trial.id, answers, contact, consent_given: true, consent_at: new Date().toISOString() })
     .select("id")
     .single();
   if (error || !data) fail("submission save failed", error);

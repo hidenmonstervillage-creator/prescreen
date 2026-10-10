@@ -10,6 +10,10 @@ const nextConfig = {
   experimental: {
     // Runs lib/env-guard.ts once per server start (instrumentation.ts).
     instrumentationHook: true,
+    // The lead pack route reads its two fonts from disk (lib/pack-fonts.ts).
+    outputFileTracingIncludes: {
+      "/api/site/pack": ["./public/fonts/Geologica-Sharp-Regular.ttf", "./public/fonts/Geologica-Sharp-SemiBold.ttf"],
+    },
   },
 };
 

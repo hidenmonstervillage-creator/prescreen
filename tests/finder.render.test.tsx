@@ -71,13 +71,13 @@ describe("/find result list", () => {
 
   it("the pre-screen button only for the study on the platform, linking to its public page", () => {
     expect(html.match(/data-prescreen-link/g)).toHaveLength(1);
-    expect(html).toMatch(/href="\/s\/nct06380751-md2jhsjd"[^>]*data-prescreen-link[^>]*>Pre-screen this patient</);
+    expect(html).toMatch(/href="\/s\/nct06380751-md2jhsjd"[^>]*data-prescreen-link[^>]*>Pre-screen patients</);
   });
 
   it("other studies say they are not on the platform yet, with the site city list", () => {
-    expect(html).toContain("Not on the platform yet. Sites in Bulgaria: Burgas.");
-    expect(html).toContain("No recruiting site in Bulgaria is listed.");
-    expect(html).toContain("No site in Bulgaria is listed as recruiting.");
+    expect(html).toContain("Not on the platform yet. Hospitals in Bulgaria: Burgas.");
+    expect(html).toContain("No recruiting hospital in Bulgaria is listed.");
+    expect(html).toContain("No hospital in Bulgaria is listed as recruiting.");
   });
 
   it("plain-word lines end with their criterion id and carry the verbatim quote on hover and on expand", () => {
@@ -97,7 +97,7 @@ describe("/find result list", () => {
 
   it("says when the search was widened to all of Bulgaria, and when nothing matched", () => {
     const widened = renderToStaticMarkup(<FinderResultList outcome={outcome([offPlatform], true)} />);
-    expect(widened).toContain("Fewer than 3 matched in Plovdiv");
+    expect(widened).toContain("Fewer than 3 found in Plovdiv");
     const none = renderToStaticMarkup(<FinderResultList outcome={outcome([])} />);
     expect(none).toContain("data-find-empty");
   });
@@ -108,7 +108,7 @@ describe("/find page copy", () => {
 
   it("heading and subline are exact, and the page never calls itself a finder", () => {
     expect(page).toContain("Find a recruiting trial for a patient");
-    expect(page).toMatch(/the site contacts the patient after the pre-screen/);
+    expect(page).toMatch(/the research team at the hospital contacts the patient after the pre-screen/);
     expect(page.toLowerCase()).not.toContain("trial finder");
     const form = renderToStaticMarkup(<FinderForm values={{ condition: "breast cancer", markers: "", city: "Plovdiv" }} errors={[]} />);
     expect(form.toLowerCase()).not.toContain("finder");

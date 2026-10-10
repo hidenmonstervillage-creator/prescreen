@@ -9,8 +9,8 @@ export default function FinderResultList({ outcome }: { outcome: FinderOutcome }
   if (!results.length) {
     return (
       <p className={`${cardClass} mt-8 px-6 py-5 text-[17px] leading-7 text-ink`} data-find-empty>
-        No recruiting study with a site in Bulgaria matched &ldquo;{terms}&rdquo;. Try a broader condition, or leave out the stage or
-        markers.
+        No recruiting study at a hospital in Bulgaria was found for &ldquo;{terms}&rdquo;. Try a broader condition, or leave out the
+        stage or markers.
       </p>
     );
   }
@@ -19,7 +19,7 @@ export default function FinderResultList({ outcome }: { outcome: FinderOutcome }
       <p className="text-[17px] leading-7 text-ink" data-find-summary>
         {results.length} recruiting {results.length === 1 ? "study" : "studies"} for &ldquo;{terms}&rdquo; near {input.city}
         {cityTotal !== null && !widened && cityTotal > results.length ? `, the first ${results.length} of ${cityTotal}` : ""}.
-        {widened && ` Fewer than 3 matched in ${input.city}, so studies with sites elsewhere in Bulgaria are included.`}
+        {widened && ` Fewer than 3 found in ${input.city}, so studies at hospitals elsewhere in Bulgaria are included.`}
       </p>
       <div className="mt-4 space-y-5">
         {results.map((r) => (

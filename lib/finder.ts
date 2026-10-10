@@ -1,4 +1,4 @@
-// Doctor-side search: recruiting studies with a site in Bulgaria, from ClinicalTrials.gov,
+// Doctor-side search: recruiting studies at a hospital in Bulgaria, from ClinicalTrials.gov,
 // each with up to 5 of its criteria rewritten in plain words by gpt-4o. Every line names
 // the criterion it came from, and code (never the model) attaches that criterion's verbatim
 // text. A line that fails a check is dropped; the study is always kept.
@@ -67,7 +67,7 @@ export function recruitingSites(study: Pick<CtgovStudy, "locations">, city: stri
   const out: Site[] = [];
   for (const l of study.locations) {
     if (l.country !== COUNTRY || l.status !== "RECRUITING") continue;
-    const site = { facility: normalizeWs(l.facility ?? "") || "Site name not given", city: normalizeWs(l.city ?? "") || "City not given" };
+    const site = { facility: normalizeWs(l.facility ?? "") || "Hospital name not given", city: normalizeWs(l.city ?? "") || "City not given" };
     const key = `${site.facility}|${site.city}`;
     if (seen.has(key)) continue;
     seen.add(key);

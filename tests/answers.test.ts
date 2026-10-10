@@ -31,7 +31,7 @@ describe("cleanSubmission", () => {
         "q1: choose yes, no or not sure",
         "q2: choose one of the options",
         "q3: enter a number",
-        "contact: tell the site how to reach you",
+        "contact: tell the research team how to reach you",
       ]);
     }
     expect(cleanSubmission(Q, null).ok).toBe(false);

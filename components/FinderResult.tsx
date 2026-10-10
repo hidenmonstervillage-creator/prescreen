@@ -3,7 +3,7 @@ import PlainCriteria from "./PlainCriteria";
 import { buttonClass, cardClass, focusRing } from "./ui";
 
 /**
- * One study: link, title, phase, status, recruiting sites in Bulgaria, plain-word criteria, next step.
+ * One study: link, title, phase, status, recruiting hospitals in Bulgaria, plain-word criteria, next step.
  * The next step is the strongest thing on the card and comes straight after the title: beside it from
  * md up, under it on a phone. It is second in the markup too, so keyboard order matches what is seen.
  */
@@ -35,19 +35,19 @@ export default function FinderResult({ result }: { result: Result }) {
       <div className="md:col-start-2 md:row-span-2 md:row-start-1">
         {r.prescreenHref ? (
           <a href={r.prescreenHref} className={`${buttonClass("primary", "lg")} w-full whitespace-nowrap`} data-prescreen-link>
-            Pre-screen this patient
+            Pre-screen patients
           </a>
         ) : (
           <p className="rounded-lg border border-line bg-page px-4 py-3 text-body text-ink-secondary" data-not-on-platform>
             Not on the platform yet.{" "}
-            {r.cities.length > 0 ? `Sites in Bulgaria: ${r.cities.join(", ")}.` : "No recruiting site in Bulgaria is listed."}
+            {r.cities.length > 0 ? `Hospitals in Bulgaria: ${r.cities.join(", ")}.` : "No recruiting hospital in Bulgaria is listed."}
           </p>
         )}
       </div>
       <div className="min-w-0 space-y-5 md:col-start-1 md:row-start-2">
         {r.sites.length > 0 ? (
           <div data-sites>
-            <p className="text-small font-semibold text-ink">Recruiting sites in Bulgaria</p>
+            <p className="text-small font-semibold text-ink">Recruiting hospitals in Bulgaria</p>
             <ul className="mt-2 flex flex-wrap gap-2">
               {r.sites.map((s) => (
                 <li key={`${s.facility}|${s.city}`} className="rounded-md border border-line bg-page px-2.5 py-1 text-small text-ink">
@@ -58,7 +58,7 @@ export default function FinderResult({ result }: { result: Result }) {
           </div>
         ) : (
           <p className="text-body text-ink-secondary" data-sites>
-            No site in Bulgaria is listed as recruiting.
+            No hospital in Bulgaria is listed as recruiting.
           </p>
         )}
         <PlainCriteria lines={r.lines} status={r.linesStatus} />

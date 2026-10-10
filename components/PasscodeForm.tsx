@@ -31,7 +31,7 @@ export default function PasscodeForm() {
     <form onSubmit={onSubmit} className="flex flex-col gap-4" data-passcode-form>
       <div>
         <label htmlFor="passcode-input" className={labelClass}>
-          Site passcode
+          Hospital passcode
         </label>
         <input
           id="passcode-input"

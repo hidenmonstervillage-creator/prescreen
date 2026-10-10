@@ -24,7 +24,7 @@ export default function PublicPrescreen({
         data-demo-notice
       >
         <span className="inline-flex h-7 shrink-0 items-center rounded-md border border-fictional-line bg-surface px-2.5 text-label uppercase">
-          Demo site
+          Demo page
         </span>
         <p className="text-[17px] font-medium">
           Use fictional details only. Do not enter real health information or real contact details.

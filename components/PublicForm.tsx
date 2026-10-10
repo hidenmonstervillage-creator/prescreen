@@ -3,12 +3,13 @@
 import { useRef, useState } from "react";
 import type { PublicQuestion } from "@/lib/types";
 import QuestionField from "./QuestionField";
+import ConsentField from "./ConsentField";
 import { ErrorLine, Spinner } from "./Icons";
 import { buttonClass, focusRing } from "./ui";
 
-export const CONFIRMATION_TEXT = "Thank you. The site will contact you.";
+export const CONFIRMATION_TEXT = "Thank you. The research team will contact you.";
 
-/** Questions per screen: short screens read faster than one long form. The contact field gets its own last screen. */
+/** Questions per screen: short screens read faster than one long form. Contact and consent get their own last screen. */
 const PER_STEP = 4;
 
 function chunk<T>(items: T[], size: number): T[][] {
@@ -20,6 +21,7 @@ function chunk<T>(items: T[], size: number): T[][] {
 export default function PublicForm({ slug, questions }: { slug: string; questions: PublicQuestion[] }) {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [contact, setContact] = useState("");
+  const [consent, setConsent] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
@@ -49,7 +51,7 @@ export default function PublicForm({ slug, questions }: { slug: string; question
     const res = await fetch(`/api/s/${slug}/submit`, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ answers, contact }),
+      body: JSON.stringify({ answers, contact, consent }),
     });
     if (res.ok) {
       setDone(true);
@@ -85,8 +87,8 @@ export default function PublicForm({ slug, questions }: { slug: string; question
         </ol>
         {step === 0 && (
           <p className="pt-2 text-[18px] leading-7 text-ink-secondary">
-            Answer what you know. You can choose &ldquo;Not sure&rdquo; or leave a question blank. The trial site reads your answers
-            and contacts you.
+            Answer what you know. You can choose &ldquo;Not sure&rdquo; or leave a question blank. The research team at the hospital
+            reads your answers and contacts you.
           </p>
         )}
       </div>
@@ -104,7 +106,7 @@ export default function PublicForm({ slug, questions }: { slug: string; question
       {onContactStep && (
         <div>
           <label htmlFor="contact-input" className="block text-[22px] font-semibold leading-8 text-ink md:text-[26px] md:leading-9">
-            How should the site contact you?
+            How should the research team contact you?
           </label>
           <p id="contact-help" className="mt-1.5 text-[17px] leading-6 text-ink-secondary">
             Your name and a phone number or email address.
@@ -123,6 +125,8 @@ export default function PublicForm({ slug, questions }: { slug: string; question
         </div>
       )}
 
+      {onContactStep && <ConsentField checked={consent} onChange={setConsent} />}
+
       <div className="flex flex-wrap items-center gap-3 border-t border-line pt-6">
         {step > 0 && (
           <button type="button" onClick={() => goTo(step - 1)} disabled={busy} className={buttonClass("secondary", "lg")} data-back>
@@ -132,13 +136,13 @@ export default function PublicForm({ slug, questions }: { slug: string; question
         {onContactStep ? (
           <button
             type="submit"
-            disabled={busy || !contact.trim()}
+            disabled={busy || !contact.trim() || !consent}
             aria-busy={busy}
             className={`${buttonClass("primary", "lg")} ml-auto`}
             data-submit
           >
             {busy && <Spinner />}
-            {busy ? "Sending..." : "Send to the site"}
+            {busy ? "Sending..." : "Send to the research team"}
           </button>
         ) : (
           <button type="submit" className={`${buttonClass("primary", "lg")} ml-auto`} data-next>

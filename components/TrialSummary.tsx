@@ -25,7 +25,7 @@ export default function TrialSummary({ trial }: { trial: Trial }) {
       </p>
       {bg.length > 0 && (
         <p className="text-body text-ink-secondary">
-          Sites in Bulgaria: {bg.map((l) => `${l.city} (${(l.status ?? "").toLowerCase().replace(/_/g, " ")})`).join(", ")}
+          Hospitals in Bulgaria: {bg.map((l) => `${l.city} (${(l.status ?? "").toLowerCase().replace(/_/g, " ")})`).join(", ")}
         </p>
       )}
     </section>

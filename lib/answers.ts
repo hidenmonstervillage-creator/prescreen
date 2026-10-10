@@ -7,6 +7,13 @@ export const MAX_CONTACT = 300;
 
 export type CleanSubmission = { answers: Answers; contact: string };
 
+const YES_NO_LABEL: Record<string, string> = { yes: "Yes", no: "No", unsure: "Not sure" };
+
+/** A stored answer as the person saw it: yes_no values read as their button labels. */
+export function answerLabel(q: Pick<Question, "type"> | undefined, value: string): string {
+  return q?.type === "yes_no" ? (YES_NO_LABEL[value] ?? value) : value;
+}
+
 export function cleanSubmission(
   questions: Question[],
   raw: unknown,
@@ -37,7 +44,7 @@ export function cleanSubmission(
   }
 
   const contact = typeof body.contact === "string" ? body.contact.trim() : "";
-  if (!contact) errors.push("contact: tell the site how to reach you");
+  if (!contact) errors.push("contact: tell the research team how to reach you");
   else if (contact.length > MAX_CONTACT) errors.push(`contact: keep it under ${MAX_CONTACT} characters`);
 
   return errors.length ? { ok: false, errors } : { ok: true, value: { answers, contact } };

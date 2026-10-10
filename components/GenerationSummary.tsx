@@ -20,7 +20,7 @@ export default function GenerationSummary({ report, criteria }: { report: Partia
     <section data-generation-summary className="rounded-xl border border-line bg-surface-sunken/60 px-6 py-4 text-body text-ink">
       <p className="text-[17px]">
         <strong className="font-semibold">{criteria.length} criteria:</strong> {askable} a patient can answer,{" "}
-        {criteria.length - askable} for the site team.{q ? <strong className="font-semibold"> {q.kept} questions.</strong> : ""}
+        {criteria.length - askable} for the research team.{q ? <strong className="font-semibold"> {q.kept} questions.</strong> : ""}
       </p>
       {c && c.reasked.length > 0 && (
         <p className="mt-1.5 text-ink-secondary">Re-asked: {c.reasked.map((r) => `${r.id} (${r.problems.join("; ")})`).join(", ")}</p>
