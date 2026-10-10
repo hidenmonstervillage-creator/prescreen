@@ -22,6 +22,24 @@ export function UnavailableIcon({ className = "size-5" }: IconProps) {
   );
 }
 
+/** Expand and collapse. Rotate it with the open state (group-open:rotate-90). */
+export function ChevronRight({ className = "size-5" }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={`shrink-0 ${className}`}
+    >
+      <path d="M8 5.5l4.5 4.5L8 14.5" />
+    </svg>
+  );
+}
+
 /** Loading. Turns only when the viewer allows motion. */
 export function Spinner({ className = "size-5" }: IconProps) {
   return (

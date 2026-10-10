@@ -1,59 +1,67 @@
 import type { FinderResult as Result } from "@/lib/finder";
 import PlainCriteria from "./PlainCriteria";
+import { buttonClass, cardClass, focusRing } from "./ui";
 
-/** One study: link, title, phase, status, recruiting sites in Bulgaria, plain-word criteria, next step. */
+/**
+ * One study: link, title, phase, status, recruiting sites in Bulgaria, plain-word criteria, next step.
+ * The next step is the strongest thing on the card and comes straight after the title: beside it from
+ * md up, under it on a phone. It is second in the markup too, so keyboard order matches what is seen.
+ */
 export default function FinderResult({ result }: { result: Result }) {
   const r = result;
   return (
-    <article className="rounded border border-gray-200 p-4" data-trial-nct={r.nctId}>
-      <p className="text-sm">
-        <a
-          href={`https://clinicaltrials.gov/study/${r.nctId}`}
-          target="_blank"
-          rel="noreferrer"
-          className="text-blue-700 underline"
-          data-ctgov-link
-        >
-          {r.nctId}
-        </a>
-        <span className="text-gray-600">
-          {" "}
-          &middot; {r.phase} &middot; {r.status}
-        </span>
-      </p>
-      <h2 className="mt-1 text-lg font-semibold">{r.title}</h2>
-      {r.sites.length > 0 ? (
-        <div className="mt-2 text-sm" data-sites>
-          <p className="font-medium">Recruiting sites in Bulgaria</p>
-          <ul className="list-inside list-disc text-gray-700">
-            {r.sites.map((s) => (
-              <li key={`${s.facility}|${s.city}`}>
-                {s.facility}, {s.city}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        <p className="mt-2 text-sm text-gray-700" data-sites>
-          No site in Bulgaria is listed as recruiting.
-        </p>
-      )}
-      <PlainCriteria lines={r.lines} status={r.linesStatus} />
-      <div className="mt-4">
-        {r.prescreenHref ? (
+    <article
+      className={`${cardClass} grid gap-x-8 gap-y-5 px-5 py-5 sm:px-6 sm:py-6 md:grid-cols-[minmax(0,1fr)_17.5rem]`}
+      data-trial-nct={r.nctId}
+    >
+      <header className="min-w-0 md:col-start-1 md:row-start-1">
+        <p className="text-body text-ink-secondary">
           <a
-            href={r.prescreenHref}
-            className="inline-block rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white"
-            data-prescreen-link
+            href={`https://clinicaltrials.gov/study/${r.nctId}`}
+            target="_blank"
+            rel="noreferrer"
+            className={`rounded-sm font-mono text-[15px] font-medium text-link underline underline-offset-2 hover:text-link-hover ${focusRing}`}
+            data-ctgov-link
           >
+            {r.nctId}
+          </a>
+          <span>
+            {" "}
+            &middot; {r.phase} &middot; {r.status}
+          </span>
+        </p>
+        <h2 className="mt-1.5 text-heading text-ink md:text-[22px] md:leading-8">{r.title}</h2>
+      </header>
+      <div className="md:col-start-2 md:row-span-2 md:row-start-1">
+        {r.prescreenHref ? (
+          <a href={r.prescreenHref} className={`${buttonClass("primary", "lg")} w-full whitespace-nowrap`} data-prescreen-link>
             Pre-screen this patient
           </a>
         ) : (
-          <p className="text-sm text-gray-700" data-not-on-platform>
+          <p className="rounded-lg border border-line bg-page px-4 py-3 text-body text-ink-secondary" data-not-on-platform>
             Not on the platform yet.{" "}
             {r.cities.length > 0 ? `Sites in Bulgaria: ${r.cities.join(", ")}.` : "No recruiting site in Bulgaria is listed."}
           </p>
         )}
+      </div>
+      <div className="min-w-0 space-y-5 md:col-start-1 md:row-start-2">
+        {r.sites.length > 0 ? (
+          <div data-sites>
+            <p className="text-small font-semibold text-ink">Recruiting sites in Bulgaria</p>
+            <ul className="mt-2 flex flex-wrap gap-2">
+              {r.sites.map((s) => (
+                <li key={`${s.facility}|${s.city}`} className="rounded-md border border-line bg-page px-2.5 py-1 text-small text-ink">
+                  {s.facility}, {s.city}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <p className="text-body text-ink-secondary" data-sites>
+            No site in Bulgaria is listed as recruiting.
+          </p>
+        )}
+        <PlainCriteria lines={r.lines} status={r.linesStatus} />
       </div>
     </article>
   );

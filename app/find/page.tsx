@@ -5,6 +5,7 @@ import { cleanFinderInput, findTrials, type FinderInput } from "@/lib/finder";
 import { finderDeps } from "@/lib/finder-store";
 import FinderForm from "@/components/FinderForm";
 import FinderResultList from "@/components/FinderResultList";
+import { ErrorLine, Spinner } from "@/components/Icons";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -25,18 +26,19 @@ export default function FindPage({ searchParams }: { searchParams: Params }) {
   const submitted = "condition" in searchParams || "city" in searchParams;
   const parsed = submitted ? cleanFinderInput(values) : null;
   return (
-    <main className="mx-auto max-w-3xl p-6">
-      <h1 className="text-2xl font-semibold">Find a recruiting trial for a patient</h1>
-      <p className="mt-2 text-sm text-gray-700">
+    <main className="mx-auto max-w-5xl px-4 pb-16 pt-8 sm:px-6 md:pt-12">
+      <h1 className="text-title text-ink md:text-display">Find a recruiting trial for a patient</h1>
+      <p className="mt-3 max-w-3xl text-[17px] leading-7 text-ink-secondary md:text-[19px] md:leading-8">
         Studies recruiting at sites in Bulgaria, from ClinicalTrials.gov. When a study is on the platform, the patient answers its
         pre-screen questions, and the site contacts the patient after the pre-screen.
       </p>
-      <FinderForm values={values} errors={parsed && !parsed.ok ? parsed.errors : []} />
+      <FinderForm values={values} errors={parsed && !parsed.ok ? parsed.errors : []} searched={Boolean(parsed?.ok)} />
       {parsed?.ok && (
         <Suspense
           key={JSON.stringify(parsed.value)}
           fallback={
-            <p className="mt-6 text-sm text-gray-600" data-find-searching>
+            <p role="status" className="mt-8 flex items-center gap-2 text-[17px] font-medium text-ink" data-find-searching>
+              <Spinner />
               Searching ClinicalTrials.gov. The first search for a study can take about 20 seconds.
             </p>
           }
@@ -55,11 +57,13 @@ async function Results({ input }: { input: FinderInput }) {
   } catch (err) {
     console.error(`[find] search failed: ${(err as Error).message}`);
     return (
-      <p role="alert" className="mt-6 text-sm text-red-700" data-find-error>
-        {err instanceof CtgovError
-          ? "ClinicalTrials.gov did not answer. Try again in a minute."
-          : "The search did not finish. Try again in a minute."}
-      </p>
+      <div className="mt-8" data-find-error>
+        <ErrorLine className="text-body">
+          {err instanceof CtgovError
+            ? "ClinicalTrials.gov did not answer. Try again in a minute."
+            : "The search did not finish. Try again in a minute."}
+        </ErrorLine>
+      </div>
     );
   }
   return <FinderResultList outcome={outcome} />;

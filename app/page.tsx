@@ -10,13 +10,13 @@ export default function Home() {
         speaks to, with its source quoted.
       </p>
       <div className="mt-8 flex flex-wrap gap-3">
-        <Link href="/find" className={buttonClass("primary", "lg")} data-nav="find">
+        <Link href="/find" className={`${buttonClass("primary", "lg")} w-full text-center sm:w-auto`} data-nav="find">
           Find a recruiting trial for a patient
         </Link>
-        <Link href="/site" className={buttonClass("secondary", "lg")} data-nav="site">
+        <Link href="/site" className={`${buttonClass("secondary", "lg")} w-full text-center sm:w-auto`} data-nav="site">
           Site staff sign in
         </Link>
-        <Link href="/pricing" className={buttonClass("secondary", "lg")} data-nav="pricing">
+        <Link href="/pricing" className={`${buttonClass("secondary", "lg")} w-full text-center sm:w-auto`} data-nav="pricing">
           Pricing
         </Link>
       </div>

@@ -1,4 +1,6 @@
 import type { LinesStatus, PlainLine } from "@/lib/finder";
+import { ChevronRight } from "./Icons";
+import { focusRing } from "./ui";
 
 const STATUS_NOTE: Partial<Record<LinesStatus, string>> = {
   no_list: "The criteria text has no list to rewrite. Open the study on ClinicalTrials.gov to read it.",
@@ -10,31 +12,41 @@ const STATUS_NOTE: Partial<Record<LinesStatus, string>> = {
 export default function PlainCriteria({ lines, status }: { lines: PlainLine[]; status: LinesStatus }) {
   const note = STATUS_NOTE[status];
   return (
-    <section className="mt-3" data-plain-criteria>
-      <h3 className="text-sm font-semibold">Top criteria in plain words</h3>
+    <section data-plain-criteria>
+      <h3 className="text-small font-semibold text-ink">Top criteria in plain words</h3>
       {lines.length > 0 && (
-        <ol className="mt-1 space-y-1 text-sm">
+        <ol className="mt-2 divide-y divide-line overflow-clip rounded-lg border border-line">
           {lines.map((l) => (
             <li key={l.criterion_id} data-criterion-line={l.criterion_id} title={l.quote}>
-              <details>
-                <summary className="cursor-pointer">
-                  <span className="mr-2 rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-700">
-                    {l.section === "inclusion" ? "Inclusion" : "Exclusion"}
+              <details className="group">
+                <summary
+                  className={`flex cursor-pointer list-none items-start gap-3 px-3.5 py-3 text-[16px] leading-6 text-ink hover:bg-page group-open:bg-page [&::-webkit-details-marker]:hidden ${focusRing} focus-visible:outline-offset-[-2px]`}
+                >
+                  <ChevronRight className="mt-0.5 size-5 text-ink-secondary transition-transform group-open:rotate-90 motion-reduce:transition-none" />
+                  <span className="flex min-w-0 flex-col items-start gap-1 sm:flex-row sm:gap-3">
+                    <span className="mt-px shrink-0 rounded-md border border-line bg-surface px-2 text-small font-medium leading-6 text-ink-secondary">
+                      {l.section === "inclusion" ? "Inclusion" : "Exclusion"}
+                    </span>
+                    <span className="min-w-0">
+                      {l.text} <span className="whitespace-nowrap font-mono text-small text-ink-secondary">({l.criterion_id})</span>
+                    </span>
                   </span>
-                  {l.text} <span className="text-gray-500">({l.criterion_id})</span>
                 </summary>
-                <blockquote className="ml-4 mt-1 border-l-2 border-gray-300 pl-2 text-gray-700" data-criterion-quote>
+                <blockquote
+                  className="mb-3 ml-3.5 mr-3.5 rounded-r-md border-l-4 border-evidence-line bg-evidence-tint px-3 py-2 text-[15px] leading-6 text-ink sm:ml-11"
+                  data-criterion-quote
+                >
                   &ldquo;{l.quote}&rdquo;
-                  <span className="block text-xs text-gray-500">Verbatim from ClinicalTrials.gov, criterion {l.criterion_id}</span>
+                  <span className="mt-1 block text-small text-ink-secondary">Verbatim from ClinicalTrials.gov, criterion {l.criterion_id}</span>
                 </blockquote>
               </details>
             </li>
           ))}
         </ol>
       )}
-      {note && <p className="mt-1 text-sm text-gray-600">{note}</p>}
+      {note && <p className="mt-2 text-body text-ink-secondary">{note}</p>}
       {lines.length > 0 && (
-        <p className="mt-1 text-xs text-gray-500">Lines rewritten by a model from the criteria text. Open a line to see its source.</p>
+        <p className="mt-2 text-small text-ink-secondary">Lines rewritten by a model from the criteria text. Open a line to see its source.</p>
       )}
     </section>
   );
