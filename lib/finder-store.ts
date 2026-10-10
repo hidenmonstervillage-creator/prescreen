@@ -15,9 +15,11 @@ export async function platformRows(nctIds: string[]): Promise<PlatformRow[]> {
 }
 
 export async function readRewrite(nctId: string): Promise<CachedRewrite | null> {
-  const { data, error } = await db().from("finder_rewrites").select("lines").eq("nct_id", nctId).maybeSingle();
+  const { data, error } = await db().from("finder_rewrites").select("lines, report").eq("nct_id", nctId).maybeSingle();
   if (error) throw new Error(`finder_rewrites read failed: ${error.message}`);
-  return data ? { lines: (data.lines ?? []) as PlainLine[] } : null;
+  if (!data) return null;
+  const version = (data.report as Partial<RewriteReport> | null)?.prompt_version;
+  return { lines: (data.lines ?? []) as PlainLine[], promptVersion: typeof version === "number" ? version : null };
 }
 
 export async function saveRewrite(nctId: string, lines: PlainLine[], report: RewriteReport): Promise<void> {

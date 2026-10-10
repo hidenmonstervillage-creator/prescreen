@@ -11,6 +11,7 @@ import {
   lookupOnPlatform,
   numberCriteria,
   phaseLabel,
+  PLAIN_PROMPT_VERSION,
   PLAIN_SYSTEM,
   plainMessages,
   quoteOf,
@@ -92,7 +93,8 @@ function fakeDeps(opts: {
       platformCalls.push(ids);
       return (opts.platform ?? []).filter((r) => ids.includes(r.nct_id));
     },
-    readRewrite: async (nct) => (cache.has(nct) ? { lines: cache.get(nct)!.lines } : null),
+    readRewrite: async (nct) =>
+      cache.has(nct) ? { lines: cache.get(nct)!.lines, promptVersion: cache.get(nct)!.report?.prompt_version ?? null } : null,
     saveRewrite: async (nct, lines, report) => {
       cache.set(nct, { lines, report });
     },
@@ -406,7 +408,7 @@ describe("plain-word lines: cache per NCT", () => {
     const a = await findTrials(DEMO, first.deps);
     expect(a.modelCalls).toBe(1);
     expect(a.results[0].linesStatus).toBe("written");
-    expect(cache.get("NCT06380751").report).toMatchObject({ kept: 5, model: "gpt-4o" });
+    expect(cache.get("NCT06380751").report).toMatchObject({ kept: 5, model: "gpt-4o", prompt_version: PLAIN_PROMPT_VERSION });
 
     const second = fakeDeps({ searches: [result([study("NCT06380751")])], llm, cache });
     const b = await findTrials(DEMO, second.deps);
@@ -422,11 +424,23 @@ describe("plain-word lines: cache per NCT", () => {
     const stale: PlainLine[] = [{ criterion_id: "e6", section: "exclusion", text: "Another cancer", quote: "History of another cancer" }];
     expect(cacheIsCurrent(stale, criteria)).toBe(false);
     const llm = fakeLlm([{ lines: GOOD_LINES }]);
-    const cache = new Map([["NCT06380751", { lines: stale }]]);
+    // Current prompt version, so only the changed criterion text makes it stale.
+    const cache = new Map([["NCT06380751", { lines: stale, report: { prompt_version: PLAIN_PROMPT_VERSION } as RewriteReport }]]);
     const { deps } = fakeDeps({ searches: [result([study("NCT06380751")])], llm, cache });
     const out = await findTrials(DEMO, deps);
     expect(llm.calls).toHaveLength(1);
     expect(out.results[0].lines).toHaveLength(5);
+  });
+
+  it("lines cached under an earlier prompt version are rewritten", async () => {
+    const llm = fakeLlm([{ lines: GOOD_LINES }, { lines: GOOD_LINES }]);
+    const cache = new Map();
+    await findTrials(DEMO, fakeDeps({ searches: [result([study("NCT06380751")])], llm, cache }).deps);
+    cache.get("NCT06380751").report.prompt_version = PLAIN_PROMPT_VERSION - 1;
+    const again = await findTrials(DEMO, fakeDeps({ searches: [result([study("NCT06380751")])], llm, cache }).deps);
+    expect(llm.calls).toHaveLength(2);
+    expect(again.results[0].linesStatus).toBe("written");
+    expect(cache.get("NCT06380751").report.prompt_version).toBe(PLAIN_PROMPT_VERSION);
   });
 
   it("a cache read failure falls back to the model and still shows the study", async () => {

@@ -15,7 +15,7 @@ export const MAX_RESULTS = 5;
 /** Below this many studies in the city, a second search covers the whole country. */
 export const MIN_CITY_RESULTS = 3;
 export const PLAIN_LINES = 5;
-export const MAX_LINE_CHARS = 220;
+export const MAX_LINE_CHARS = 240;
 /** Criteria sent to the model per study; very long lists are cut here. */
 export const MAX_PROMPT_ITEMS = 150;
 export const INPUT_LIMITS = { condition: 120, markers: 120, city: 60 } as const;
@@ -194,16 +194,20 @@ export function quoteOf(c: NumberedCriterion): string {
 // ---------------------------------------------------------------------------
 // Plain-word lines: one model call per study, checked line by line in code
 
+/** Bump when PLAIN_SYSTEM changes: cached lines written under another version are rewritten. */
+export const PLAIN_PROMPT_VERSION = 2;
+
 export const PLAIN_SYSTEM = `You help a doctor read the criteria list of one clinical trial quickly. You get the criteria as items, each with an id ("i" for an inclusion item, "e" for an exclusion item) and its exact text.
 
 Pick the ${PLAIN_LINES} items that say the most about who the trial is for: the condition and its stage, required tumour markers, mutations or earlier treatments, and the exclusions that apply to many people with this condition. Prefer items a doctor can check from a patient's history.
 
-For each item you pick, write one short line in plain words:
-1. Say what the item itself says, and nothing more. Keep its meaning, its time limits and its numbers exactly as written. Never add a number, age or limit that is not in the item's text.
-2. Do not say whether the item is an inclusion or an exclusion item; the page shows that next to the line.
-3. Do not speak about any particular patient, do not give advice, and do not say what the item means for anyone taking part.
-4. At most 20 words. Use commas or full stops, never dashes as punctuation. Do not put the id in the text.
-5. "criterion_id" is the id of the item the line comes from, exactly as given. Use each id at most once.`;
+For each item you pick, write one line in plain, everyday words:
+1. Rewrite the item; do not copy its wording. Replace technical phrases and abbreviations with everyday words, for example "histologically or cytologically documented" becomes "confirmed by a test of tissue or cells", "metastatic" becomes "has spread to other parts of the body", "not amenable to curative treatment" becomes "cannot be cured", "germline" becomes "inherited". Keep the names of genes, markers, tests and medicines (for example BRCA1, HER2, HR-positive, camizestrant).
+2. Keep the item's meaning complete: keep every time limit and number as written, and keep any exception ("except", "unless", "apart from") in short form. Never add a number, age or limit that is not in the item's text.
+3. Do not say whether the item is an inclusion or an exclusion item; the page shows that next to the line. So describe the condition, treatment or finding itself, without "must", "cannot", "no" or "not allowed". Example: for the exclusion item "History of another primary malignancy" write "Another primary cancer in the past", not "Cannot have had another cancer".
+4. Do not speak about any particular patient, do not give advice, and do not say what the item means for anyone taking part.
+5. At most 25 words. Use commas or full stops, never dashes as punctuation. Do not put the id in the text.
+6. "criterion_id" is the id of the item the line comes from, exactly as given. Use each id at most once.`;
 
 const PLAIN_SCHEMA = {
   type: "object",
@@ -229,6 +233,7 @@ export type PlainLine = { criterion_id: string; section: Section; text: string; 
 export type DroppedLine = { criterion_id: string; text: string; problems: string[] };
 export type RewriteReport = {
   model: string;
+  prompt_version: number;
   prompt_tokens: number;
   completion_tokens: number;
   returned: number;
@@ -329,6 +334,7 @@ export async function writePlainLines(
     lines: kept,
     report: {
       model: MODEL,
+      prompt_version: PLAIN_PROMPT_VERSION,
       prompt_tokens: res.usage.prompt_tokens,
       completion_tokens: res.usage.completion_tokens,
       returned: returned.length,
@@ -354,7 +360,8 @@ export function cacheIsCurrent(lines: PlainLine[], criteria: NumberedCriterion[]
 // ---------------------------------------------------------------------------
 // The whole search
 
-export type CachedRewrite = { lines: PlainLine[] };
+/** promptVersion: PLAIN_PROMPT_VERSION the lines were written under, null when unknown. */
+export type CachedRewrite = { lines: PlainLine[]; promptVersion: number | null };
 
 export type FinderDeps = {
   search: (params: CtgovSearchParams) => Promise<CtgovSearchResult>;
@@ -423,7 +430,7 @@ export async function findTrials(input: FinderInput, deps: FinderDeps): Promise<
     } catch (err) {
       console.error(`[find] cache read failed for ${study.nctId}: ${(err as Error).message}`);
     }
-    if (cached && cacheIsCurrent(cached.lines, criteria)) {
+    if (cached && cached.promptVersion === PLAIN_PROMPT_VERSION && cacheIsCurrent(cached.lines, criteria)) {
       cacheHits += 1;
       return { lines: cached.lines, linesStatus: cached.lines.length ? "cached" : "none_passed" };
     }
