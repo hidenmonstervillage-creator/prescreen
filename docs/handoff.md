@@ -14,6 +14,12 @@ On the deployed URL, not localhost: one real trial pasted, published, submitted 
 
 Fixture copy (contacts stripped): `tests/fixtures/NCT06380751.study.json`, verbatim criteria text: `tests/fixtures/NCT06380751.criteria.md`.
 
+**Checkpoint run, 2026-10-10 14:23, on https://prescreen-tau.vercel.app (done):**
+- Generation on the deployed app: 34 criteria (19 a patient can answer, 15 for the site team), none dropped or re-asked; 12 questions after one re-ask (q9 had one "yes" confirming both hepatitis and HIV; the re-ask returned 13, q13 was dropped by the 12 limit). gpt-4o, 3 calls, 5972 tokens in, 3812 out.
+- Public page: https://prescreen-tau.vercel.app/s/nct06380751-md2jhsjd
+- Fictional submission ("Mira Fictiva (fictional patient), +359 00 000 0000"): counts line **9 met · 1 not met · 9 not found · 15 need a clinician**. e6 ("History of another primary malignancy", answered yes) shows the exclusion flip; q5 "Not sure" and the blank q12 are not found.
+- Screenshots: `reports/A1/checkpoint-matrix-01.jpg` to `-07.jpg` (local, gitignored).
+
 ## The five screens
 
 | # | Screen | Route | Who | What it does |
@@ -34,18 +40,23 @@ API (all server side, service role; built in session A1):
 |--------|-------|---------|
 | GET | `/api/health` | `{ ok, commit }`, commit from `BUILD_COMMIT` |
 | POST | `/api/site/login` | passcode check, cookie, rate limit |
-| POST | `/api/site/trials` | `{ nct }` to fetch, generate and store a draft trial |
-| POST | `/api/site/trials/[id]/publish` | set `slug` and `published_at` |
-| POST | `/api/s/[slug]/submit` | store answers and contact, then the mappings |
+| POST | `/api/site/logout` | clears the cookie |
+| POST | `/api/site/trials` | `{ nct, regenerate? }` to fetch, generate and store a draft trial (an existing trial is returned without spend) |
+| POST | `/api/site/trials/[id]/publish` | set `slug` (NCT plus 8 random characters) and `published_at`; idempotent |
+| POST | `/api/site/submissions/[id]/map` | rebuild one submission's map if the first build failed |
+| POST | `/api/s/[slug]/submit` | public: store answers and contact, then the mappings; returns only `{ ok: true }` |
+
+Site pages and site API routes are gated twice: `middleware.ts`, then a session check inside each page and route.
 
 ## Data model (Supabase, RLS on for every table)
 
-- **trials**: `id` uuid, `nct_id` text unique, `title`, `raw_eligibility` text (verbatim criteria markdown), `criteria` jsonb, `questions` jsonb, `slug` text unique, `published_at` timestamptz, `created_at`.
-  - `criteria[]`: `{ id: "i1" | "e1", section: "inclusion" | "exclusion", quote, askable, not_askable_reason }`. `quote` is a verbatim substring of `raw_eligibility`.
-  - `questions[]`: `{ id, text, type: "yes_no" | "choice" | "number" | "free_text", options?, criterion_ids, rules }`. `rules` says, per criterion served, which answers make it met and which make it not met.
+- **trials**: `id` uuid, `nct_id` text unique, `title`, `raw_eligibility` text (verbatim criteria markdown), `criteria` jsonb, `questions` jsonb, `slug` text unique, `published_at` timestamptz, `created_at`. Added in A1: `source` jsonb (ClinicalTrials.gov status, conditions, sex, ages, sites; no contacts) and `generation` jsonb (model, token spend, re-asked and dropped items).
+  - `criteria[]`: `{ id: "i1" | "e1", section: "inclusion" | "exclusion", quote, parent_quote, askable, not_askable_reason }`. `quote` (and `parent_quote`, the line that introduces a numbered sub-list) is a verbatim substring of the visible criteria text: whitespace normalised, markdown backslash escapes removed.
+  - `questions[]`: `{ id, text, type: "yes_no" | "choice" | "number" | "free_text", options, criterion_ids, rules }`. Each rule lists, per criterion served, the answers (or number ranges) that confirm the criterion's text and those that deny it; code turns that into met or not met per section. The public page gets only `id, text, type, options`.
 - **submissions**: `id`, `trial_id` fk, `answers` jsonb, `contact` text, `created_at`.
-- **mappings**: `id`, `submission_id` fk, `criterion_id` text, `state` in `met`, `not_met`, `not_found`, `needs_clinician`, `quoted_criterion`, `quoted_answer`.
-- Access: anon may INSERT into `submissions` only and SELECT nothing. Everything else goes through the server with the service role.
+- **mappings**: `id`, `submission_id` fk, `criterion_id` text, `state` in `met`, `not_met`, `not_found`, `needs_clinician`, `quoted_criterion`, `quoted_answer`. Added in A1: `question_id`.
+- **login_attempts** (added in A1): wrong passcodes by keyed hash of the address, for the 5 per 10 minutes limit.
+- Access: anon may INSERT into `submissions` only, and only for a published trial; it can SELECT nothing (verified with the anon key: `npm run db:verify-rls`). Everything else goes through the server with the service role.
 
 ## How a criterion gets its state
 
@@ -62,3 +73,4 @@ API (all server side, service role; built in session A1):
 - `StateCell` is the only component that renders a criterion state.
 - Run `npm test` before pushing: the wording test fails on verdict words and em dashes.
 - Never deploy, never run migrations or seeds; Mike merges and deploys.
+- Open question: the data-backed pages need the Supabase service role key to run locally. Until Mike decides how to share it (or adds a fixture mode), `tests/matrix.render.test.tsx` renders the matrix from `tests/fixtures/NCT06380751.generated.json` without a database.
