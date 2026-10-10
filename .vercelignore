@@ -1,0 +1,7 @@
+.env.local
+.env
+.env*.local
+reports
+coverage
+node_modules
+.next

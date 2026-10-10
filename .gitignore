@@ -1,0 +1,26 @@
+# dependencies
+node_modules/
+
+# build output
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# env files (secrets live only in .env.local and the Windows environment)
+.env
+.env*.local
+.env.development
+.env.production
+
+# vercel link state
+.vercel/
+
+# local checkpoint screenshots and run reports
+reports/
+
+# misc
+coverage/
+npm-debug.log*
+.DS_Store
+Thumbs.db

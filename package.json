@@ -1,0 +1,35 @@
+{
+  "name": "prescreen",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "env:check": "node scripts/env-check.mjs",
+    "db:migrate": "node scripts/db/migrate.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.117.3",
+    "next": "14.2.35",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "20.19.43",
+    "@types/pg": "8.23.1",
+    "@types/react": "18.3.31",
+    "@types/react-dom": "18.3.7",
+    "autoprefixer": "10.6.1",
+    "eslint": "8.57.1",
+    "eslint-config-next": "14.2.35",
+    "pg": "8.23.1",
+    "postcss": "8.5.29",
+    "tailwindcss": "3.4.19",
+    "typescript": "5.9.3",
+    "vitest": "3.2.7"
+  }
+}
