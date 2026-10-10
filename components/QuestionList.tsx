@@ -1,6 +1,7 @@
 import type { Question, QuestionRule } from "@/lib/types";
+import { cardClass } from "./ui";
 
-const TYPE_LABEL: Record<Question["type"], string> = {
+export const TYPE_LABEL: Record<Question["type"], string> = {
   yes_no: "yes or no",
   choice: "one choice",
   number: "number",
@@ -20,21 +21,35 @@ function ruleText(q: Question, r: QuestionRule): string {
 
 export default function QuestionList({ questions }: { questions: Question[] }) {
   return (
-    <section data-question-list>
-      <h2 className="mb-2 text-lg font-semibold">Questions ({questions.length})</h2>
-      <ol className="space-y-2">
+    <section data-question-list className={`${cardClass} flex min-w-0 flex-col lg:max-h-[78vh]`}>
+      <h2 className="border-b border-line px-5 py-3.5 text-heading text-ink">
+        Questions <span className="font-normal text-ink-secondary">({questions.length})</span>
+      </h2>
+      <ol className="min-h-0 flex-1 space-y-2.5 overflow-y-auto px-5 py-4">
         {questions.map((q) => (
-          <li key={q.id} data-question-id={q.id} className="rounded border border-gray-200 p-2">
-            <p className="text-xs text-gray-500">
-              {q.id} &middot; {TYPE_LABEL[q.type]}
+          <li key={q.id} data-question-id={q.id} className="rounded-lg border border-line px-3.5 py-3">
+            <p className="text-small text-ink-secondary">
+              <span className="font-mono font-medium">{q.id}</span> &middot; {TYPE_LABEL[q.type]} &middot; covers{" "}
+              <span className="font-mono font-medium">{q.criterion_ids.join(", ")}</span>
             </p>
-            <p className="text-sm text-gray-900">{q.text}</p>
-            {q.options && <p className="mt-1 text-xs text-gray-600">Options: {q.options.join(" / ")}</p>}
-            <ul className="mt-1 space-y-0.5 text-xs text-gray-600">
-              {q.rules.map((r) => (
-                <li key={r.criterion_id}>{ruleText(q, r)}</li>
-              ))}
-            </ul>
+            <p className="mt-1 text-[17px] font-medium leading-6 text-ink">{q.text}</p>
+            {q.options && (
+              <ul className="mt-2 flex flex-wrap gap-1.5">
+                {q.options.map((o) => (
+                  <li key={o} className="rounded-md border border-line bg-page px-2 py-0.5 text-small text-ink">
+                    {o}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <details className="mt-2 text-small text-ink-secondary">
+              <summary className="cursor-pointer select-none font-medium hover:text-ink">How answers are read</summary>
+              <ul className="mt-1 space-y-0.5">
+                {q.rules.map((r) => (
+                  <li key={r.criterion_id}>{ruleText(q, r)}</li>
+                ))}
+              </ul>
+            </details>
           </li>
         ))}
       </ol>

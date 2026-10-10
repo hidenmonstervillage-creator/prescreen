@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { ErrorLine, Spinner } from "./Icons";
+import { buttonClass, focusRing, sectionLabel } from "./ui";
 
 export default function PublishPanel({ trialId, initialSlug }: { trialId: string; initialSlug: string | null }) {
   const [slug, setSlug] = useState<string | null>(initialSlug);
@@ -20,39 +22,44 @@ export default function PublishPanel({ trialId, initialSlug }: { trialId: string
   const url = slug ? `${typeof window === "undefined" ? "" : window.location.origin}/s/${slug}` : null;
 
   return (
-    <section data-publish-panel className="flex flex-wrap items-center gap-3">
+    <section data-publish-panel className="flex flex-col gap-3 lg:min-w-[22rem] lg:items-end">
       {url ? (
-        <p className="text-sm">
-          Published:{" "}
-          <a href={url} className="text-blue-700 underline" data-public-link target="_blank" rel="noreferrer">
+        <div className="lg:text-right">
+          <p className={sectionLabel}>Published</p>
+          <a
+            href={url}
+            className={`mt-1 block break-all rounded-sm font-mono text-body font-medium text-link underline underline-offset-2 hover:text-link-hover ${focusRing}`}
+            data-public-link
+            target="_blank"
+            rel="noreferrer"
+          >
             {url}
           </a>
-        </p>
+        </div>
       ) : (
         <button
           type="button"
           onClick={publish}
           disabled={busy}
-          className="rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+          aria-busy={busy}
+          className={`${buttonClass("primary", "lg")} w-full lg:w-auto lg:min-w-[14rem]`}
           data-publish
         >
+          {busy && <Spinner />}
           {busy ? "Publishing..." : "Publish"}
         </button>
       )}
-      <button
-        type="button"
-        disabled
-        title="The export is built in the UI session"
-        className="cursor-not-allowed rounded border border-gray-300 px-4 py-2 text-sm text-gray-500"
+      <a
+        href={`/site/trials/${trialId}/kit`}
+        target="_blank"
+        rel="noreferrer"
+        className={`${buttonClass("secondary", "lg")} w-full lg:w-auto lg:min-w-[14rem]`}
         data-download-kit
       >
         Download kit
-      </button>
-      {error && (
-        <p role="alert" className="text-sm text-red-700">
-          {error}
-        </p>
-      )}
+      </a>
+      {!url && <p className="text-small text-ink-secondary lg:text-right">Publish creates the public pre-screen page.</p>}
+      {error && <ErrorLine>{error}</ErrorLine>}
     </section>
   );
 }

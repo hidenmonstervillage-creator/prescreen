@@ -1,23 +1,25 @@
 import Link from "next/link";
+import { buttonClass } from "@/components/ui";
 
 export default function Home() {
   return (
-    <main className="mx-auto max-w-xl p-8">
-      <h1 className="text-2xl font-semibold">Pre-screen</h1>
-      <p className="mt-2 text-gray-600">
-        Plain-language pre-screen questions for one clinical trial at a time. Every answer is mapped to the trial
-        criterion it speaks to, with its source quoted.
+    <main className="mx-auto flex min-h-screen max-w-3xl flex-col justify-center px-6 py-16">
+      <h1 className="text-display text-ink">Pre-screen</h1>
+      <p className="mt-4 max-w-2xl text-[19px] leading-8 text-ink-secondary">
+        Plain-language pre-screen questions for one clinical trial at a time. Every answer is mapped to the trial criterion it
+        speaks to, with its source quoted.
       </p>
-      <p className="mt-6">
-        <Link href="/find" className="text-blue-700 underline" data-nav="find">
+      <div className="mt-8 flex flex-wrap gap-3">
+        <Link href="/find" className={buttonClass("primary", "lg")} data-nav="find">
           Find a recruiting trial for a patient
         </Link>
-      </p>
-      <p className="mt-2">
-        <Link href="/site" className="text-blue-700 underline" data-nav="site">
+        <Link href="/site" className={buttonClass("secondary", "lg")} data-nav="site">
           Site staff sign in
         </Link>
-      </p>
+        <Link href="/pricing" className={buttonClass("secondary", "lg")} data-nav="pricing">
+          Pricing
+        </Link>
+      </div>
     </main>
   );
 }

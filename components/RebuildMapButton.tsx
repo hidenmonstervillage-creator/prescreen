@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { ErrorLine, Spinner } from "./Icons";
+import { buttonClass } from "./ui";
 
 export default function RebuildMapButton({ submissionId }: { submissionId: string }) {
   const [busy, setBusy] = useState(false);
@@ -16,11 +18,12 @@ export default function RebuildMapButton({ submissionId }: { submissionId: strin
     }
   }
   return (
-    <div className="flex flex-col items-start gap-1">
-      <button type="button" onClick={rebuild} disabled={busy} className="rounded bg-gray-900 px-3 py-1.5 text-sm text-white disabled:opacity-50" data-rebuild-map>
+    <div className="flex flex-col items-start gap-2">
+      <button type="button" onClick={rebuild} disabled={busy} aria-busy={busy} className={buttonClass("primary")} data-rebuild-map>
+        {busy && <Spinner />}
         {busy ? "Building..." : "Build the map"}
       </button>
-      {error && <p className="text-sm text-red-700">{error}</p>}
+      {error && <ErrorLine>{error}</ErrorLine>}
     </div>
   );
 }

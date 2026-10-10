@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { ErrorLine, Spinner } from "./Icons";
+import { buttonClass, inputClass, labelClass } from "./ui";
 
 export default function PasscodeForm() {
   const [passcode, setPasscode] = useState("");
@@ -26,31 +28,37 @@ export default function PasscodeForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-3" data-passcode-form>
-      <label className="flex flex-col gap-1 text-sm">
-        <span className="font-medium">Site passcode</span>
+    <form onSubmit={onSubmit} className="flex flex-col gap-4" data-passcode-form>
+      <div>
+        <label htmlFor="passcode-input" className={labelClass}>
+          Site passcode
+        </label>
         <input
+          id="passcode-input"
           type="password"
           autoComplete="current-password"
           value={passcode}
           onChange={(e) => setPasscode(e.target.value)}
-          className="rounded border border-gray-300 px-3 py-2"
+          aria-invalid={error ? true : undefined}
+          className={`mt-1.5 ${inputClass} h-12 ${error ? "border-2 border-ink" : ""}`}
           data-passcode-input
           required
         />
-      </label>
+      </div>
       <button
         type="submit"
         disabled={busy || !passcode}
-        className="rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+        aria-busy={busy}
+        className={`${buttonClass("primary")} h-12`}
         data-passcode-submit
       >
+        {busy && <Spinner />}
         {busy ? "Checking..." : "Sign in"}
       </button>
       {error && (
-        <p role="alert" className="text-sm text-red-700" data-passcode-error>
-          {error}
-        </p>
+        <div data-passcode-error>
+          <ErrorLine>{error}</ErrorLine>
+        </div>
       )}
     </form>
   );

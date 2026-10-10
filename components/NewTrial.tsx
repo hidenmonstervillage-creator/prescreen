@@ -8,6 +8,8 @@ import SourceText from "./SourceText";
 import GenerationSummary from "./GenerationSummary";
 import TrialSummary from "./TrialSummary";
 import PublishPanel from "./PublishPanel";
+import { ErrorLine, Spinner } from "./Icons";
+import { buttonClass, cardClass, focusRing, helpClass, labelClass } from "./ui";
 
 export default function NewTrial() {
   const [nct, setNct] = useState("");
@@ -36,44 +38,56 @@ export default function NewTrial() {
 
   return (
     <div className="space-y-6">
-      <form onSubmit={onSubmit} className="flex flex-wrap items-end gap-3" data-nct-form>
-        <label className="flex flex-col gap-1 text-sm">
-          <span className="font-medium">NCT ID</span>
+      <form onSubmit={onSubmit} className={`${cardClass} flex flex-wrap items-end gap-4 px-6 py-5`} data-nct-form>
+        <div>
+          <label htmlFor="nct-input" className={labelClass}>
+            NCT ID
+          </label>
           <input
+            id="nct-input"
             value={nct}
             onChange={(e) => setNct(e.target.value)}
             placeholder="NCT00000000"
-            className="w-48 rounded border border-gray-300 px-3 py-2 font-mono"
+            aria-describedby="nct-help"
+            className={`mt-1.5 h-14 w-72 rounded-lg border border-control bg-surface px-4 font-mono text-[22px] font-medium text-ink placeholder:text-ink-muted hover:border-control-hover ${focusRing}`}
             data-nct-input
             required
           />
-        </label>
+        </div>
         <button
           type="submit"
           disabled={busy || !nct.trim()}
-          className="rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+          aria-busy={busy}
+          className={buttonClass(trial ? "secondary" : "primary", "lg")}
           data-fetch-generate
         >
+          {busy && <Spinner />}
           {busy ? "Working..." : "Fetch and generate"}
         </button>
+        <p id="nct-help" className={`${helpClass} basis-full`}>
+          The checklist and questions are written from the trial&rsquo;s criteria on ClinicalTrials.gov. Every line quotes its source.
+        </p>
         {busy && (
-          <p className="text-sm text-gray-600" data-busy>
+          <p role="status" className="flex basis-full items-center gap-2 text-body font-medium text-ink" data-busy>
+            <Spinner />
             Fetching from ClinicalTrials.gov and writing the checklist and questions. This can take a minute.
           </p>
         )}
       </form>
       {error && (
-        <p role="alert" className="text-sm text-red-700" data-error>
-          {error}
-        </p>
+        <div data-error>
+          <ErrorLine className="text-body">{error}</ErrorLine>
+        </div>
       )}
       {trial && (
-        <div className="space-y-4" data-trial-id={trial.id}>
-          <TrialSummary trial={trial} />
-          {reused && <p className="text-sm text-gray-600">This trial was generated before; showing the stored version.</p>}
+        <div className="space-y-5" data-trial-id={trial.id}>
+          <section className={`${cardClass} grid items-start gap-6 px-6 py-5 lg:grid-cols-[minmax(0,1fr)_auto]`}>
+            <TrialSummary trial={trial} />
+            <PublishPanel trialId={trial.id} initialSlug={trial.published_at ? trial.slug : null} />
+          </section>
+          {reused && <p className="text-body text-ink-secondary">This trial was generated before; showing the stored version.</p>}
           <GenerationSummary report={trial.generation} criteria={trial.criteria} />
-          <PublishPanel trialId={trial.id} initialSlug={trial.published_at ? trial.slug : null} />
-          <div className="grid gap-4 lg:grid-cols-3">
+          <div className="grid items-start gap-5 lg:grid-cols-3">
             <CriteriaChecklist criteria={trial.criteria} questions={trial.questions} />
             <QuestionList questions={trial.questions} />
             <SourceText text={trial.raw_eligibility} nctId={trial.nct_id} />

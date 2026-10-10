@@ -1,3 +1,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  /* Karma: the focus ring is always visible, 2px accent outside the element. */
+  :focus-visible {
+    outline: 2px solid theme("colors.focus-ring");
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: theme("colors.highlight");
+  }
+}
+
+/* Print (the trial kit): A4, white paper, no app chrome. Components hide chrome with print:hidden. */
+@page {
+  size: A4;
+  margin: 14mm 14mm 16mm;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff;
+    font-size: 11pt;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}

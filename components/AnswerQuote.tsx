@@ -18,24 +18,28 @@ export default function AnswerQuote({
 }) {
   const q = questions.find((x) => x.id === row.question_id);
   if (criterion && !criterion.askable) {
-    return <span className="text-sm text-gray-600">Not asked: {criterion.not_askable_reason ?? "for the site team"}</span>;
+    return (
+      <p className="text-body text-ink-secondary">
+        Not asked: {criterion.not_askable_reason ?? "for the site team"}
+      </p>
+    );
   }
   if (!row.question_id && !row.quoted_answer) {
-    return <span className="text-sm text-gray-600">No question covers this criterion.</span>;
+    return <p className="text-body text-ink-secondary">No question covers this criterion.</p>;
   }
   return (
-    <div className="space-y-1 text-sm">
+    <div className="space-y-2">
       {q && (
-        <p className="text-gray-600">
-          <span className="font-medium">{q.id}:</span> {q.text}
+        <p className="text-small text-ink-secondary">
+          <span className="font-mono font-medium">{q.id}</span> {q.text}
         </p>
       )}
       {row.quoted_answer ? (
-        <blockquote className="border-l-2 border-gray-300 pl-2 text-gray-900">
+        <blockquote className="rounded-r-md border-l-4 border-evidence-line bg-evidence-tint px-3 py-1.5 text-[18px] font-medium leading-7 text-ink">
           &ldquo;{answerLabel(q, row.quoted_answer)}&rdquo;
         </blockquote>
       ) : (
-        <p className="text-gray-600">No answer given.</p>
+        <p className="text-body text-ink-secondary">No answer given.</p>
       )}
     </div>
   );
