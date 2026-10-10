@@ -1,0 +1,586 @@
+{
+  "nct_id": "NCT06380751",
+  "criteria": [
+    {
+      "id": "i1",
+      "section": "inclusion",
+      "quote": "Adult females, pre/peri-menopausal and/or post-menopausal, and adult males",
+      "parent_quote": null,
+      "askable": true,
+      "not_askable_reason": null
+    },
+    {
+      "id": "i2",
+      "section": "inclusion",
+      "quote": "Histologically or cytologically documented diagnosis of HR-positive, HER2-negative breast cancer",
+      "parent_quote": null,
+      "askable": false,
+      "not_askable_reason": "needs pathology results"
+    },
+    {
+      "id": "i3",
+      "section": "inclusion",
+      "quote": "Advanced breast cancer with either locally advanced disease not amenable to curative treatment or metastatic disease",
+      "parent_quote": null,
+      "askable": true,
+      "not_askable_reason": null
+    },
+    {
+      "id": "i4",
+      "section": "inclusion",
+      "quote": "ECOG performance status of 0 or 1 with no deterioration over the previous 2 weeks",
+      "parent_quote": null,
+      "askable": false,
+      "not_askable_reason": "needs a clinician's judgment"
+    },
+    {
+      "id": "i5",
+      "section": "inclusion",
+      "quote": "FFPE tumour tissue from each participant",
+      "parent_quote": null,
+      "askable": false,
+      "not_askable_reason": "needs pathology results"
+    },
+    {
+      "id": "i6",
+      "section": "inclusion",
+      "quote": "Documented germline tumour loss of function mutation in BRCA1, BRCA2, or PALB2",
+      "parent_quote": null,
+      "askable": false,
+      "not_askable_reason": "needs genetic test results"
+    },
+    {
+      "id": "i7",
+      "section": "inclusion",
+      "quote": "Adequate organ and marrow function",
+      "parent_quote": null,
+      "askable": false,
+      "not_askable_reason": "needs lab results"
+    },
+    {
+      "id": "e1",
+      "section": "exclusion",
+      "quote": "Participants with history of MDS/AML or with features suggestive of MDS/AML",
+      "parent_quote": null,
+      "askable": true,
+      "not_askable_reason": null
+    },
+    {
+      "id": "e2",
+      "section": "exclusion",
+      "quote": "Participants with any known predisposition to bleeding",
+      "parent_quote": null,
+      "askable": true,
+      "not_askable_reason": null
+    },
+    {
+      "id": "e3",
+      "section": "exclusion",
+      "quote": "Any history of persisting severe cytopenia",
+      "parent_quote": null,
+      "askable": true,
+      "not_askable_reason": null
+    },
+    {
+      "id": "e4",
+      "section": "exclusion",
+      "quote": "Any evidence of severe or uncontrolled systemic diseases or active uncontrolled infections",
+      "parent_quote": null,
+      "askable": false,
+      "not_askable_reason": "needs a clinician's judgment"
+    },
+    {
+      "id": "e5",
+      "section": "exclusion",
+      "quote": "Refractory nausea and vomiting, chronic GI disease, inability to swallow the formulated product, or previous significant bowel resection",
+      "parent_quote": null,
+      "askable": true,
+      "not_askable_reason": null
+    },
+    {
+      "id": "e6",
+      "section": "exclusion",
+      "quote": "History of another primary malignancy",
+      "parent_quote": null,
+      "askable": true,
+      "not_askable_reason": null
+    },
+    {
+      "id": "e7",
+      "section": "exclusion",
+      "quote": "Persistent toxicities (CTCAE Grade ≥ 2) caused by previous anti-cancer therapy excluding alopecia",
+      "parent_quote": null,
+      "askable": false,
+      "not_askable_reason": "needs a clinician's judgment"
+    },
+    {
+      "id": "e8",
+      "section": "exclusion",
+      "quote": "Spinal cord compression, brain metastases, carcinomatous meningitis, or leptomeningeal disease",
+      "parent_quote": null,
+      "askable": true,
+      "not_askable_reason": null
+    },
+    {
+      "id": "e9",
+      "section": "exclusion",
+      "quote": "Evidence of active and uncontrolled hepatitis B and/or hepatitis C",
+      "parent_quote": null,
+      "askable": true,
+      "not_askable_reason": null
+    },
+    {
+      "id": "e10",
+      "section": "exclusion",
+      "quote": "Evidence of active and uncontrolled HIV infection",
+      "parent_quote": null,
+      "askable": true,
+      "not_askable_reason": null
+    },
+    {
+      "id": "e11",
+      "section": "exclusion",
+      "quote": "Active tuberculosis infection",
+      "parent_quote": null,
+      "askable": true,
+      "not_askable_reason": null
+    },
+    {
+      "id": "e12",
+      "section": "exclusion",
+      "quote": "Cardiac criteria, including history of arrythmia and cardiovascular disease",
+      "parent_quote": null,
+      "askable": true,
+      "not_askable_reason": null
+    },
+    {
+      "id": "e13",
+      "section": "exclusion",
+      "quote": "Concurrent exogenous reproductive hormone therapy or non-topical hormonal therapy for non-cancer-related conditions",
+      "parent_quote": null,
+      "askable": true,
+      "not_askable_reason": null
+    },
+    {
+      "id": "e14",
+      "section": "exclusion",
+      "quote": "Major surgical procedure or significant traumatic injury within 4 weeks of the first dose of study intervention or an anticipated need for major surgery during the study",
+      "parent_quote": null,
+      "askable": true,
+      "not_askable_reason": null
+    },
+    {
+      "id": "e15",
+      "section": "exclusion",
+      "quote": "Palliative radiotherapy with a limited field of radiation within 2 weeks or with wide field of radiation or to more than 30% of the bone marrow within 4 weeks before the first dose of study treatment",
+      "parent_quote": null,
+      "askable": true,
+      "not_askable_reason": null
+    },
+    {
+      "id": "e16",
+      "section": "exclusion",
+      "quote": "Prior treatment with systemic anti-cancer therapy for locoregionally recurrent or metastatic disease is not permitted, apart from treatment with ET for up to 28 days total before randomisation",
+      "parent_quote": null,
+      "askable": true,
+      "not_askable_reason": null
+    },
+    {
+      "id": "e17",
+      "section": "exclusion",
+      "quote": "Prior treatment within 28 days with blood product support or growth factor support",
+      "parent_quote": null,
+      "askable": true,
+      "not_askable_reason": null
+    },
+    {
+      "id": "e18",
+      "section": "exclusion",
+      "quote": "Any systemic concurrent anti-cancer treatment",
+      "parent_quote": null,
+      "askable": true,
+      "not_askable_reason": null
+    },
+    {
+      "id": "e19",
+      "section": "exclusion",
+      "quote": "Strong and moderate CYP3A4 inducers/inhibitors",
+      "parent_quote": "Concomitant use of the following types of medications or herbal supplements within 21 days or at least 5 half-lives of randomisation:",
+      "askable": false,
+      "not_askable_reason": "needs knowledge of drug interactions"
+    },
+    {
+      "id": "e20",
+      "section": "exclusion",
+      "quote": "Sensitive CYP2B6 substrates",
+      "parent_quote": "Concomitant use of the following types of medications or herbal supplements within 21 days or at least 5 half-lives of randomisation:",
+      "askable": false,
+      "not_askable_reason": "needs knowledge of drug interactions"
+    },
+    {
+      "id": "e21",
+      "section": "exclusion",
+      "quote": "Substrates of CYP2C9 and/or CYP2C19 which have a narrow therapeutic index, eg, warfarin (and other coumarin-derived vitamin K antagonist anticoagulants) and phenytoin.",
+      "parent_quote": "Concomitant use of the following types of medications or herbal supplements within 21 days or at least 5 half-lives of randomisation:",
+      "askable": false,
+      "not_askable_reason": "needs knowledge of drug interactions"
+    },
+    {
+      "id": "e22",
+      "section": "exclusion",
+      "quote": "Concomitant use of drugs that are known to prolong QT and have a known risk of TdP",
+      "parent_quote": null,
+      "askable": false,
+      "not_askable_reason": "needs knowledge of drug interactions"
+    },
+    {
+      "id": "e23",
+      "section": "exclusion",
+      "quote": "Systemic use of atropine",
+      "parent_quote": null,
+      "askable": true,
+      "not_askable_reason": null
+    },
+    {
+      "id": "e24",
+      "section": "exclusion",
+      "quote": "Disease progression ≤ 84 days following the last dose of neo-adjuvant or adjuvant chemotherapy",
+      "parent_quote": "The following exclusion criteria apply to treatments administered for early breast cancer:",
+      "askable": false,
+      "not_askable_reason": "needs a clinician's judgment"
+    },
+    {
+      "id": "e25",
+      "section": "exclusion",
+      "quote": "Disease progression ≤ 1 year (365 days) from the last dose of treatment with a PARPi and/or platinum agent for early breast cancer",
+      "parent_quote": "The following exclusion criteria apply to treatments administered for early breast cancer:",
+      "askable": false,
+      "not_askable_reason": "needs a clinician's judgment"
+    },
+    {
+      "id": "e26",
+      "section": "exclusion",
+      "quote": "Disease progression ≤ 1 year (365 days) from the last dose with a CDK4/6i in the adjuvant setting",
+      "parent_quote": "The following exclusion criteria apply to treatments administered for early breast cancer:",
+      "askable": false,
+      "not_askable_reason": "needs a clinician's judgment"
+    },
+    {
+      "id": "e27",
+      "section": "exclusion",
+      "quote": "Disease progression ≤ 1 year (365 days) from the last dose of an oral SERD including camizestrant.",
+      "parent_quote": "The following exclusion criteria apply to treatments administered for early breast cancer:",
+      "askable": false,
+      "not_askable_reason": "needs a clinician's judgment"
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "text": "Are you an adult female who is pre-menopausal, peri-menopausal, or post-menopausal, or an adult male?",
+      "type": "choice",
+      "options": [
+        "Adult female, pre-menopausal",
+        "Adult female, peri-menopausal",
+        "Adult female, post-menopausal",
+        "Adult male",
+        "None of the above"
+      ],
+      "criterion_ids": [
+        "i1"
+      ],
+      "rules": [
+        {
+          "criterion_id": "i1",
+          "confirm_answers": [
+            "Adult female, pre-menopausal",
+            "Adult female, peri-menopausal",
+            "Adult female, post-menopausal",
+            "Adult male"
+          ],
+          "deny_answers": [
+            "None of the above"
+          ],
+          "confirm_range": null,
+          "deny_range": null
+        }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "Do you have advanced breast cancer that is either locally advanced and cannot be treated to cure, or metastatic?",
+      "type": "yes_no",
+      "options": null,
+      "criterion_ids": [
+        "i3"
+      ],
+      "rules": [
+        {
+          "criterion_id": "i3",
+          "confirm_answers": [
+            "yes"
+          ],
+          "deny_answers": [
+            "no"
+          ],
+          "confirm_range": null,
+          "deny_range": null
+        }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "Have you ever been told you have MDS (myelodysplastic syndromes) or AML (acute myeloid leukemia), or do you have features that suggest these conditions?",
+      "type": "yes_no",
+      "options": null,
+      "criterion_ids": [
+        "e1"
+      ],
+      "rules": [
+        {
+          "criterion_id": "e1",
+          "confirm_answers": [
+            "yes"
+          ],
+          "deny_answers": [
+            "no"
+          ],
+          "confirm_range": null,
+          "deny_range": null
+        }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "Do you have any known condition that makes you prone to bleeding?",
+      "type": "yes_no",
+      "options": null,
+      "criterion_ids": [
+        "e2"
+      ],
+      "rules": [
+        {
+          "criterion_id": "e2",
+          "confirm_answers": [
+            "yes"
+          ],
+          "deny_answers": [
+            "no"
+          ],
+          "confirm_range": null,
+          "deny_range": null
+        }
+      ]
+    },
+    {
+      "id": "q5",
+      "text": "Have you ever had a history of severe and ongoing low blood cell counts (cytopenia)?",
+      "type": "yes_no",
+      "options": null,
+      "criterion_ids": [
+        "e3"
+      ],
+      "rules": [
+        {
+          "criterion_id": "e3",
+          "confirm_answers": [
+            "yes"
+          ],
+          "deny_answers": [
+            "no"
+          ],
+          "confirm_range": null,
+          "deny_range": null
+        }
+      ]
+    },
+    {
+      "id": "q6",
+      "text": "Do you have any of these: nausea and vomiting that doesn't go away, chronic stomach or bowel disease, trouble swallowing pills, or have you had a significant bowel surgery?",
+      "type": "yes_no",
+      "options": null,
+      "criterion_ids": [
+        "e5"
+      ],
+      "rules": [
+        {
+          "criterion_id": "e5",
+          "confirm_answers": [
+            "yes"
+          ],
+          "deny_answers": [
+            "no"
+          ],
+          "confirm_range": null,
+          "deny_range": null
+        }
+      ]
+    },
+    {
+      "id": "q7",
+      "text": "Have you ever been diagnosed with another type of cancer besides breast cancer?",
+      "type": "yes_no",
+      "options": null,
+      "criterion_ids": [
+        "e6"
+      ],
+      "rules": [
+        {
+          "criterion_id": "e6",
+          "confirm_answers": [
+            "yes"
+          ],
+          "deny_answers": [
+            "no"
+          ],
+          "confirm_range": null,
+          "deny_range": null
+        }
+      ]
+    },
+    {
+      "id": "q8",
+      "text": "Do you have any of these conditions: spinal cord compression, brain metastases, carcinomatous meningitis, or leptomeningeal disease?",
+      "type": "yes_no",
+      "options": null,
+      "criterion_ids": [
+        "e8"
+      ],
+      "rules": [
+        {
+          "criterion_id": "e8",
+          "confirm_answers": [
+            "yes"
+          ],
+          "deny_answers": [
+            "no"
+          ],
+          "confirm_range": null,
+          "deny_range": null
+        }
+      ]
+    },
+    {
+      "id": "q9",
+      "text": "Do you have active and uncontrolled hepatitis B or hepatitis C?",
+      "type": "yes_no",
+      "options": null,
+      "criterion_ids": [
+        "e9"
+      ],
+      "rules": [
+        {
+          "criterion_id": "e9",
+          "confirm_answers": [
+            "yes"
+          ],
+          "deny_answers": [
+            "no"
+          ],
+          "confirm_range": null,
+          "deny_range": null
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "text": "Do you have active and uncontrolled HIV infection?",
+      "type": "yes_no",
+      "options": null,
+      "criterion_ids": [
+        "e10"
+      ],
+      "rules": [
+        {
+          "criterion_id": "e10",
+          "confirm_answers": [
+            "yes"
+          ],
+          "deny_answers": [
+            "no"
+          ],
+          "confirm_range": null,
+          "deny_range": null
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "text": "Do you have an active tuberculosis infection?",
+      "type": "yes_no",
+      "options": null,
+      "criterion_ids": [
+        "e11"
+      ],
+      "rules": [
+        {
+          "criterion_id": "e11",
+          "confirm_answers": [
+            "yes"
+          ],
+          "deny_answers": [
+            "no"
+          ],
+          "confirm_range": null,
+          "deny_range": null
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "text": "Do you have a history of heart rhythm problems or any heart disease?",
+      "type": "yes_no",
+      "options": null,
+      "criterion_ids": [
+        "e12"
+      ],
+      "rules": [
+        {
+          "criterion_id": "e12",
+          "confirm_answers": [
+            "yes"
+          ],
+          "deny_answers": [
+            "no"
+          ],
+          "confirm_range": null,
+          "deny_range": null
+        }
+      ]
+    }
+  ],
+  "report": {
+    "model": "gpt-4o",
+    "usage": {
+      "calls": 2,
+      "prompt_tokens": 3184,
+      "completion_tokens": 2814
+    },
+    "criteria": {
+      "returned": 34,
+      "kept": 34,
+      "reasked": [],
+      "dropped": [],
+      "uncovered_lines": [],
+      "reason_replaced": []
+    },
+    "questions": {
+      "returned": 12,
+      "kept": 12,
+      "reasked": false,
+      "first_problems": [],
+      "dropped": [],
+      "links_removed": [],
+      "askable_without_question": [
+        "e13",
+        "e14",
+        "e15",
+        "e16",
+        "e17",
+        "e18",
+        "e23"
+      ]
+    },
+    "open_problems": []
+  }
+}
