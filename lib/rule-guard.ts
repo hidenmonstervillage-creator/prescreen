@@ -8,12 +8,16 @@
 //
 // Time windows. A criterion that names a time window ("within 4 weeks before", "at least 2 weeks
 // since", a washout period) and that the must-ask table does not ask is served only by a number
-// question whose rule compares the number (confirm_range or deny_range). A yes or no question, or a
+// question that asks for the number ("How many weeks ago ...") and whose rule compares it
+// (confirm_range or deny_range). A yes or no question, or a
 // choice, on a time window is rejected. A window measured in half-lives is never asked: a patient
 // cannot know a half-life, so no number settles it (halfLifeGuard, before the model).
 //
 // Permissions ("may have received", "is allowed") are guarded earlier, in lib/must-ask.ts: never asked.
 import type { Criterion, Question } from "./types";
+
+/** A number question on a time window asks for the number: "How many weeks ago ...", "How long since ...", "When ...". */
+export const ASKS_FOR_A_NUMBER_RE = /\b(?:how many|how long|how much time|when)\b/i;
 
 /** Words that make a question's stem negative. */
 export const NEGATIVE_STEM_RE = /\b(?:not|never|without|no longer|cannot)\b|\b\w+n['’]t\b/i;
@@ -117,12 +121,15 @@ export function ruleRejections(q: Question, criteria: Criterion[]): RuleRejectio
   for (const r of q.rules) {
     const c = byId.get(r.criterion_id);
     if (!c) continue;
-    if (isTimeWindow(c) && q.type !== "number") {
+    if (isTimeWindow(c) && (q.type !== "number" || !ASKS_FOR_A_NUMBER_RE.test(q.text))) {
       out.push({
         question_id: q.id,
         criterion_id: c.id,
         guard: "time_window",
-        problem: 'the criterion names a time window: use a "number" question that asks how many days, weeks or months ago, and set the ranges from the window',
+        problem:
+          q.type === "number"
+            ? 'the question must ask for the number itself, for example "How many weeks ago did you last ...?", and the ranges compare it'
+            : 'the criterion names a time window: use a "number" question that asks how many days, weeks or months ago, and set the ranges from the window',
       });
       continue;
     }

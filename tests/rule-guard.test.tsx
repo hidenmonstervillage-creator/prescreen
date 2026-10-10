@@ -143,6 +143,24 @@ describe("guard 3: a time window takes a number question (the q9 case)", () => {
     expect(mapDeterministic(g.criteria, [q8], { q8: 10 }).rows[0].state).toBe("needs_clinician");
   });
 
+  it("a number question must ask for the number (NCT06499285, as production wrote it on 8a331c9)", () => {
+    const e22 = crit("e22", "exclusion", "Major surgery within 28 days before randomization.");
+    const e3 = crit("e3", "exclusion", "Receipt of RBC transfusion for any reason(s) other than underlying MDS within 16 weeks before randomization.");
+    const num = (id: string, text: string, criterion: string, confirm: { min: number | null; max: number | null }, deny: { min: number | null; max: number | null }): Question => ({
+      id,
+      text,
+      type: "number",
+      options: null,
+      criterion_ids: [criterion],
+      rules: [{ criterion_id: criterion, confirm_answers: [], deny_answers: [], confirm_range: confirm, deny_range: deny }],
+    });
+    const q9 = num("q9", "Have you had any major surgery in the last 28 days?", "e22", { min: null, max: 28 }, { min: 29, max: null });
+    expect(ruleRejections(q9, [e22])).toMatchObject([{ criterion_id: "e22", guard: "time_window" }]);
+    expect(ruleRejections(q9, [e22])[0].problem).toContain("ask for the number itself");
+    const q7 = num("q7", "How many weeks ago did you last receive a red blood cell transfusion for reasons other than MDS?", "e3", { min: null, max: 16 }, { min: 17, max: null });
+    expect(ruleRejections(q7, [e3])).toEqual([]);
+  });
+
   it("refuses the production q9 (a choice on e4 to e7) and a yes or no, accepts a number question that compares", () => {
     const criteria = WASHOUT.map((q, k) => crit(`e${k + 4}`, "exclusion", q, WASHOUT_PARENT));
     const q9: Question = {
